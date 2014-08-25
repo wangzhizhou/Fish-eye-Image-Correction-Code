@@ -31,17 +31,26 @@ int main(int argc, char** argv)
 	//Extract the center and radius from the origin image
 	ScanLineMethod(imgOrg, center, radius,150);
 	//HoughCircleMethod(imgOrg, center, radius);
-	//radius -= 100;
-	//Mat img1, img2, img3;
+
+	Mat img1, img2, img3;
 	//User multiple method to correct the distorted image
  	//img1=latitudeCorrection( imgOrg,  center,  radius,Forward);
-	latitudeCorrection(imgOrg, center, radius, Reverse);
-	//img3 = img1 - img2;
-	//imshow("img1", img1);
-	//imshow("img2", img2);
-	//imshow("img3", img3);
-	//imshow("org", imgOrg);
-	
-	//waitKey();
+	for (double r = PI / 20; r < PI; r += PI / 20)
+	{
+		img2 = latitudeCorrection(imgOrg, center, radius, Reverse,r);
+		
+		if (img2.data)
+		{
+			imshow("img2", img2);
+			waitKey(5);
+		}
+		else
+		{
+			cout << "Failed to rectified!" << endl;
+		}
+
+	}
+
+	waitKey();
 	return 0;
 }

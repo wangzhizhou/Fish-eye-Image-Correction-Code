@@ -1,15 +1,16 @@
 #include "latitudeCorrection.h"
 
-Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
-{
+Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,double camerFieldAngle)
+{	
+	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
+	{
+		cout << "The parameter \"camerFieldAngle\" must be in the interval (0,PI]." << endl;
+		return Mat();
+	}
+
 	Mat retImg(Size(WIDTH, HEIGHT), CV_8UC3, Scalar(0, 0, 0));
 
-
-#ifndef _VIEW_FIELD_
-	double dx = PI / WIDTH;
-#else
-	double dx = CAMER_VIEW_FIELD / WIDTH;
-#endif
+	double dx = camerFieldAngle / WIDTH;
 	double dy = dx;
 
 	//coordinate for latitude map
@@ -36,9 +37,10 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 	//Image cooradinate of imgRet
 	int u_latitude, v_latitude;
 
-	//offset of imgRet
+	//offset of imgRet Origin
 	double longitude_offset, latitude_offset;
-
+	longitude_offset = (PI - camerFieldAngle) / 2;
+	latitude_offset = (PI - camerFieldAngle) / 2;
 
 	Mat_<Vec3b> _retImg = retImg;
 	Mat_<Vec3b> _imgOrg = imgOrg;
@@ -60,17 +62,19 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 				u = i;
 				v = j;
 
+				double R = radius / sin(camerFieldAngle / 2);
+
 				//Convert to cartiesian cooradinate in unity circle
-				x_cart = (u - center.x) / (double)radius;
-				y_cart = -(v - center.y) / (double)radius;
+				x_cart = (u - center.x) / R;
+				y_cart = -(v - center.y) / R;
 
 				//convert to polar axes
 				theta = cvFastArctan(y_cart, x_cart)*PI / 180;
 				p = sqrt(pow(x_cart, 2) + pow(y_cart, 2));
 
 				//convert to sphere surface parameter cooradinate
-				//Theta_sphere = p*CAMER_VIEW_FIELD / 2;
-				Theta_sphere = PI / 2 - acos(p);
+				//Theta_sphere = p*camerFieldAngle / 2;
+				Theta_sphere = asin(p);
 				Phi_sphere = theta;
 
 				//convert to sphere surface 3D cooradinate
@@ -83,8 +87,12 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 				longitude = cvFastArctan(z, -x)*PI / 180;
 
 				//transform the latitude to pixel cooradinate
-				u_latitude = (longitude / dx);
-				v_latitude = (latitude / dy);
+				
+				u_latitude = ((longitude-longitude_offset) / dx);
+				v_latitude = ((latitude-latitude_offset) / dy);
+
+				if (u_latitude<0 || u_latitude>=HEIGHT || v_latitude<0 || v_latitude>=WIDTH)
+					continue; 
 
 				//perform the map from the origin image to the latitude map image
 				_retImg(v_latitude, u_latitude)[0] = _imgOrg(j, i)[0];
@@ -94,31 +102,17 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 		}
 
 		break;
-	case Reverse:
 
-#ifdef _VIEW_FIELD_
-		longitude_offset = (PI - CAMER_VIEW_FIELD) / 2;
- 		latitude_offset = (PI - CAMER_VIEW_FIELD) / 2;
-#endif
+	case Reverse:
 
 		for (int j = 0; j < HEIGHT; j++)
 		{
 
-#ifndef _VIEW_FIELD_
-			latitude = j*dy;
-#else
 			latitude =latitude_offset+j*dy;
-#endif
-
 			for (int i = 0; i < WIDTH; i++)
-			{
-				
-#ifndef _VIEW_FIELD_
-				longitude = i*dx;
-#else
-				longitude = longitude_offset+i*dx;
-#endif
+			{			
 
+				longitude = longitude_offset+i*dx;
 				//Convert from latitude cooradinate to the sphere cooradinate
 				x = -sin(latitude)*cos(longitude);
 				y = cos(latitude);
@@ -130,15 +124,14 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 				Phi_sphere = Phi_sphere*PI / 180;//Convert from Angle to Radian
 
 				//Convert from parameter sphere cooradinate to fish-eye polar cooradinate
-				//p = 2 * Theta_sphere / CAMER_VIEW_FIELD;
-				double R = radius / sin(CAMER_VIEW_FIELD / 2);
-
 				p = sin(Theta_sphere);  
 				theta = Phi_sphere;
 
 				//Convert from fish-eye polar cooradinate to cartesian cooradinate
 				x_cart = p*cos(theta);
 				y_cart = p*sin(theta);
+
+				double R = radius / sin(camerFieldAngle / 2);
 
 				//Convert from cartesian cooradinate to image cooradinate
 				u = x_cart*R + center.x;
@@ -156,9 +149,8 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type)
 
 		break;
 	default:
-		cout << "The CorrectType is Wrong!" << endl;
-		abort();
-		//break;
+		cout << "The CorrectType is Wrong! It should be \"Forward\" or \"Reverse\"." << endl;
+		return Mat();
 	}
 
 #ifdef _DEBUG_
