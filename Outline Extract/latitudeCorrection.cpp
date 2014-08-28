@@ -7,10 +7,14 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 		cout << "The parameter \"camerFieldAngle\" must be in the interval (0,PI]." << endl;
 		return Mat();
 	}
+	double rateOfWindow = 0.9;
+	int width = imgOrg.size().width*rateOfWindow;
+	int height = width;
+	Size imgSize(width,height);
+	
+	Mat retImg(imgSize, CV_8UC3, Scalar(0, 0, 0));
 
-	Mat retImg(Size(WIDTH, HEIGHT), CV_8UC3, Scalar(0, 0, 0));
-
-	double dx = camerFieldAngle / WIDTH;
+	double dx = camerFieldAngle / imgSize.width;
 	double dy = dx;
 
 	//coordinate for latitude map
@@ -73,7 +77,6 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 				p = sqrt(pow(x_cart, 2) + pow(y_cart, 2));
 
 				//convert to sphere surface parameter cooradinate
-				//Theta_sphere = p*camerFieldAngle / 2;
 				Theta_sphere = asin(p);
 				Phi_sphere = theta;
 
@@ -91,7 +94,7 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 				u_latitude = ((longitude-longitude_offset) / dx);
 				v_latitude = ((latitude-latitude_offset) / dy);
 
-				if (u_latitude<0 || u_latitude>=HEIGHT || v_latitude<0 || v_latitude>=WIDTH)
+				if (u_latitude<0 || u_latitude>=imgSize.height || v_latitude<0 || v_latitude>=imgSize.width)
 					continue; 
 
 				//perform the map from the origin image to the latitude map image
@@ -105,11 +108,11 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 
 	case Reverse:
 
-		for (int j = 0; j < HEIGHT; j++)
+		for (int j = 0; j < imgSize.height; j++)
 		{
 
 			latitude =latitude_offset+j*dy;
-			for (int i = 0; i < WIDTH; i++)
+			for (int i = 0; i < imgSize.width; i++)
 			{			
 
 				longitude = longitude_offset+i*dx;
@@ -137,14 +140,19 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 				u = x_cart*R + center.x;
 				v = -y_cart*R + center.y;
 
-				if (pow(u - center.x, 2) + pow(v - center.y, 2)>pow(radius,2))
-					continue;
+				//if (pow(u - center.x, 2) + pow(v - center.y, 2) > pow(radius, 2))
+				//{
+				//	_imgOrg(v, u)[0] = 255;
+				//	_imgOrg(v, u)[1] = 255;
+				//	_imgOrg(v, u)[2] = 255;
+				//	continue;
+				//}
 
 				_retImg(j, i)[0] = _imgOrg(v, u)[0];
 				_retImg(j, i)[1] = _imgOrg(v, u)[1];
 				_retImg(j, i)[2] = _imgOrg(v, u)[2];
 				
-			}
+			} 
 		}
 
 		break;
@@ -152,7 +160,9 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,
 		cout << "The CorrectType is Wrong! It should be \"Forward\" or \"Reverse\"." << endl;
 		return Mat();
 	}
-
+	//imshow("org", _imgOrg);
+	//imshow("ret", _retImg);
+	//waitKey();
 #ifdef _DEBUG_
 	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg );

@@ -24,6 +24,9 @@
     <ClCompile Include="latitudeCorrection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="panoramaExpansion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="outlineExtract.h">
@@ -33,6 +36,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="globalInclude.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="panoramaExpansion.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

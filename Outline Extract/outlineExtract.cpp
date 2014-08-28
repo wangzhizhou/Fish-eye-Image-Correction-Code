@@ -1,6 +1,6 @@
 #include "outlineExtract.h"
 
-void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold)
+void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold,Point offsetCenter, int adjustRadius)
 {
 	Mat src,gray;
 	src = imgOrg.clone();
@@ -66,14 +66,14 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold)
 	}
 	//rectangle(src, Point(left, top), Point(right, bottom), Scalar(0, 0, 255),2);
 	
-	center.x =(right + left) / 2;
-	center.y =(top + bottom) / 2;
+	center.x =(right + left) / 2+offsetCenter.x;
+	center.y =(top + bottom) / 2+offsetCenter.y;
 
 	double radius_max = max(right - left, bottom - top) / 2;
 	double radius_min = min(right - left, bottom - top) / 2;
 	double radius_avg = (radius_max + radius_min) / 2;
 
-	radius = radius_max;
+	radius = radius_max+adjustRadius;
 
 #ifdef _DEBUG_
 	cout << "Use the ScanLine Method:" << endl

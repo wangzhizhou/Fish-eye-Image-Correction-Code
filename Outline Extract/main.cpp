@@ -2,6 +2,7 @@
 
 #include "outlineExtract.h"
 #include "latitudeCorrection.h"
+#include "panoramaExpansion.h"
 
 
 void Usage()
@@ -24,32 +25,41 @@ int main(int argc, char** argv)
 		cout << "Failed to read in a image." << endl;
 		return -1;
 	}
-
 	Point2i center;
-	int radius = 0.0;
+	int radius = 0;
 
 	//Extract the center and radius from the origin image
-	ScanLineMethod(imgOrg, center, radius,150);
-	//HoughCircleMethod(imgOrg, center, radius);
-
+	ScanLineMethod(imgOrg.clone(), center, radius, 10);
+	//HoughCircleMethod(imgOrg.clone(), center, radius);
 	Mat img1, img2, img3;
-	//User multiple method to correct the distorted image
- 	//img1=latitudeCorrection( imgOrg,  center,  radius,Forward);
-	for (double r = PI / 20; r < PI; r += PI / 20)
+	for (double r = PI / 20; r <= PI; r += PI / 20)
 	{
-		img2 = latitudeCorrection(imgOrg, center, radius, Reverse,r);
-		
-		if (img2.data)
+		img1=panoramaExpansion(imgOrg.clone(), center, radius,r,Forward);
+		if (img1.data)
 		{
-			imshow("img2", img2);
-			waitKey(5);
+			imshow("ret", img1);
+			waitKey(10);
+			
 		}
-		else
-		{
-			cout << "Failed to rectified!" << endl;
-		}
-
 	}
+
+	//User multiple method to correct the distorted image
+	//img1=latitudeCorrection( imgOrg,  center,  radius,Forward);
+	//for (double r = PI / 20; r <= PI; r += PI / 20)
+	//{
+	//	img2 = latitudeCorrection(imgOrg.clone(), center, radius, Forward, r);
+
+	//	if (img2.data)
+	//	{
+	//		imshow("img2", img2);
+	//		waitKey(5);
+	//	}
+	//	else
+	//	{
+	//		cout << "Failed to rectified!" << endl;
+	//	}
+
+	//}
 
 	waitKey();
 	return 0;

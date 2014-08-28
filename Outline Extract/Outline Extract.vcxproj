@@ -71,11 +71,13 @@
     <ClCompile Include="latitudeCorrection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="outlineExtract.cpp" />
+    <ClCompile Include="panoramaExpansion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globalInclude.h" />
     <ClInclude Include="latitudeCorrection.h" />
     <ClInclude Include="outlineExtract.h" />
+    <ClInclude Include="panoramaExpansion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
