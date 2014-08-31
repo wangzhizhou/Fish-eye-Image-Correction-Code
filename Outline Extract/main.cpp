@@ -29,8 +29,10 @@ int main(int argc, char** argv)
 	int radius = 0;
 
 	//Extract the center and radius from the origin image
-	ScanLineMethod(imgOrg.clone(), center, radius, 10);
-	//HoughCircleMethod(imgOrg.clone(), center, radius);
+	//ScanLineMethod(imgOrg, center, radius, 125);
+	revisedScanLineMethod(imgOrg, center, radius, 50 );
+	//imshow("imgsrc", imgOrg);
+	//HoughCircleMethod(imgOrg, center, radius);
 	Mat img1, img2, img3;
 	for (double r = PI / 20; r <= PI; r += PI / 20)
 	{
@@ -47,7 +49,8 @@ int main(int argc, char** argv)
 	//img1=latitudeCorrection( imgOrg,  center,  radius,Forward);
 	//for (double r = PI / 20; r <= PI; r += PI / 20)
 	//{
-	//	img2 = latitudeCorrection(imgOrg.clone(), center, radius, Forward, r);
+	//	img2 = latitudeCorrection(imgOrg.clone(), center, radius,  r);
+	//	//img2 = latitudeCorrection(imgOrg.clone(), center, radius, r,Forward);
 
 	//	if (img2.data)
 	//	{

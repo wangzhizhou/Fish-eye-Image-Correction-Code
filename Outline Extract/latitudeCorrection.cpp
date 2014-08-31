@@ -1,6 +1,6 @@
 #include "latitudeCorrection.h"
 
-Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type,double camerFieldAngle)
+Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle,CorrectType type )
 {	
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{

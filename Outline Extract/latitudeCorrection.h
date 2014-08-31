@@ -3,4 +3,4 @@
 
 #include "globalInclude.h"
 
-Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, CorrectType type = Reverse, double camerFieldAngle = PI*11/15);
+Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle = PI * 11 / 15, CorrectType type = Reverse );
