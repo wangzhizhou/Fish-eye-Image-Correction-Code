@@ -170,3 +170,13 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 #endif
 	return retImg;
 }
+
+
+
+Mat cylinderCorrection(Mat imgOrg, Point2i center, int radius)
+{
+	Mat retImg;
+
+	return retImg;
+	
+}

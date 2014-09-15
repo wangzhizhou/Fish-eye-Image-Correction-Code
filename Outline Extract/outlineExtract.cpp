@@ -1,23 +1,68 @@
 #include "outlineExtract.h"
 
-void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Point offsetCenter, int adjustRadius)
+void areaStatisticsMethod(Mat imgOrg, Point2i& center, int& radius, int threshold)
+{
+	Mat src = imgOrg.clone();
+	//imwrite("area_src.tiff", src);
+	Size srcSize = src.size();
+	Mat gray,binarized;
+	cvtColor(src, gray, CV_BGR2GRAY);
+
+	cv::threshold(gray, binarized, threshold, 255, THRESH_BINARY);
+	/*imwrite("area_gray.tiff", gray);
+	imwrite("area_binary.tiff", binarized);
+	imshow("gray", gray);
+	imshow("binary", binarized);
+	waitKey();*/
+	double area = 0.0;
+	int xTorque=0, yTorque=0;
+
+	for (int j = 0; j < srcSize.height; j++)
+	{
+		for (int i = 0; i < srcSize.width; i++)
+		{
+			if (binarized.at<uchar>(Point(i, j)) == 255)
+			{
+				area++;
+
+				xTorque += i;
+				yTorque += j;
+			}
+		}
+	}
+	radius = sqrt(area / PI);
+	center.x = xTorque / area;
+	center.y = yTorque / area;
+
+#ifdef _DEBUG_
+	cout << "Use the Area Statistics Method:" << endl
+		<< "\tThe center is (" << center.x << ", "
+		<< center.y << ")" << endl
+		<< "\tThe radius is " << radius << endl;
+
+	circle(src, center, radius, Scalar(0, 0, 255), 2);
+	circle(src, center, 3, Scalar(0, 0, 255), -1);
+
+	namedWindow("Area Statistics Method Result", CV_WINDOW_AUTOSIZE);
+	imshow("Area Statistics Method Result", src);
+	imwrite("area_ret.tiff", src);
+	waitKey();
+#endif
+}
+
+
+void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold,int N)
 {
 	Mat src, gray;
-	src = imgOrg.clone();
-	//src = imgOrg;
+	src = imgOrg.clone();	
 	cvtColor(src, gray, CV_BGR2GRAY);
 
 	vector<Point> points;
 	vector<double> distance;
 
-
-	//circle(src, center, 3, Scalar(0, 0, 255), -1);
-	//circle(src, center, radius, Scalar(255, 255, 255)); 
-
 	Size imgSize = src.size();
 
 	int x, y;
-	const int N = 10;
 	double theta = 0;
 
 	for (int n = 0; n < 2 * N; n++, theta = PI*n / (2 * N))
@@ -29,6 +74,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 		int radius = 0;
 		Point ptMax1(0, 0), ptMax2(0, 0);
 		Point ptMin1(0, 0), ptMin2(0, 0);
+		int flag = 0;
 
 		double minVal, maxVal;
 
@@ -39,15 +85,19 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 				minMaxLoc(gray.row(i), &minVal, &maxVal, &ptMin1, &ptMax1);
 				if ((maxVal - minVal)>threshold)
 				{
+					flag++;
+
 					ptMax1.y = i;
-					cout << "horizontal top:" << endl;
-					cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
-					points.push_back(ptMax1);
-					break;
+					//cout << "horizontal top:" << endl;
+					//cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
+  					points.push_back(ptMax1);
+					goto top_label;
 				}
 			}
+		top_label:
+
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax1, 3, Scalar(0, 192, 255), -1);
+			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
 			waitKey();
 #endif
@@ -57,26 +107,38 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 				minMaxLoc(gray.row(i), &minVal, &maxVal, &ptMin2, &ptMax2);
 				if ((maxVal - minVal) > threshold)
 				{
+					flag++;
+
 					ptMax2.y = i;
-					cout << "horizontal bottom:" << endl;
-					cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
+					//cout << "horizontal bottom:" << endl;
+					//cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
+
+					//src.row(i) = Scalar(0, 0, 255);
+					//src.row(i + 1) = Scalar(0, 0, 255);
 
 					points.push_back(ptMax2);
-					break;
+					goto bottom_label;
 				}
 			}
+		bottom_label:
+
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax2, 3, Scalar(0, 0, 192), -1);
-			line(src, ptMax1, ptMax2, Scalar(192, 192, 0));
+			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
+			line(src, ptMax1, ptMax2, Scalar(192, 192, 0),2);
 			imshow("src", src);
 			waitKey();
 #endif
-			distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			if (flag == 2)
+			{
+				distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			}
+			else if (flag == 1)
+			{
+				points.pop_back();
+			}
 		}
 		else if (0 < n&&n < N)
 		{
-
-
 			for (int i = 0; i < imgSize.width; i++)
 			{
 				for (int j = 0; j <= i; j++)
@@ -104,9 +166,29 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 					if (abs(max1 - min1)>threshold)
 					{
-						cout << "jump outer1" << endl;
-						cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
+						flag++;
+						//cout << "jump outer1" << endl;
+						//cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
 						points.push_back(ptMax1);
+
+/*						Point start, end;
+						for (int k = 0; k <= i; k++)
+						{
+							x = k;
+							y = -tan(theta)*(x - i);
+							if (k == 0)
+							{
+								start = Point(x, y);
+							}
+							else if (k == i)
+							{
+								end = Point(x, y);
+							}
+							
+
+						}
+						line(src, start, end, Scalar(0, 0, 255), 2);*/ 
+
 						goto outer1;
 					}
 				}
@@ -114,7 +196,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 		outer1:
 
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax1, 3, Scalar(0, 255, 255), -1);
+			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
 			waitKey();
 #endif
@@ -146,9 +228,29 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 					if (abs(max2 - min2)>threshold)
 					{
-						cout << "jump outer2" << endl;
-						cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
+						flag++;
+						//cout << "jump outer2" << endl;
+						//cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
 						points.push_back(ptMax2);
+
+						//Point start, end;
+						//for (int k = i; k < imgSize.width; k++)
+						//{
+						//	x = k;
+						//	y = imgSize.height - 1 - tan(theta)*(x - i);
+						//	if (k == i)
+						//	{
+						//		start = Point(x, y);
+						//	}
+						//	else if (k == imgSize.width-1)
+						//	{
+						//		end = Point(x, y);
+						//	}
+
+
+						//}
+						//line(src, start, end, Scalar(0, 0, 255), 2);
+
 						goto outer2;
 					}
 				}
@@ -157,12 +259,19 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 			;
 
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax2, 3, Scalar(0, 0, 255), -1);
-			line(src, ptMax1, ptMax2, Scalar(192, 192, 0));
+			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
+			line(src, ptMax1, ptMax2, Scalar(192, 192, 0),2);
 			imshow("src", src);
 			waitKey();	
 #endif
-			distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			if (flag == 2)
+			{
+				distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			}
+			else if (flag == 1)
+			{
+				points.pop_back();
+			}
 
 		}
 		else if (N == n)
@@ -172,17 +281,21 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 				minMaxLoc(gray.col(i), &minVal, &maxVal, &ptMin1, &ptMax1);
 				if ((maxVal - minVal)>threshold)
 				{
+					flag++;
 					ptMax1.x = i;
-					cout << "vertical left:" << endl;
-					cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
+					//cout << "vertical left:" << endl;
+					//cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
 
+					//src.col(i) = Scalar(0, 0, 255);
+					//src.col(i - 1) = Scalar(0, 0, 255);
 					points.push_back(ptMax1);
-					break;
+					goto left_label;
 				}
 			}
+		left_label:
 
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax1, 3, Scalar(0, 255, 64), -1);
+			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
 			waitKey();
 #endif
@@ -192,22 +305,35 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 				minMaxLoc(gray.col(i), &minVal, &maxVal, &ptMin2, &ptMax2);
 				if ((maxVal - minVal) > threshold)
 				{
+					flag++;
 					ptMax2.x = i;
-					cout << "vertical right:" << endl;
-					cout << "ptMax1=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
-
+					//cout << "vertical right:" << endl;
+					//cout << "ptMax1=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
 					points.push_back(ptMax2);
-					break;
+
+					//src.col(i) = Scalar(0, 0, 255);
+					//src.col(i + 1) = Scalar(0, 0, 255);
+
+					goto right_label;
 				}
 			}
 
+		right_label:
+
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax2, 3, Scalar(255, 0, 0), -1);
-			line(src, ptMax1, ptMax2, Scalar(192, 192, 0));
+			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
+			line(src, ptMax1, ptMax2, Scalar(192, 192, 0),2);
 			imshow("src", src);
 			waitKey();
 #endif
-			distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			if (flag == 2)
+			{
+				distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			}
+			else if (flag == 1)
+			{
+				points.pop_back();
+			}
 
 		}
 		else if (N < n&&n < 2 * N)
@@ -224,30 +350,50 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 					{
 						continue;
 					}
-					uchar i = gray.at<uchar>(ptCur);
+					uchar I = gray.at<uchar>(ptCur);
 
-					if (i > max1)
+					if (I > max1)
 					{
-						max1 = i;
+						max1 = I;
 						ptMax1 = ptCur;
 					}
-					if (i < min1)
+					if (I < min1)
 					{
-						min1 = i;
+						min1 = I;
 					}
 
 					if (abs(max1 - min1)>threshold)
 					{
-						cout << "jump outer3" << endl;
-						cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
+						flag++;
+						//cout << "jump outer3" << endl;
+						//cout << "ptMax1=(" << ptMax1.x << ", " << ptMax1.y << ")" << endl;
 						points.push_back(ptMax1);
+
+						//Point start, end;
+						//for (int k = 0; k <= i; k++)
+						//{
+						//	x = k;
+						//	y = imgSize.height - 1 - tan(theta)*(x - i);
+
+						//	if (k == 0)
+						//	{
+						//		start = Point(x, y);
+						//	}
+						//	else if (k == i)
+						//	{
+						//		end = Point(x, y);
+						//	}
+						//}
+						//line(src, start, end, Scalar(0, 0, 255), 2);
+
 						goto outer3;
 					}
 				}
 			}
 		outer3:
+
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax1, 3, Scalar(255, 255, 255), -1);
+			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
 			waitKey();
 #endif
@@ -278,9 +424,29 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 					if (abs(max2 - min2)>threshold)
 					{
-						cout << "jump outer4" << endl;
-						cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
+						flag++;
+						//cout << "jump outer4" << endl;
+						//cout << "ptMax2=(" << ptMax2.x << ", " << ptMax2.y << ")" << endl;
 						points.push_back(ptMax2);
+
+			/*			Point start, end;
+						for (int k = i; k < imgSize.width; k++)
+						{
+							x = k;
+							y = -tan(theta)*(x - i);
+							if (k == i)
+							{
+								start = Point(x, y);
+							}
+							else if (k == imgSize.width - 1)
+							{
+								end = Point(x, y);
+							}
+
+
+						}
+						line(src, start, end, Scalar(0, 0, 255), 2);*/
+
 						goto outer4;
 					}
 				}
@@ -289,12 +455,19 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 			;
 #ifdef _SHOW_POINTS_
-			circle(src, ptMax2, 3, Scalar(255, 0, 255), -1);
-			line(src, ptMax1, ptMax2, Scalar(192, 192, 192));
+			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
+			line(src, ptMax1, ptMax2, Scalar(192, 192, 0),2);
 			imshow("src", src);
 			waitKey();
 #endif
-			distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			if (flag == 2)
+			{
+				distance.push_back(sqrt(pow(ptMax1.x - ptMax2.x, 2) + pow(ptMax1.y - ptMax2.y, 2)));
+			}
+			else if (flag == 1)
+			{
+				points.pop_back();
+			}
 
 		}
 		else
@@ -303,6 +476,17 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 			break;
 		}
 	}
+
+
+	//vector<Point>::iterator itero = points.begin();
+	//ofstream of("points.txt", ios::trunc | ios::out);
+	//while (itero != points.end())
+	//{
+	//	of << (*itero).x << ", " << (*itero).y << endl;
+	//	itero++;
+	//}
+	//of.close(); 
+
 
 	//find out validate points
 	double mean = 0;
@@ -326,25 +510,38 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 	//figure out the center and radius of the circle with Kasa method
 
-	CircleFitByKasa(validPoints, center, radius);
+	if (!CircleFitByKasa(validPoints, center, radius))
+	{
+		cout << "Revisied LineScan Method Failed, Because the Circle Fit Method failed!" << endl;
+		return;
+	}
 
 #ifdef _DEBUG_
 	cout << "Use the Revised ScanLine Method:" << endl
 		<< "\tThe center is (" << center.x << ", "
 		<< center.y << ")" << endl
-		<< "\tThe radius is " << radius << endl;
+		<< "\tThe radius is " << radius << endl ;
 
-	circle(src, center, radius, Scalar(0, 0, 255), 1);
-	circle(src, center, 3, Scalar(0, 255, 255), -1);
+	circle(src, center, radius, Scalar(0, 0, 255), 2);
+	circle(src, center, 5, Scalar(0, 255, 255), -1);
 
-	namedWindow("Revised ScanLine Method Result", CV_WINDOW_AUTOSIZE);
-	imshow("Revised ScanLine Method Result", src);
-	waitKey();
+	//namedWindow("Revised ScanLine Method Result", CV_WINDOW_AUTOSIZE);
+	//imshow("Revised ScanLine Method Result", src);
+	extern const char window_name[];
+	imshow(window_name, src);
+	//imwrite("Revised_Scan_ret.tiff", src);
+	//waitKey();
 #endif
 
 }
-void CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
+bool CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
 {
+	if (validPoints.size() <= 2)
+	{
+		cout << "The Circle fit failed, Because there is not enought validate points to use!" << endl;
+		return false;
+	}
+
 	vector<Point3i> extendA;
 	vector<int> extendB;
 	vector<Point>::iterator iter = validPoints.begin();
@@ -375,16 +572,15 @@ void CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
 	radius = sqrt((pow(p1,2)+pow(p2,2))/4+p3);
 
 	//cout << center.x << endl << center.y << endl << radius << endl;
-
-
+	return true;
 }
 void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Point offsetCenter, int adjustRadius)
 {
-	Mat src, gray;
+	Mat src, gray,gray_back;
 	src = imgOrg.clone();
+	imwrite("Scan_src.tiff", src);
 	cvtColor(src, gray, CV_BGR2GRAY);
-
-	//GaussianBlur(gray, gray, Size(9, 9), 2, 2);
+	gray_back = gray.clone();
 
 	int left, right, top, bottom;
 
@@ -398,6 +594,11 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Poi
 		minMaxLoc(gray.row(i), &minVal, &maxVal, &minLoc, &maxLoc);
 		if ((maxVal - minVal)>threshold)
 		{
+			maxLoc.y = i;
+			gray_back.row(i) = 255;
+			gray_back.row(i-1) = 255;
+			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
+
 			top = i;
 			count++;
 			break;
@@ -408,6 +609,11 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Poi
 		minMaxLoc(gray.row(i), &minVal, &maxVal, &minLoc, &maxLoc);
 		if ((maxVal - minVal) > threshold)
 		{
+			maxLoc.y = i;
+			gray_back.row(i) = 255;
+			gray_back.row(i + 1) = 255;
+
+			//circle(src, maxLoc, 3, Scalar(0, 255 , 255), -1);
 			bottom = i;
 			count++;
 			break;
@@ -418,6 +624,12 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Poi
 		minMaxLoc(gray.col(i), &minVal, &maxVal, &minLoc, &maxLoc);
 		if ((maxVal - minVal)>threshold)
 		{
+			maxLoc.x = i;
+			gray_back.col(i) = 255;
+			gray_back.col(i - 1) = 255;
+
+			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
+
 			left = i;
 			count++;
 			break;
@@ -428,6 +640,12 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Poi
 		minMaxLoc(gray.col(i), &minVal, &maxVal, &minLoc, &maxLoc);
 		if ((maxVal - minVal) > threshold)
 		{
+			maxLoc.x = i;
+			gray_back.col(i) = 255;
+			gray_back.col(i + 1) = 255;
+
+			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
+
 			right = i;
 			count++;
 			break;
@@ -454,13 +672,15 @@ void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Poi
 	radius = radius_max + adjustRadius;
 
 #ifdef _DEBUG_
+	imwrite("Scan_gray.tiff", gray_back);
 	cout << "Use the ScanLine Method:" << endl
 		<< "\tThe center is (" << center.x << ", " 
 		<< center.y << ")" << endl
 		<< "\tThe radius is " << radius << endl;
 
 	circle(src, center, radius, Scalar(0, 0, 255), 2);
-	circle(src, center, 3, Scalar(0, 255, 255), -1);
+	circle(src, center, 3, Scalar(0, 0, 255), -1);
+	imwrite("Scan_ret.tiff", src);
 
 	namedWindow("ScanLine Method Result", CV_WINDOW_AUTOSIZE);
 	imshow("ScanLine Method Result", src);
@@ -473,19 +693,21 @@ void HoughCircleMethod(Mat imgOrg, Point2i& center, int& radius)
 {
 	Mat src, gray;
 	src = imgOrg.clone();
+	imwrite("Hough_src.tiff", src);
 
 	cvtColor(src, gray, CV_BGR2GRAY);
+	imwrite("Hough_gray.tiff", gray);
 	GaussianBlur(gray, gray, Size(9, 9), 2, 2);
 
 	vector<Vec3f> circles;
-	HoughCircles(gray, circles, CV_HOUGH_GRADIENT, 1, gray.rows / 8, 200, 100, 0, 0);
+	HoughCircles(gray, circles, CV_HOUGH_GRADIENT, 1, gray.rows / 4, 180,90,gray.rows/6);
 
 	for (size_t i = 0; i < circles.size(); i++)
 	{
 		Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
 		int radius = cvRound(circles[i][2]);
 		// circle center
-		cv::circle(src, center, 3, Scalar(0, 255, 0), -1, 8, 0);
+		cv::circle(src, center, 3, Scalar(0, 0, 255), -1, 8, 0);
 		// circle outline
 		cv::circle(src, center, radius, Scalar(0, 0, 255), 2, 8, 0);
 	}
@@ -506,6 +728,7 @@ void HoughCircleMethod(Mat imgOrg, Point2i& center, int& radius)
 
 	namedWindow("Hough Circle Transform Result", CV_WINDOW_AUTOSIZE);
 	imshow("Hough Circle Transform Result", src);
+	imwrite("Hough_ret.tiff", src);
 	waitKey();
 #endif
 
