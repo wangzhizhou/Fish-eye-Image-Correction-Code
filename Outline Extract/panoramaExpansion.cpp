@@ -2,8 +2,13 @@
 
 Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, CorrectType type)
 {
+	//设定展开图的高度，因为鱼眼图像不能灰复高度信息，所以这里可以跟根实际来
+	//进行调节
 	int heightOfPanorama=radius*2;
+
+	//设定展开图的宽度，这里设定为鱼眼图像圆形有效区域的周长
 	int widthOfPanorama=2*PI*radius;
+
 
 	double dx = 2*PI/widthOfPanorama;
 	double dy = radius / (double)heightOfPanorama;
@@ -15,13 +20,14 @@ Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, 
 
 	int u, v;
 
+	//展开图的变量分配
 	Mat retImg(heightOfPanorama,widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
 	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	Mat_<Vec3b> _imgOrg = imgOrg.clone();
 
 	switch (type)
 	{
-	case Reverse:
+	case Reverse:	//使用反向映射来填充展开图
 		for (int j = 0; j < heightOfPanorama; j++)
 		{
 			for (int i = 0; i < widthOfPanorama; i++)
@@ -68,8 +74,7 @@ Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, 
 				theta = theta < 0 ? theta + 2 * PI : theta;
 
 				int u_ret = theta / dx;
-				int v_ret = p / dy;		
-
+				int v_ret = p / dy;	
 
 				if (u_ret<0 || u_ret >= widthOfPanorama || v_ret<0 || v_ret >= heightOfPanorama)
 					continue;

@@ -68,12 +68,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cylinderCorrection.cpp" />
     <ClCompile Include="latitudeCorrection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="outlineExtract.cpp" />
     <ClCompile Include="panoramaExpansion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cylinderCorrection.h" />
     <ClInclude Include="globalInclude.h" />
     <ClInclude Include="latitudeCorrection.h" />
     <ClInclude Include="outlineExtract.h" />

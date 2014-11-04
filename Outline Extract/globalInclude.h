@@ -26,5 +26,5 @@ enum CorrectType
 	//on the rectified image have its corresponding origin pixel.
 };
 
-#define _DEBUG_
+//#define _DEBUG_
 //#define _SHOW_POINTS_
