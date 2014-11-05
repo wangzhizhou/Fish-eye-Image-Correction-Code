@@ -1,7 +1,7 @@
 #include "latitudeCorrection.h"
 
-Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle,CorrectType type )
-{	
+Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle, CorrectType type)
+{
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
 		cout << "The parameter \"camerFieldAngle\" must be in the interval (0,PI]." << endl;
@@ -10,8 +10,8 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 	double rateOfWindow = 0.9;
 	int width = imgOrg.size().width*rateOfWindow;
 	int height = width;
-	Size imgSize(width,height);
-	
+	Size imgSize(width, height);
+
 	Mat retImg(imgSize, CV_8UC3, Scalar(0, 0, 0));
 
 	double dx = camerFieldAngle / imgSize.width;
@@ -90,12 +90,12 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 				longitude = cvFastArctan(z, -x)*PI / 180;
 
 				//transform the latitude to pixel cooradinate
-				
-				u_latitude = ((longitude-longitude_offset) / dx);
-				v_latitude = ((latitude-latitude_offset) / dy);
 
-				if (u_latitude<0 || u_latitude>=imgSize.height || v_latitude<0 || v_latitude>=imgSize.width)
-					continue; 
+				u_latitude = ((longitude - longitude_offset) / dx);
+				v_latitude = ((latitude - latitude_offset) / dy);
+
+				if (u_latitude < 0 || u_latitude >= imgSize.height || v_latitude < 0 || v_latitude >= imgSize.width)
+					continue;
 
 				//perform the map from the origin image to the latitude map image
 				_retImg(v_latitude, u_latitude)[0] = _imgOrg(j, i)[0];
@@ -111,11 +111,11 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 		for (int j = 0; j < imgSize.height; j++)
 		{
 
-			latitude =latitude_offset+j*dy;
+			latitude = latitude_offset + j*dy;
 			for (int i = 0; i < imgSize.width; i++)
-			{			
+			{
 
-				longitude = longitude_offset+i*dx;
+				longitude = longitude_offset + i*dx;
 				//Convert from latitude cooradinate to the sphere cooradinate
 				x = -sin(latitude)*cos(longitude);
 				y = cos(latitude);
@@ -126,16 +126,17 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 				Phi_sphere = cvFastArctan(y, x);//return value in Angle
 				Phi_sphere = Phi_sphere*PI / 180;//Convert from Angle to Radian
 
+
 				//Convert from parameter sphere cooradinate to fish-eye polar cooradinate
-				p = sin(Theta_sphere);  
+				p = sin(Theta_sphere);
 				theta = Phi_sphere;
 
 				//Convert from fish-eye polar cooradinate to cartesian cooradinate
 				x_cart = p*cos(theta);
 				y_cart = p*sin(theta);
 
-				double R = radius / sin(camerFieldAngle / 2);
-
+				//double R = radius / sin(camerFieldAngle / 2);
+				double R = radius;
 				//Convert from cartesian cooradinate to image cooradinate
 				u = x_cart*R + center.x;
 				v = -y_cart*R + center.y;
@@ -148,11 +149,10 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 				//	continue;
 				//}
 
-				_retImg(j, i)[0] = _imgOrg(v, u)[0];
-				_retImg(j, i)[1] = _imgOrg(v, u)[1];
-				_retImg(j, i)[2] = _imgOrg(v, u)[2];
-				
-			} 
+				_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(v,u);
+
+
+			}
 		}
 
 		break;
@@ -171,5 +171,139 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 	return retImg;
 }
 
+Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, double camerFieldAngle,
+	camMode projMode)
+{
+	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
+	{
+		cout << "The parameter \"camerFieldAngle\" must be in the interval (0,PI]." << endl;
+		return Mat();
+	}
+	double rateOfWindow = 0.9;
+	int width = imgOrg.size().width*rateOfWindow;
+	int height = width;
+	Size imgSize(width, height);
+
+	Mat retImg(imgSize, CV_8UC3, Scalar(0, 0, 0));
+
+	double dx = camerFieldAngle / imgSize.width;
+	double dy = dx;
+
+	//coordinate for latitude map
+	double latitude;
+	double longitude;
+
+	//unity sphere coordinate 
+	double x, y, z, r;
+
+	//parameter cooradinate of sphere coordinate
+	double Theta_sphere;
+	double Phi_sphere;
+
+	//polar cooradinate for fish-eye Image
+	double p;
+	double theta;
+
+	//cartesian coordinate 
+	double x_cart, y_cart;
+
+	//Image cooradinate of imgOrg
+	double u, v;
+	Point pt,pt1, pt2, pt3, pt4;
+
+	//Image cooradinate of imgRet
+	int u_latitude, v_latitude;
+	Rect imgArea(0, 0, imgOrg.cols, imgOrg.rows);
+
+	//offset of imgRet Origin
+	double longitude_offset, latitude_offset;
+	longitude_offset = (PI - camerFieldAngle) / 2;
+	latitude_offset = (PI - camerFieldAngle) / 2;
+
+	double foval = 0.0;//½¹¾à
 
 
+	Mat_<Vec3b> _retImg = retImg;
+	Mat_<Vec3b> _imgOrg = imgOrg;
+
+	//according to the camera type to do the calibration
+	for (int j = 0; j < imgSize.height; j++)
+	{
+
+		latitude = latitude_offset + j*dy;
+		for (int i = 0; i < imgSize.width; i++)
+		{
+
+			longitude = longitude_offset + i*dx;
+			//Convert from latitude cooradinate to the sphere cooradinate
+			x = -sin(latitude)*cos(longitude);
+			y = cos(latitude);
+			z = sin(latitude)*sin(longitude);
+
+			//Convert from sphere cooradinate to the parameter sphere cooradinate
+			Theta_sphere = acos(z);
+			Phi_sphere = cvFastArctan(y, x);//return value in Angle
+			Phi_sphere = Phi_sphere*PI / 180;//Convert from Angle to Radian
+
+
+			switch (projMode)
+			{
+			case PERSPECTIVE:
+				foval = radius / tan(camerFieldAngle / 2);			
+				p =foval*tan(Theta_sphere);
+				break;
+			case STEREOGRAPHIC:
+				foval = radius / (2 * tan(camerFieldAngle / 4));
+				p = 2 * foval*tan(Theta_sphere/2);
+				break;
+			case EQUIDISTANCE:
+				foval = radius / (camerFieldAngle / 2);
+				p = foval*Theta_sphere;
+				break;
+			case EQUISOLID:
+				foval = radius / (2 * sin(camerFieldAngle / 4));
+				p = 2 * foval*sin(Theta_sphere / 2);
+				break;
+			case ORTHOGONAL:
+				foval = radius / sin(camerFieldAngle / 2);
+				p = foval*sin(Theta_sphere);
+				break;
+			default:
+				cout << "The camera mode hasn't been choose!" << endl;
+			}
+			//Convert from parameter sphere cooradinate to fish-eye polar cooradinate
+			//p = sin(Theta_sphere);
+			theta = Phi_sphere;
+
+			//Convert from fish-eye polar cooradinate to cartesian cooradinate
+			x_cart = p*cos(theta);
+			y_cart = p*sin(theta);
+
+			//double R = radius / sin(camerFieldAngle / 2);
+
+			//Convert from cartesian cooradinate to image cooradinate
+			u = x_cart + center.x;
+			v = -y_cart + center.y;
+
+			pt = Point(u, v);
+			
+			if (!pt.inside(imgArea))
+			{
+				continue;
+			}
+		
+			_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(pt);
+
+		}
+	}
+
+	//imshow("org", _imgOrg);
+	//imshow("ret", _retImg);
+	//waitKey();
+#ifdef _DEBUG_
+	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	imshow("Corrected Image", retImg);
+	waitKey();
+#endif
+	return retImg;
+}

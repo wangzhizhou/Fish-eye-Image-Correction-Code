@@ -26,5 +26,14 @@ enum CorrectType
 	//on the rectified image have its corresponding origin pixel.
 };
 
+typedef enum
+{
+	PERSPECTIVE,	
+	STEREOGRAPHIC,	
+	EQUIDISTANCE,	
+	EQUISOLID,		
+	ORTHOGONAL
+}camMode;
+
 //#define _DEBUG_
 //#define _SHOW_POINTS_

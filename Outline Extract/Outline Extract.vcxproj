@@ -71,6 +71,7 @@
     <ClCompile Include="cylinderCorrection.cpp" />
     <ClCompile Include="latitudeCorrection.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="outlineExtract.cpp" />
     <ClCompile Include="panoramaExpansion.cpp" />
   </ItemGroup>
@@ -78,6 +79,7 @@
     <ClInclude Include="cylinderCorrection.h" />
     <ClInclude Include="globalInclude.h" />
     <ClInclude Include="latitudeCorrection.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="outlineExtract.h" />
     <ClInclude Include="panoramaExpansion.h" />
   </ItemGroup>

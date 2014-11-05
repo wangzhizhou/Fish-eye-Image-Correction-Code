@@ -88,6 +88,8 @@ static void onMouse(int event, int x, int y, int, void* args)
 		}
 
 		break;
+	case cv::EVENT_MOUSEMOVE:
+		//cout << "(x, y) = (" << x << ", " << y << ")" << endl;
 	default:
 		;
 	}
@@ -164,13 +166,17 @@ int main(int argc, char** argv)
 	}
 	*/
 
-	////下一步进行鱼眼图像的校正
-	//Mat ret=latitudeCorrection(imgOrg, center, radius);
-	//destroyWindow(window_name);
 
+
+	//下一步进行鱼眼图像的校正
+	//Mat ret=latitudeCorrection2(imgOrg, center, radius);
+	//destroyWindow(window_name);
 	//namedWindow("ret", CV_WINDOW_NORMAL);
 	//resizeWindow("ret", 512, 512);
 	//imshow("ret", ret);
+	//namedWindow("org", CV_WINDOW_NORMAL);
+	//resizeWindow("org", 512, 512);
+	//imshow("org", imgOrg);
 
 	 
 	/*
