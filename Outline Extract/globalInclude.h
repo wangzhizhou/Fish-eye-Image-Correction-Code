@@ -28,12 +28,17 @@ enum CorrectType
 
 typedef enum
 {
-	PERSPECTIVE,	
 	STEREOGRAPHIC,	
 	EQUIDISTANCE,	
 	EQUISOLID,		
 	ORTHOGONAL
 }camMode;
+
+typedef enum
+{
+	PERSPECTIVE,
+	LATITUDE_LONGTITUDE,
+}distMapMode;
 
 //#define _DEBUG_
 //#define _SHOW_POINTS_

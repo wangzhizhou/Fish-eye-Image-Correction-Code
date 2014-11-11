@@ -5,6 +5,7 @@
 #include "latitudeCorrection.h"
 #include "cylinderCorrection.h"
 #include "panoramaExpansion.h"
+#include "map.h"
 //用法提示
 void Usage()
 {
@@ -80,8 +81,17 @@ static void onMouse(int event, int x, int y, int, void* args)
 		points.push_back(pt);
 		if (2 == points.size())
 		{
-			cv::line(image, points[0], points[1], cv::Scalar(0, 255, 255), 3);
+			findPoints(center, radius, points);
 
+			std::vector<Point>::iterator it = points.begin();
+			while (it != points.end() - 1)
+			{
+				cv::circle(image, *it, 10, cv::Scalar(0, 0, 255), -1);
+				cv::circle(image, *(it+1), 10, cv::Scalar(0, 0, 255), -1);
+
+				line(image, *it, *(it + 1), Scalar(0, 255, 255), 3);
+				++it;
+			}
 			cv::imshow(winname, image);
 			lines.push_back(points);
 			points.clear();
@@ -124,34 +134,18 @@ int main(int argc, char** argv)
 
 	//上面完成了有效区域半径和圆心的的参数提取工作
 	center = Point(1097, 1102);
-	radius = 1097;	
+	radius = 1097;
 
+	
 	image = imgOrg.clone();
 	namedWindow(winname, CV_WINDOW_NORMAL);
 	resizeWindow(winname, 512, 512);
 	moveWindow(winname, 800, 300);
-	//circle(image, center, radius, Scalar(0, 0, 255), image.cols / 300);
-	//circle(image, center, image.cols/300, Scalar(0, 255, 255), -1);
+	circle(image, center, radius, Scalar(0, 0, 255), image.cols / 300);
+	circle(image, center, image.cols/300, Scalar(0, 255, 255), -1);
 	imshow(winname, image);
 	setMouseCallback(winname, onMouse);
 	waitKey();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/*这一部分只针对鱼眼像片是朝向天空和大地拍摄的图像进行的校正
 		Mat img1, img2, img3;
@@ -169,14 +163,15 @@ int main(int argc, char** argv)
 
 
 	//下一步进行鱼眼图像的校正
-	//Mat ret=latitudeCorrection2(imgOrg, center, radius);
-	//destroyWindow(window_name);
-	//namedWindow("ret", CV_WINDOW_NORMAL);
-	//resizeWindow("ret", 512, 512);
-	//imshow("ret", ret);
-	//namedWindow("org", CV_WINDOW_NORMAL);
-	//resizeWindow("org", 512, 512);
-	//imshow("org", imgOrg);
+	Mat ret=latitudeCorrection2(imgOrg, center, radius);
+	destroyWindow(window_name);
+	namedWindow("ret", CV_WINDOW_NORMAL);
+	resizeWindow("ret", 512, 512);
+	imshow("ret", ret);
+	namedWindow("org", CV_WINDOW_NORMAL);
+	resizeWindow("org", 512, 512);
+	Mat ret1 = latitudeCorrection2(imgOrg, center, radius,PERSPECTIVE);
+	imshow("org", ret1);
 
 	 
 	/*
@@ -200,7 +195,8 @@ int main(int argc, char** argv)
 	//}
 
 	*/
-		
+	
+	
 	waitKey();
 	return 0;
 }

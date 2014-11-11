@@ -171,8 +171,8 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 	return retImg;
 }
 
-Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, double camerFieldAngle,
-	camMode projMode)
+Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode distMap, double camerFieldAngle,
+	camMode camProjMode)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -180,14 +180,22 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, double camerFiel
 		return Mat();
 	}
 	double rateOfWindow = 0.9;
-	int width = imgOrg.size().width*rateOfWindow;
-	int height = width;
+
+	//int width = imgOrg.size().width*rateOfWindow;
+	//int height = width;
+
+	int width = imgOrg.cols;
+	int height = imgOrg.rows;
+
+
 	Size imgSize(width, height);
+	int center_x = imgSize.width / 2;
+	int center_y = imgSize.height / 2;
 
 	Mat retImg(imgSize, CV_8UC3, Scalar(0, 0, 0));
 
 	double dx = camerFieldAngle / imgSize.width;
-	double dy = dx;
+	double dy = camerFieldAngle / imgSize.height;
 
 	//coordinate for latitude map
 	double latitude;
@@ -230,28 +238,46 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, double camerFiel
 	for (int j = 0; j < imgSize.height; j++)
 	{
 
-		latitude = latitude_offset + j*dy;
 		for (int i = 0; i < imgSize.width; i++)
 		{
+			Point3f tmpPt(i - center_x, center_y - j, 1600);//最后一个参数用来修改成像面的焦距
+			double normPt = norm(tmpPt);
 
-			longitude = longitude_offset + i*dx;
-			//Convert from latitude cooradinate to the sphere cooradinate
-			x = -sin(latitude)*cos(longitude);
-			y = cos(latitude);
-			z = sin(latitude)*sin(longitude);
+			switch (distMap)
+			{
+			case PERSPECTIVE:
 
-			//Convert from sphere cooradinate to the parameter sphere cooradinate
+				tmpPt.x /= normPt;
+				tmpPt.y /= normPt;
+				tmpPt.z /= normPt;
+
+				x = tmpPt.x;
+				y = tmpPt.y;
+				z = tmpPt.z;
+
+				break;
+			case LATITUDE_LONGTITUDE:
+
+				latitude = latitude_offset + j*dy;
+				longitude = longitude_offset + i*dx;
+				//Convert from latitude cooradinate to the sphere cooradinate
+				x = -sin(latitude)*cos(longitude);
+				y = cos(latitude);
+				z = sin(latitude)*sin(longitude);
+
+				break;
+			default:
+				break;
+			}
+
+			//Convert from unit sphere cooradinate to the parameter sphere cooradinate
 			Theta_sphere = acos(z);
 			Phi_sphere = cvFastArctan(y, x);//return value in Angle
 			Phi_sphere = Phi_sphere*PI / 180;//Convert from Angle to Radian
 
 
-			switch (projMode)
+			switch (camProjMode)
 			{
-			case PERSPECTIVE:
-				foval = radius / tan(camerFieldAngle / 2);			
-				p =foval*tan(Theta_sphere);
-				break;
 			case STEREOGRAPHIC:
 				foval = radius / (2 * tan(camerFieldAngle / 4));
 				p = 2 * foval*tan(Theta_sphere/2);
@@ -305,5 +331,6 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, double camerFiel
 	imshow("Corrected Image", retImg);
 	waitKey();
 #endif
+	imwrite("ret.jpg", retImg);
 	return retImg;
 }
