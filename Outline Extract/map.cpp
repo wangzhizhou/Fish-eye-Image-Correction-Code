@@ -102,7 +102,7 @@ void findPoints(Point2i center, int radius,std::vector<cv::Point> &points, camMo
 		<< norm(e3) << endl;
 	std::vector<Point3f> tmpK;
 	tmpK.push_back(e1);
-	tmpK.push_back(e2);
+	tmpK.push_back(e2);	
 	tmpK.push_back(e3);
 	cout << e1 << endl << e2 << endl << e3 << endl;
 	cout << "tmpK=" << tmpK << endl;

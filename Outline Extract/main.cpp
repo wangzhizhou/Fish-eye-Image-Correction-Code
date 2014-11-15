@@ -76,7 +76,7 @@ static void onMouse(int event, int x, int y, int, void* args)
 	switch (event)
 	{
 	case cv::EVENT_LBUTTONDOWN:
-		cv::circle(image, pt, 15, cv::Scalar(0, 255, 0), -1);
+		cv::circle(image, pt, imgOrg.cols*0.005, cv::Scalar(0, 255, 0), -1);
 		cv::imshow(winname, image);
 		points.push_back(pt);
 		if (2 == points.size())
@@ -86,10 +86,10 @@ static void onMouse(int event, int x, int y, int, void* args)
 			std::vector<Point>::iterator it = points.begin();
 			while (it != points.end() - 1)
 			{
-				cv::circle(image, *it, 10, cv::Scalar(0, 0, 255), -1);
-				cv::circle(image, *(it+1), 10, cv::Scalar(0, 0, 255), -1);
+				cv::circle(image, *it, imgOrg.cols*0.003, cv::Scalar(0, 0, 255), -1);
+				cv::circle(image, *(it+1), imgOrg.cols*0.003, cv::Scalar(0, 0, 255), -1);
 
-				line(image, *it, *(it + 1), Scalar(0, 255, 255), 3);
+				line(image, *it, *(it + 1), Scalar(0, 255, 255), imgOrg.cols*0.002);
 				++it;
 			}
 			cv::imshow(winname, image);
@@ -121,25 +121,25 @@ int main(int argc, char** argv)
 		cout << "Failed to read in a image." << endl;
 		return -1;
 	}
-	//namedWindow(window_name, CV_WINDOW_NORMAL);
-	//resizeWindow(window_name, 512, 612);
-	//moveWindow(window_name, 800, 300);
-	//const char N_trackbar_name[]="N (0-15)";
-	//const char Threshold_trackbar_name[] = "Threshold(0-255)";
-	//createTrackbar(N_trackbar_name, window_name, &N_slider, N_max, On_N_trackbar);
-	//createTrackbar(Threshold_trackbar_name, window_name, &threshold_slider, threshold_max, On_threshold_trackbar);
-	//On_N_trackbar(N_slider,0);
-	//On_threshold_trackbar(threshold_slider,0);
-	//waitKey();//获得了鱼眼图像圆形有效区域的圆心坐标和半径
+	namedWindow(window_name, CV_WINDOW_NORMAL);
+	resizeWindow(window_name, 512, 612);
+	moveWindow(window_name, 800, 300);
+	const char N_trackbar_name[]="N (0-15)";
+	const char Threshold_trackbar_name[] = "Threshold(0-255)";
+	createTrackbar(N_trackbar_name, window_name, &N_slider, N_max, On_N_trackbar);
+	createTrackbar(Threshold_trackbar_name, window_name, &threshold_slider, threshold_max, On_threshold_trackbar);
+	On_N_trackbar(N_slider,0);
+	On_threshold_trackbar(threshold_slider,0);
+	waitKey();//获得了鱼眼图像圆形有效区域的圆心坐标和半径
 
 	//上面完成了有效区域半径和圆心的的参数提取工作
-	center = Point(1097, 1102);
-	radius = 1097;
+	//center = Point(1097, 1102);
+	//radius = 1097;
 
 	
 	image = imgOrg.clone();
 	namedWindow(winname, CV_WINDOW_NORMAL);
-	resizeWindow(winname, 512, 512);
+	//resizeWindow(winname, 512, 512);
 	moveWindow(winname, 800, 300);
 	circle(image, center, radius, Scalar(0, 0, 255), image.cols / 300);
 	circle(image, center, image.cols/300, Scalar(0, 255, 255), -1);
@@ -163,15 +163,21 @@ int main(int argc, char** argv)
 
 
 	//下一步进行鱼眼图像的校正
-	Mat ret=latitudeCorrection2(imgOrg, center, radius);
+	Mat ret=latitudeCorrection3(imgOrg, center, radius);
+	imwrite("left.jpg", ret);
 	destroyWindow(window_name);
+//	destroyWindow(winname);
 	namedWindow("ret", CV_WINDOW_NORMAL);
 	resizeWindow("ret", 512, 512);
 	imshow("ret", ret);
+
 	namedWindow("org", CV_WINDOW_NORMAL);
 	resizeWindow("org", 512, 512);
-	Mat ret1 = latitudeCorrection2(imgOrg, center, radius,PERSPECTIVE);
+	imshow("org", imgOrg);
+	Mat ret1 = latitudeCorrection2(imgOrg, center, radius);
 	imshow("org", ret1);
+
+
 
 	 
 	/*
@@ -196,6 +202,24 @@ int main(int argc, char** argv)
 
 	*/
 	
+
+	//漫游算法雏形
+	//std::ostringstream fileName;
+	//double stepAng = PI / 6;
+	//int Number = 0;
+	//for (double i = -PI / 2; i < PI / 2; i += stepAng)
+	//{
+	//	for (double j = -PI / 2; j < PI / 2; j += stepAng)
+	//	{
+	//		Mat ret1 = latitudeCorrection3(imgOrg, center, radius, PERSPECTIVE, i, j);
+	//		////imshow("org", ret1);
+	//		fileName << "stitch\\" << ++Number << ".jpg";
+	//		imwrite(fileName.str().c_str(), ret1);
+	//		//std::cout << fileName.str() << endl;
+	//		fileName.str("");
+	//	}
+	//}
+
 	
 	waitKey();
 	return 0;
