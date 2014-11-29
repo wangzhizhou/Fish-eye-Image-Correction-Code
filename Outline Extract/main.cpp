@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 	//上面完成了有效区域半径和圆心的的参数提取工作
 	//center = Point(1097, 1102);
 	//radius = 1097;
-
+	
 	
 	image = imgOrg.clone();
 	namedWindow(winname, CV_WINDOW_NORMAL);
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 
 
 	//下一步进行鱼眼图像的校正
-	Mat ret=latitudeCorrection3(imgOrg, center, radius);
+	Mat ret=latitudeCorrection(imgOrg, center, radius,PI*5/6);
 	imwrite("left.jpg", ret);
 	destroyWindow(window_name);
 //	destroyWindow(winname);
@@ -171,15 +171,13 @@ int main(int argc, char** argv)
 	resizeWindow("ret", 512, 512);
 	imshow("ret", ret);
 
+
 	namedWindow("org", CV_WINDOW_NORMAL);
 	resizeWindow("org", 512, 512);
 	imshow("org", imgOrg);
-	Mat ret1 = latitudeCorrection2(imgOrg, center, radius);
-	imshow("org", ret1);
-
-
-
-	 
+	Mat ret1 = latitudeCorrection5(imgOrg, center, radius,PI/180*90,PI/180*90);//如何让两个方向的调整互不影响
+	imshow("org", ret1);	 
+	imwrite("forwardMap.jpg",ret1);
 	/*
 		//使用多种方法来校正鱼眼图像，下面是经纬校正法
 	//Mat img1, img2, img3;
