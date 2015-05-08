@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 
 
 	//下一步进行鱼眼图像的校正
-	Mat ret=latitudeCorrection(imgOrg, center, radius,PI*5/6);
+	Mat ret=latitudeCorrection4(imgOrg, center, radius,/*PI*5/6*/PI/180*90,PI/180*90);
 	imwrite("left.jpg", ret);
 	destroyWindow(window_name);
 //	destroyWindow(winname);

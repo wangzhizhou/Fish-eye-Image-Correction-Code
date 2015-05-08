@@ -252,6 +252,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 
 	for (int n = 0; n < 2 * N; n++, theta = PI*n / (2 * N))
 	{
+		//if (n == N||n==0) continue;
 		int min1, min2;
 		min1 = min2 = 255;
 		int max1, max2;

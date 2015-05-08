@@ -821,7 +821,7 @@ Mat latitudeCorrection4(Mat imgOrg, Point2i center, int radius,double w_longtitu
 double func1(double l, double phi,double w)
 {
 	static double limit = auxFunc(w, 0);
-	double result = l - limit + auxFunc(w, phi);
+	double result = l-limit + auxFunc(w, phi);
 	return result;
 }
 double getPhi1(double l,double w)
@@ -1001,8 +1001,8 @@ Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtit
 				l =limi_latitude+sin(w_latitude)*sqrt(cos(latitude)*cos(latitude) + (1 - sin(latitude))*(1 - sin(latitude))) / sin(PI - w_latitude - atan((1 - sin(latitude)) / abs(cos(latitude))));
 			}
 			u_longtitude = ((longitude - longitude_offset)/dx);
-			v_latitude = (latitude - latitude_offset) / dy;
-			//v_latitude = l*imgSize.height/(2*limi_latitude);
+			// = (latitude - latitude_offset) / dy;
+			v_latitude = l*imgSize.height/(2*limi_latitude);
 
 			if (u_longtitude < 0 || u_longtitude >= imgSize.height || v_latitude < 0 || v_latitude >= imgSize.width)
 				continue;
