@@ -1,242 +1,325 @@
-#include "outlineExtract.h"
+#include "findCircleParameter.h"
+
+//圆提取窗口标题
+string findCircleParameter::win_name = "Circle Extraction";
+
+//变角度线扫描法，扫描倾角分割系数
+string findCircleParameter::N_trackbar_name = "N(0-15)";
+
+//变角度线扫描法阈值设定值
+string findCircleParameter::thresholdValue_trackbar_name = "Threshold(0-255)";
+
+//变角度线扫描法的角度方向数初值
+int findCircleParameter::N_slider_value = 5;
+
+//变角度线扫描法的角度方向数最大设定值
+int findCircleParameter::N_max_value = 15;
+
+//线扫描的阈值
+int findCircleParameter::thresholdValue_slider_value = 40;
+
+//线扫描阈值最大设定值
+int findCircleParameter::thresholdValue_max_value = 255;
+
+//存放识别出的圆的中心坐标(图像坐标系下)
+Point2i findCircleParameter::center = Point2i(-1, -1);
+
+//存放识别出的圆的半径大小
+int findCircleParameter::radius = -1;
+
+//存放原图
+Mat findCircleParameter::image = Mat();
 
 
-//面积统计法求圆形有效区域的圆心位置和半径
-void areaStatisticsMethod(Mat imgOrg, Point2i& center, int& radius, int threshold)
+/********验证部分变量初始化***********/
+
+//存放线条上点的坐标
+std::vector<std::vector<cv::Point>> findCircleParameter::lines;
+
+//验证窗口标题
+std::string findCircleParameter::check_win_name = "Check Verify";
+
+//
+std::vector<cv::Point> findCircleParameter::points;
+
+//鱼眼镜头的视场角
+const double findCircleParameter::FOV = PI;
+/**********************************/
+
+//初始化识别图，导入待识别图像
+bool findCircleParameter::init(Mat img)
 {
-	Mat src = imgOrg.clone();//复制原图，以避免修改原图
-	
-	//imwrite("area_src.tiff", src);//保存图片供论文使用
+	image = img;
+	if (image.data)
+		return true;
+	return false;
+}
 
-	Size srcSize = src.size();//获得原始图像的尺寸
+//开始识别圆
+void findCircleParameter::findCircle()
+{
+	namedWindow(win_name, CV_WINDOW_NORMAL);
+	createTrackbar(N_trackbar_name, win_name, &N_slider_value, N_max_value, On_N_trackbar);
+	createTrackbar(thresholdValue_trackbar_name, win_name, &thresholdValue_slider_value, thresholdValue_max_value, On_threshold_trackbar);
+	On_N_trackbar(N_slider_value, 0);
+	On_threshold_trackbar(thresholdValue_slider_value, 0);
+	waitKey();
+	destroyWindow(win_name);
+}
 
-	Mat gray,binarized;
+//检验是否有效
+void findCircleParameter::checkVarify()
+{
+	namedWindow(check_win_name, CV_WINDOW_KEEPRATIO);
+	resizeWindow(check_win_name, 512, 512);
+	imshow(check_win_name, image);
+	setMouseCallback(check_win_name, onMouse);
+	waitKey();
+}
 
-	cvtColor(src, gray, CV_BGR2GRAY);//对彩色原图进行灰度化
-
-	cv::threshold(gray, binarized, threshold, 255, THRESH_BINARY);//以一定的阈值对灰度图像二值化
-
-	/*imwrite("area_gray.tiff", gray);
-	imwrite("area_binary.tiff", binarized);
-	imshow("gray", gray);
-	imshow("binary", binarized);
-	waitKey();*/
-	
-	//由于鱼眼图像圆形有效区域的像素亮度较高，所以二值化后会变成白色区域，
-	//我们可以把这个白色区域看作是平面几何图像，从而求取它的重心坐标，作为圆心坐标
-	//而一般圆形有效区域中暗点较少，所以可以把白色区域的面近似为圆形有效区域的面积，
-	//从而求得半径大小
-	
-	double area = 0.0;
-	int xTorque=0, yTorque=0;
-	for (int j = 0; j < srcSize.height; j++)
+//光标回调函数
+void findCircleParameter::onMouse(int event, int x, int y, int, void* params)
+{
+	Mat src = image.clone();
+	cv::Point pt(x, y);
+	switch (event)
 	{
-		for (int i = 0; i < srcSize.width; i++)
+	case cv::EVENT_LBUTTONDOWN:
+		cv::circle(src, pt, src.cols*0.005, cv::Scalar(0, 255, 0), -1);
+		cv::imshow(check_win_name, src);
+		points.push_back(pt);
+		if (2 == points.size())
 		{
-			if (binarized.at<uchar>(Point(i, j)) == 255)
+			findPoints(center, radius, points);
+			std::vector<Point>::iterator it = points.begin();
+			while (it != points.end() - 1)
 			{
-				area++;//统计出白色区域的像素点个数，作为白色区域的面积
+				cv::circle(src, *it, src.cols*0.003, cv::Scalar(0, 0, 255), -1);
+				cv::circle(src, *(it + 1), src.cols*0.003, cv::Scalar(0, 0, 255), -1);
 
-				//计算x、y两个坐标方向上的一次矩
-				xTorque += i;
-				yTorque += j;
+				line(src, *it, *(it + 1), Scalar(0, 255, 255), src.cols*0.002);
+				++it;
 			}
+			cv::imshow(check_win_name, src);
+			lines.push_back(points);
+			points.clear();
 		}
+		break;
+	case cv::EVENT_MOUSEMOVE:
+		//cout << "(x, y) = (" << x << ", " << y << ")" << endl;
+	default:
+		;
 	}
-	radius = sqrt(area / PI);//求得圆形有效区域的半径
-
-	//求得白色区域的重点位置作为圆形有效区域的圆心
-	center.x = xTorque / area;
-	center.y = yTorque / area;
-
-#ifdef _DEBUG_
-	cout << "Use the Area Statistics Method:" << endl
-		<< "\tThe center is (" << center.x << ", "
-		<< center.y << ")" << endl
-		<< "\tThe radius is " << radius << endl;
-
-	circle(src, center, radius, Scalar(0, 0, 255), 2);
-	circle(src, center, 3, Scalar(0, 0, 255), -1);
-
-	namedWindow("Area Statistics Method Result", CV_WINDOW_AUTOSIZE);
-	imshow("Area Statistics Method Result", src);
-	imwrite("area_ret.tiff", src);
-	waitKey();
-
-#endif
 }
-//传统线扫描法
-void ScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, Point offsetCenter, int adjustRadius)
+
+void findCircleParameter::findPoints(Point2i center, int radius, std::vector<cv::Point> &points, camMode projMode)
 {
-	Mat src, gray,gray_back;
-	src = imgOrg.clone();
+	std::vector<cv::Point3f> spherePoints(points.size());
+	std::vector<cv::Point3f>::iterator itSphere = spherePoints.begin();
 
-	//imwrite("Scan_src.tiff", src);
+	cout << points << endl;
 
-	cvtColor(src, gray, CV_BGR2GRAY);
-	gray_back = gray.clone();
+	std::vector<cv::Point>::iterator it = points.begin();
 
-	int left, right, top, bottom;
-
-
-	double minVal, maxVal;
-	Point2i minLoc, maxLoc;
-
-	uchar count = 0;
-	for (int i = 0; i < gray.rows; i++)
+	while (it != points.end())
 	{
-		minMaxLoc(gray.row(i), &minVal, &maxVal, &minLoc, &maxLoc);
-		if ((maxVal - minVal)>threshold)
+		int u = it->x;
+		int v = it->y;
+
+		//Convert to cartiesian cooradinate in unity circle
+		int x_cart = (u - center.x);
+		int y_cart = -(v - center.y);
+
+		//convert to polar axes
+		double theta = cvFastArctan(y_cart, x_cart)*PI / 180;
+		double p = sqrt(pow(x_cart, 2) + pow(y_cart, 2));
+
+		double foval = 0.0;
+		double Theta_sphere;
+		switch (projMode)
 		{
-			maxLoc.y = i;
-			gray_back.row(i) = 255;
-			gray_back.row(i-1) = 255;
-			
-			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
 
-			top = i;
-			count++;
+		case STEREOGRAPHIC:
+			foval = radius / (2 * tan(FOV / 4));
+			Theta_sphere = 2 * atan(p / (2 * foval));
 			break;
+		case EQUIDISTANCE:
+			foval = radius / (FOV / 2);
+			Theta_sphere = p / foval;
+			break;
+		case EQUISOLID:
+			foval = radius / (2 * sin(FOV / 4));
+			Theta_sphere = 2 * asin(p / (2 * foval));
+			break;
+		case ORTHOGONAL:
+			foval = radius / sin(FOV / 2);
+			Theta_sphere = asin(p / foval);
+			break;
+		default:
+			cout << "The camera mode hasn't been choose!" << endl;
 		}
+
+		//convert to sphere surface parameter cooradinate
+		double Phi_sphere = theta;
+
+		//convert to sphere surface 3D cooradinate
+		itSphere->x = sin(Theta_sphere)*cos(Phi_sphere);
+		itSphere->y = sin(Theta_sphere)*sin(Phi_sphere);
+		itSphere->z = cos(Theta_sphere);
+
+		double temp = itSphere->x*itSphere->x +
+			itSphere->y*itSphere->y +
+			itSphere->z*itSphere->z;
+		cout << "[x, y, z] = " << *itSphere << endl
+			<< "norm = " << sqrt(temp) << endl;
+
+		++it;
+		++itSphere;
 	}
-	for (int i = gray.rows - 1; i >= 0; i--)
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+	double angle = acos(spherePoints[0].dot(spherePoints[1]));
+
+	//double angle = PI;
+	cout << "spherePoints[0]=" << spherePoints[0] << endl;
+	cout << "spherePoints[1]=" << spherePoints[1] << endl;
+
+	cv::Point3f e3 = spherePoints[0].cross(spherePoints[1]);
+	double norm_e3 = norm(e3);
+	e3.x /= norm_e3;
+	e3.y /= norm_e3;
+	e3.z /= norm_e3;
+
+	if (e3.dot(Point3f(0, 0, 1)) < 0)
 	{
-		minMaxLoc(gray.row(i), &minVal, &maxVal, &minLoc, &maxLoc);
-		if ((maxVal - minVal) > threshold)
+		e3 = spherePoints[1].cross(spherePoints[0]);
+		double norm_e3 = norm(e3);
+		e3.x /= norm_e3;
+		e3.y /= norm_e3;
+		e3.z /= norm_e3;
+
+		//swap shpereSpoint[0] and spherePoints[1]
+		spherePoints[0] = spherePoints[0] + spherePoints[1];
+		spherePoints[1] = spherePoints[0] - spherePoints[1];
+		spherePoints[0] = spherePoints[0] - spherePoints[1];
+
+	}
+	cv::Point3f e1 = spherePoints[0];
+	cv::Point3f e2 = e3.cross(e1);
+
+	cout << "e1.e2=" << e1.dot(e2) << endl
+		<< e2.dot(e3) << endl
+		<< e3.dot(e1) << endl;
+	cout << "norm(e1)=" << norm(e1) << endl << norm(e2) << endl
+		<< norm(e3) << endl;
+	std::vector<Point3f> tmpK;
+	tmpK.push_back(e1);
+	tmpK.push_back(e2);
+	tmpK.push_back(e3);
+	cout << e1 << endl << e2 << endl << e3 << endl;
+	cout << "tmpK=" << tmpK << endl;
+	Mat K = Mat(tmpK).reshape(1).t(); //从标准空间坐标到报像头空间坐标的变换矩阵
+	cout << "K=" << K << endl;
+	Mat T = K.inv(CV_SVD);//从报像头空间坐标到标准空间坐标平面变换矩阵
+
+	points.clear();
+	const int count = 20;
+	double step = angle / count;
+	double start = 0.0;
+	int l = 0;
+	while (l++ <= count)
+	{
+		Point3f stdPt(cos(start), sin(start), 0);
+		Mat  matPt(stdPt);
+
+		cout << matPt << endl << K << endl;
+		Mat ptSphere(K*matPt);
+		cout << ptSphere << endl;
+		Mat_<double> ptSphere_double;
+		ptSphere.convertTo(ptSphere_double, CV_64F);
+		double x = ptSphere_double.at<double>(0, 0);
+		double y = ptSphere_double.at<double>(1, 0);
+		double z = ptSphere_double.at<double>(2, 0);
+
+		cout << x << ", " << y << ", " << z << endl;
+
+		//Convert from sphere cooradinate to the parameter sphere cooradinate
+		double Theta_sphere = acos(z);
+		double Phi_sphere = cvFastArctan(y, x)*PI / 180;//return value in Angle
+		////////////////////////////////////////////////////////////////////////////////
+
+		double foval = 0.0;
+		double p;
+		switch (projMode)
 		{
-			maxLoc.y = i;
-			gray_back.row(i) = 255;
-			gray_back.row(i + 1) = 255;
 
-			//circle(src, maxLoc, 3, Scalar(0, 255 , 255), -1);
-
-			bottom = i;
-			count++;
+		case STEREOGRAPHIC:
+			foval = radius / (2 * tan(FOV / 4));
+			p = 2 * foval*tan(Theta_sphere / 2);
 			break;
-		}
-	}
-	for (int i = 0; i < gray.cols; i++)
-	{
-		minMaxLoc(gray.col(i), &minVal, &maxVal, &minLoc, &maxLoc);
-		if ((maxVal - minVal)>threshold)
-		{
-			maxLoc.x = i;
-			gray_back.col(i) = 255;
-			gray_back.col(i - 1) = 255;
-
-			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
-
-			left = i;
-			count++;
+		case EQUIDISTANCE:
+			foval = radius / (FOV / 2);
+			p = foval*Theta_sphere;
 			break;
-		}
-	}
-	for (int i = gray.cols - 1; i >= 0; i--)
-	{
-		minMaxLoc(gray.col(i), &minVal, &maxVal, &minLoc, &maxLoc);
-		if ((maxVal - minVal) > threshold)
-		{
-			maxLoc.x = i;
-			gray_back.col(i) = 255;
-			gray_back.col(i + 1) = 255;
-
-			//circle(src, maxLoc, 3, Scalar(0, 255, 255), -1);
-
-			right = i;
-			count++;
+		case EQUISOLID:
+			foval = radius / (2 * sin(FOV / 4));
+			p = 2 * foval*sin(Theta_sphere / 2);
 			break;
+		case ORTHOGONAL:
+			foval = radius / sin(FOV / 2);
+			p = foval*sin(Theta_sphere);
+			break;
+		default:
+			cout << "The camera mode hasn't been choose!" << endl;
 		}
+		//Convert from parameter sphere cooradinate to fish-eye polar cooradinate
+		//p = sin(Theta_sphere);
+		double theta = Phi_sphere;
+
+		//Convert from fish-eye polar cooradinate to cartesian cooradinate
+		double x_cart = p*cos(theta);
+		double y_cart = p*sin(theta);
+
+		//double R = radius / sin(camerFieldAngle / 2);
+
+		//Convert from cartesian cooradinate to image cooradinate
+		double u = x_cart + center.x;
+		double v = -y_cart + center.y;
+
+		Point pt = Point(u, v);
+		points.push_back(pt);
+		//////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////
+		start += step;
 	}
-	if (4 != count)
-	{
-		std::cout << "The ScanLine Method Failed!" << endl
-			<< "Tip: " << endl
-			<< "\tyou can try to adjust " << endl
-			<< "\tthe value of threshold to make it work." << endl
-			<< "\tcurrent value of threshold is: " << threshold << endl;
-		return;
-	}
-	//rectangle(src, Point(left, top), Point(right, bottom), Scalar(0, 0, 255),2);
-
-	center.x = (right + left) / 2 + offsetCenter.x;
-	center.y = (top + bottom) / 2 + offsetCenter.y;
-
-	double radius_max = max(right - left, bottom - top) / 2;
-	double radius_min = min(right - left, bottom - top) / 2;
-	double radius_avg = (radius_max + radius_min) / 2;
-
-	radius = radius_max + adjustRadius;
-
-#ifdef _DEBUG_
-	imwrite("Scan_gray.tiff", gray_back);
-	cout << "Use the ScanLine Method:" << endl
-		<< "\tThe center is (" << center.x << ", " 
-		<< center.y << ")" << endl
-		<< "\tThe radius is " << radius << endl;
-
-	circle(src, center, radius, Scalar(0, 0, 255), 2);
-	circle(src, center, 3, Scalar(0, 0, 255), -1);
-	imwrite("Scan_ret.tiff", src);
-
-	namedWindow("ScanLine Method Result", CV_WINDOW_AUTOSIZE);
-	imshow("ScanLine Method Result", src);
-	waitKey();
-#endif
-
+	/////////////////////////////////////////////////////////////////////
+	cout << points << endl;
 }
-//霍夫圆变换法
-void HoughCircleMethod(Mat imgOrg, Point2i& center, int& radius)
+
+//为确定鱼眼圆形有效区域参数而设置的回调函数，供OpenCV使用
+void findCircleParameter::On_N_trackbar(int N_slider_value, void* params)
 {
-	Mat src, gray;
-	src = imgOrg.clone();//复制原图，防止函数内部对其更改
+	cout << endl;
+	cout << "N_Slider" << N_slider_value << endl;
+	cout << "Threshold_Slider" << thresholdValue_slider_value << endl;
+	//用变角度线扫描法取求圆形有效区域的圆心和半径的参数
+	if (image.data)
+		revisedScanLineMethod(image, center, radius, thresholdValue_slider_value, N_slider_value);
+}
 
-	//imwrite("Hough_src.tiff", src);//保存原始供论文使用
-
-	cvtColor(src, gray, CV_BGR2GRAY);//对原始图像灰度化
-
-	//imwrite("Hough_gray.tiff", gray);
-
-	GaussianBlur(gray, gray, Size(9, 9), 2, 2);//使用高斯滤波，减小噪声影响
-
-	//使用霍夫圆检测法，检测图形中的圆形轮廓
-	vector<Vec3f> circles;
-	HoughCircles(gray, circles, CV_HOUGH_GRADIENT, 1, gray.rows / 4, 180,90,gray.rows/6);
-
-	//将检测出的圆形轮廓在原图上一一标示出来
-	for (size_t i = 0; i < circles.size(); i++)
-	{
-		Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-		int radius = cvRound(circles[i][2]);
-		// circle center
-		cv::circle(src, center, 3, Scalar(0, 0, 255), -1, 8, 0);
-		// circle outline
-		cv::circle(src, center, radius, Scalar(0, 0, 255), 2, 8, 0);
-	}
-
-	/// Show your results
-	if (circles.size())
-	{
-		center.x = circles[0][0];
-		center.y = circles[0][1];
-		radius = circles[0][2];
-	}
-
-#ifdef _DEBUG_
-	cout << "Use the HoughCircle Method:" << endl
-		<< "\tThe center is (" << center.x << ", "
-		<< center.y << ")" << endl
-		<< "\tThe radius is " << radius << endl;
-
-	namedWindow("Hough Circle Transform Result", CV_WINDOW_AUTOSIZE);
-	imshow("Hough Circle Transform Result", src);
-	imwrite("Hough_ret.tiff", src);
-	waitKey();
-#endif
-
+//为确定鱼眼圆形有效区域参数而设置的回调函数，供OpenCV使用
+void findCircleParameter::On_threshold_trackbar(int thresholdValue_slider_value, void* params)
+{
+	cout << endl;
+	cout << "N_Slider: " << N_slider_value << endl;
+	cout << "Threshold_Slider: " << thresholdValue_slider_value << endl;
+	//用变角度线扫描法取求圆形有效区域的圆心和半径的参数
+	if (image.data)
+		revisedScanLineMethod(image, center, radius, thresholdValue_slider_value, N_slider_value);
 }
 
 //变角度线扫描法——改进后的线扫描法
-void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, int N)
+void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, int N)
 {
 	Mat src, gray;
 	src = imgOrg.clone();
@@ -350,7 +433,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 						min1 = I;
 					}
 
-					if (abs(max1 - min1)>threshold)
+					if (abs(max1 - min1) > threshold)
 					{
 						flag++;
 						//cout << "jump outer1" << endl;
@@ -412,7 +495,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 						min2 = I;
 					}
 
-					if (abs(max2 - min2)>threshold)
+					if (abs(max2 - min2) > threshold)
 					{
 						flag++;
 						//cout << "jump outer2" << endl;
@@ -548,7 +631,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 						min1 = I;
 					}
 
-					if (abs(max1 - min1)>threshold)
+					if (abs(max1 - min1) > threshold)
 					{
 						flag++;
 						//cout << "jump outer3" << endl;
@@ -608,7 +691,7 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 						min2 = I;
 					}
 
-					if (abs(max2 - min2)>threshold)
+					if (abs(max2 - min2) > threshold)
 					{
 						flag++;
 						//cout << "jump outer4" << endl;
@@ -702,26 +785,26 @@ void revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int thresho
 		return;
 	}
 
-//#ifdef _DEBUG_
+	//#ifdef _DEBUG_
 	cout << "Use the Revised ScanLine Method:" << endl
 		<< "\tThe center is (" << center.x << ", "
 		<< center.y << ")" << endl
 		<< "\tThe radius is " << radius << endl;
 
-	circle(src, center, radius, Scalar(0, 0, 255), src.cols/300);
+	circle(src, center, radius, Scalar(0, 0, 255), src.cols / 300);
 	circle(src, center, 5, Scalar(0, 255, 255), -1);
 
 	//namedWindow("Revised ScanLine Method Result", CV_WINDOW_AUTOSIZE);
 	//imshow("Revised ScanLine Method Result", src);
-	extern const char window_name[];
-	imshow(window_name, src);
+	imshow(win_name, src);
 	//imwrite("Revised_Scan_ret.tiff", src);
 	//waitKey();
-//#endif
+	//#endif
 
 }
+
 //圆拟合函数，性能很好，但要防止拟合时出现奇异值的情况
-bool CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
+bool findCircleParameter::CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
 {
 	if (validPoints.size() <= 2)
 	{
