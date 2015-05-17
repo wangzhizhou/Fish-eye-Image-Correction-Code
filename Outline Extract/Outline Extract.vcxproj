@@ -71,7 +71,6 @@
   <ItemGroup>
     <ClCompile Include="corrector.cpp" />
     <ClCompile Include="findCircleParameter.cpp" />
-    <ClCompile Include="latitudeCorrection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tools.cpp" />
     <ClCompile Include="viewer.cpp" />
@@ -80,7 +79,6 @@
     <ClInclude Include="corrector.h" />
     <ClInclude Include="findCircleParameter.h" />
     <ClInclude Include="globalInclude.h" />
-    <ClInclude Include="latitudeCorrection.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="viewer.h" />
   </ItemGroup>

@@ -3,9 +3,6 @@
 #include "findCircleParameter.h"
 #include "corrector.h"
 
-#include "latitudeCorrection.h"
-
-
 //主程度入口点
 int main(int argc, char** argv)
 {
@@ -29,49 +26,30 @@ int main(int argc, char** argv)
 			{
 				corrector::dispHeaveAndEarthCorrectImage(source_image);
 			}
+
+			if (IDOK == MessageBox(NULL, "Do you want to correct the fish-eye image using the LCCP method?", "Correction Select",IDOK))
+			{
+#pragma region 校正参数设定区
+				correctParameters params;
+				params.imgOrg = source_image;
+
+				findCircleParameter::getCircleParatemer(params.center, params.radius);
+
+				params.w_longtitude = PI / 2;
+				params.w_latitude = PI / 2;
+				params.distMap = LATITUDE_LONGTITUDE;
+				params.theta_left = 0;
+				params.phi_up = 0;
+				params.camerFieldAngle = findCircleParameter::FOV;
+				params.camProjMode = EQUIDISTANCE;
+				params.typeOfCorrect = Reverse;
+#pragma endregion
+
+				corrector adjuster;
+				adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI);
+			}
 		}
 	}	 
-
-//
-//
-//
-//	//下一步进行鱼眼图像的校正
-//	Mat ret=latitudeCorrection4(imgOrg, center, radius,/*PI*5/6*/PI/180*90,PI/180*90);
-//	imwrite("left.jpg", ret);
-//	destroyWindow(window_name);
-////	destroyWindow(winname);
-//	namedWindow("ret", CV_WINDOW_NORMAL);
-//	resizeWindow("ret", 512, 512);
-//	imshow("ret", ret);
-//
-//
-//	namedWindow("org", CV_WINDOW_NORMAL);
-//	resizeWindow("org", 512, 512);
-//	imshow("org", imgOrg);
-//	Mat ret1 = latitudeCorrection5(imgOrg, center, radius,PI/180*90,PI/180*90);//如何让两个方向的调整互不影响
-//	imshow("org", ret1);	 
-//	imwrite("forwardMap.jpg",ret1);
-//	/*
-//		//使用多种方法来校正鱼眼图像，下面是经纬校正法
-//	//Mat img1, img2, img3;
-//	//img1=latitudeCorrection( imgOrg.clone(),  center,  radius,PI*17/20);
-//	//imshow("image1", img1);
-//	//for (double r = PI / 20; r <= PI; r += PI / 20)
-//	//{
-//	//	img2 = latitudeCorrection(imgOrg.clone(), center, radius,  r);
-//	//	//img2 = latitudeCorrection(imgOrg.clone(), center, radius, r,Forward);
-//	//	if (img2.data)
-//	//	{
-//	//		imshow("img2", img2);
-//	//		waitKey(5);
-//	//	}
-//	//	else
-//	//	{
-//	//		cout << "Failed to rectified!" << endl;
-//	//	}
-//	//}
-//
-//	*/
 //	
 //
 //	//漫游算法雏形

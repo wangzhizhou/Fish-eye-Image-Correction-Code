@@ -10,6 +10,7 @@ public:
 	static void Tip(string message);
 	static Mat GetImage();
 	static void DisplayImage(Mat img);
+	static void CompareTwoImages(Mat img1, Mat img2);
 private:
 	tools();
 	~tools();

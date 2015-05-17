@@ -1,5 +1,6 @@
 #include "findCircleParameter.h"
 
+#pragma region 与变角度线扫描法相关的变量声明
 //圆提取窗口标题
 string findCircleParameter::win_name = "Circle Extraction";
 
@@ -29,10 +30,9 @@ int findCircleParameter::radius = -1;
 
 //存放原图
 Mat findCircleParameter::image = Mat();
+#pragma endregion
 
-
-/********验证部分变量初始化***********/
-
+#pragma region 验证部分变量初始化
 //存放线条上点的坐标
 std::vector<std::vector<cv::Point>> findCircleParameter::lines;
 
@@ -44,10 +44,14 @@ std::vector<cv::Point> findCircleParameter::points;
 
 //鱼眼镜头的视场角
 const double findCircleParameter::FOV = PI;
-/**********************************/
+#pragma endregion
 
+#pragma region 为了便于显示而计算的图片显示尺寸
 int findCircleParameter::width_disp_img = -1;
 int findCircleParameter::height_disp_img = -1;
+
+#pragma endregion
+
 
 //初始化识别图，导入待识别图像
 bool findCircleParameter::init(Mat img)
@@ -84,6 +88,7 @@ void findCircleParameter::checkVarify()
 	imshow(check_win_name, image);
 	setMouseCallback(check_win_name, onMouse);
 	waitKey();
+	cv::destroyWindow(check_win_name);
 }
 
 //获取检测到的圆的参数
