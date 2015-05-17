@@ -21,16 +21,16 @@
     <ClCompile Include="latitudeCorrection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="panoramaExpansion.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="cylinderCorrection.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="tools.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="findCircleParameter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="corrector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="viewer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,16 +41,16 @@
     <ClInclude Include="globalInclude.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="panoramaExpansion.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="cylinderCorrection.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="tools.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="findCircleParameter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="corrector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="viewer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,16 +1,42 @@
-#include "panoramaExpansion.h"	
+#include "corrector.h"
 
-Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, CorrectType type)
+//以动态的方式显示被校正的图像
+void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
+{	
+	Mat image = sourceImage.clone();
+	Point2i center;
+	int radius;
+	
+	Mat dispImage;
+
+	string win_name = "Heaven And Earth Correct";
+	namedWindow(win_name, CV_WINDOW_NORMAL|CV_WINDOW_KEEPRATIO);
+	
+	if (findCircleParameter::getCircleParatemer(center, radius) && image.data)
+	{
+		for (double r = PI / 20; r <= PI; r += PI / 20)
+		{
+			dispImage = heavenAndEarthCorrect(image.clone(), center, radius, r, Reverse);
+			if (dispImage.data)
+			{
+				imshow(win_name, dispImage);
+				waitKey(10);
+			}
+		}
+	}
+}
+
+//对于向天和向地拍摄的鱼眼图片校正
+Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, double startRadian, CorrectType type)
 {
 	//设定展开图的高度，因为鱼眼图像不能灰复高度信息，所以这里可以跟根实际来
 	//进行调节
-	int heightOfPanorama=radius*2;
+	int heightOfPanorama = radius * 2;
 
 	//设定展开图的宽度，这里设定为鱼眼图像圆形有效区域的周长
-	int widthOfPanorama=2*PI*radius;
+	int widthOfPanorama = 2 * PI*radius;
 
-
-	double dx = 2*PI/widthOfPanorama;
+	double dx = 2 * PI / widthOfPanorama;
 	double dy = radius / (double)heightOfPanorama;
 
 	double p;
@@ -21,7 +47,7 @@ Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, 
 	int u, v;
 
 	//展开图的变量分配
-	Mat retImg(heightOfPanorama,widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
+	Mat retImg(heightOfPanorama, widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
 	Mat_<Vec3b> _retImg = retImg;
 	Mat_<Vec3b> _imgOrg = imgOrg.clone();
 
@@ -63,18 +89,18 @@ Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, 
 				u = i;
 				v = j;
 
-				x = (u - center.x) ;
+				x = (u - center.x);
 				y = -(v - center.y);
 
 				//convert to polar axes
 				theta = cvFastArctan(y, x)*PI / 180;
-				p = sqrt(pow(x, 2) + pow(y, 2));				
+				p = sqrt(pow(x, 2) + pow(y, 2));
 
 				theta -= startRadian;
 				theta = theta < 0 ? theta + 2 * PI : theta;
 
 				int u_ret = theta / dx;
-				int v_ret = p / dy;	
+				int v_ret = p / dy;
 
 				if (u_ret<0 || u_ret >= widthOfPanorama || v_ret<0 || v_ret >= heightOfPanorama)
 					continue;
@@ -88,10 +114,10 @@ Mat panoramaExpansion(Mat imgOrg, Point center, int radius, double startRadian, 
 
 		break;
 	}
-	
+
 #ifdef _DEBUG_
-	namedWindow("expand fish-eye image",CV_WINDOW_AUTOSIZE);
-	imshow("expand fish-eye image",retImg);
+	namedWindow("expand fish-eye image", CV_WINDOW_AUTOSIZE);
+	imshow("expand fish-eye image", retImg);
 	waitKey();
 #endif
 	return	retImg;

@@ -40,6 +40,10 @@ bool tools::GetFilePathToProcess()
 {
 	OPENFILENAME ofn;
 	char szFile[MAX_PATH];
+
+	char curPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, curPath);
+
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.lpstrFile = szFile;
@@ -51,6 +55,8 @@ bool tools::GetFilePathToProcess()
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = NULL;
 	ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	ofn.lpstrInitialDir = curPath;
+
 	if (GetOpenFileName(&ofn))
 	{	
 		filePathToProcess = szFile;

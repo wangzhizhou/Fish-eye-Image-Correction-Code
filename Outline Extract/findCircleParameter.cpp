@@ -46,19 +46,28 @@ std::vector<cv::Point> findCircleParameter::points;
 const double findCircleParameter::FOV = PI;
 /**********************************/
 
+int findCircleParameter::width_disp_img = -1;
+int findCircleParameter::height_disp_img = -1;
+
 //初始化识别图，导入待识别图像
 bool findCircleParameter::init(Mat img)
 {
 	image = img;
 	if (image.data)
+	{
+		height_disp_img = 512;
+		width_disp_img = (image.cols / (double)image.rows)*height_disp_img;
+
 		return true;
+	}
 	return false;
 }
 
 //开始识别圆
 void findCircleParameter::findCircle()
 {
-	namedWindow(win_name, CV_WINDOW_NORMAL);
+	namedWindow(win_name,CV_WINDOW_NORMAL);
+	resizeWindow(win_name, width_disp_img, height_disp_img+100);
 	createTrackbar(N_trackbar_name, win_name, &N_slider_value, N_max_value, On_N_trackbar);
 	createTrackbar(thresholdValue_trackbar_name, win_name, &thresholdValue_slider_value, thresholdValue_max_value, On_threshold_trackbar);
 	On_N_trackbar(N_slider_value, 0);
@@ -70,12 +79,26 @@ void findCircleParameter::findCircle()
 //检验是否有效
 void findCircleParameter::checkVarify()
 {
-	namedWindow(check_win_name, CV_WINDOW_KEEPRATIO);
-	resizeWindow(check_win_name, 512, 512);
+	namedWindow(check_win_name, CV_WINDOW_NORMAL);
+	resizeWindow(check_win_name, width_disp_img, height_disp_img);
 	imshow(check_win_name, image);
 	setMouseCallback(check_win_name, onMouse);
 	waitKey();
 }
+
+//获取检测到的圆的参数
+bool findCircleParameter::getCircleParatemer(Point2i & centerPos, int& r)
+{
+	if (center != Point2i(-1, -1) && radius != -1)
+	{
+		centerPos = center;
+		r = radius;
+		return true;
+	}
+	return false;
+	
+}
+
 
 //光标回调函数
 void findCircleParameter::onMouse(int event, int x, int y, int, void* params)
