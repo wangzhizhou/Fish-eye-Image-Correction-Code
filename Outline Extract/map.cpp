@@ -22,6 +22,7 @@ void findPoints(Point2i center, int radius,std::vector<cv::Point> &points, camMo
 		double theta = cvFastArctan(y_cart, x_cart)*PI / 180;
 		double p = sqrt(pow(x_cart, 2) + pow(y_cart, 2));
 
+
 		double foval = 0.0;
 		double Theta_sphere;
 		switch (projMode)
