@@ -37,7 +37,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\OpenCV_Debug.props" />
+    <Import Project="OpenCV_Release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -69,20 +69,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cylinderCorrection.cpp" />
-    <ClCompile Include="latitudeCorrection.cpp" />
+    <ClCompile Include="corrector.cpp" />
+    <ClCompile Include="findCircleParameter.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="outlineExtract.cpp" />
-    <ClCompile Include="panoramaExpansion.cpp" />
+    <ClCompile Include="tools.cpp" />
+    <ClCompile Include="viewer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cylinderCorrection.h" />
+    <ClInclude Include="corrector.h" />
+    <ClInclude Include="findCircleParameter.h" />
     <ClInclude Include="globalInclude.h" />
-    <ClInclude Include="latitudeCorrection.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="outlineExtract.h" />
-    <ClInclude Include="panoramaExpansion.h" />
+    <ClInclude Include="tools.h" />
+    <ClInclude Include="viewer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

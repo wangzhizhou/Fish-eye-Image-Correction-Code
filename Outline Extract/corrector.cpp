@@ -1,7 +1,185 @@
-#include "latitudeCorrection.h"
+#include "corrector.h"
 
-//origin map
-Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle, CorrectType type)
+
+#pragma region 静态成员变量和函数
+int corrector::counter = 0;
+
+//以动态的方式显示被校正的图像
+void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
+{
+	Mat image = sourceImage.clone();
+	Point2i center;
+	int radius;
+
+	Mat dispImage;
+
+	string win_name = "Heaven And Earth Correct";
+	namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
+
+	if (findCircleParameter::getCircleParatemer(center, radius) && image.data)
+	{
+		for (double r = PI / 20; r <= PI; r += PI / 20)
+		{
+			dispImage = heavenAndEarthCorrect(image.clone(), center, radius, r, Reverse);
+			if (dispImage.data)
+			{
+				imshow(win_name, dispImage);
+				waitKey(10);
+			}
+		}
+		waitKey();
+		destroyWindow(win_name);
+	}
+}
+
+//对于向天和向地拍摄的鱼眼图片校正
+Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, double startRadian, CorrectType type)
+{
+	//设定展开图的高度，因为鱼眼图像不能灰复高度信息，所以这里可以跟根实际来
+	//进行调节
+	int heightOfPanorama = radius * 2;
+
+	//设定展开图的宽度，这里设定为鱼眼图像圆形有效区域的周长
+	int widthOfPanorama = 2 * PI*radius;
+
+	double dx = 2 * PI / widthOfPanorama;
+	double dy = radius / (double)heightOfPanorama;
+
+	double p;
+	double theta;
+
+	double x, y;
+
+	int u, v;
+
+	//展开图的变量分配
+	Mat retImg(heightOfPanorama, widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
+	Mat_<Vec3b> _retImg = retImg;
+	Mat_<Vec3b> _imgOrg = imgOrg.clone();
+
+	switch (type)
+	{
+	case Reverse:	//使用反向映射来填充展开图
+		for (int j = 0; j < heightOfPanorama; j++)
+		{
+			for (int i = 0; i < widthOfPanorama; i++)
+			{
+				p = j*dy;
+				theta = i*dx + startRadian;
+
+				x = p*cos(theta);
+				y = p*sin(theta);
+
+				u = x + center.x;
+				v = y + center.y;
+
+				_retImg(j, i)[0] = _imgOrg(v, u)[0];
+				_retImg(j, i)[1] = _imgOrg(v, u)[1];
+				_retImg(j, i)[2] = _imgOrg(v, u)[2];
+
+			}
+		}
+		break;
+
+	case Forward:
+		int left, top;
+		left = center.x - radius;
+		top = center.y - radius;
+		for (int j = top; j < top + 2 * radius; j++)
+		{
+			for (int i = left; i < left + 2 * radius; i++)
+			{
+				if (pow(i - center.x, 2) + pow(j - center.y, 2) > pow(radius, 2))
+					continue;
+
+				u = i;
+				v = j;
+
+				x = (u - center.x);
+				y = -(v - center.y);
+
+				//convert to polar axes
+				theta = cvFastArctan(y, x)*PI / 180;
+				p = sqrt(pow(x, 2) + pow(y, 2));
+
+				theta -= startRadian;
+				theta = theta < 0 ? theta + 2 * PI : theta;
+
+				int u_ret = theta / dx;
+				int v_ret = p / dy;
+
+				if (u_ret < 0 || u_ret >= widthOfPanorama || v_ret < 0 || v_ret >= heightOfPanorama)
+					continue;
+
+				//perform the map from the origin image to the latitude map image
+				_retImg(v_ret, u_ret)[0] = _imgOrg(j, i)[0];
+				_retImg(v_ret, u_ret)[1] = _imgOrg(j, i)[1];
+				_retImg(v_ret, u_ret)[2] = _imgOrg(j, i)[2];
+			}
+		}
+
+		break;
+	}
+
+#ifdef _DEBUG_
+	namedWindow("expand fish-eye image", CV_WINDOW_AUTOSIZE);
+	imshow("expand fish-eye image", retImg);
+	waitKey();
+#endif
+	return	retImg;
+}
+
+#pragma endregion
+
+void corrector::correctImage(correctParameters params, correctMethod method)
+{
+	Mat resultImage;
+	switch (method)
+	{
+	case correctMethod::LONG_LAT_MAP_REVERSE_FORWARD:
+		resultImage = latitudeCorrection(params.imgOrg, params.center, params.radius, params.camerFieldAngle, params.typeOfCorrect);
+		break;
+	case correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL:
+		resultImage = latitudeCorrection2(params.imgOrg, params.center, params.radius, params.distMap, params.camerFieldAngle, params.camProjMode);
+		break;
+	case correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI:
+		resultImage = latitudeCorrection3(params.imgOrg, params.center, params.radius, params.distMap, params.theta_left, params.phi_up, params.camerFieldAngle, params.camProjMode);
+		break;
+	case correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_VARIABLE:
+		resultImage = latitudeCorrection4(params.imgOrg, params.center, params.radius, params.w_longtitude, params.w_latitude, params.distMap, params.theta_left, params.phi_up, params.camerFieldAngle, params.camProjMode);
+		break;
+	case correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_FORWORD_W_VARIABLE:
+		resultImage = latitudeCorrection5(params.imgOrg, params.center, params.radius, params.w_longtitude, params.w_latitude, params.distMap, params.theta_left, params.phi_up, params.camerFieldAngle, params.camProjMode);
+		break;
+	default:
+		cout << "You had not choose a method to correct the image!" << endl;
+	}
+
+	string win_name = "The result Image";
+
+	Mat resizedImage;
+	resize(params.imgOrg, resizedImage, Size((params.imgOrg.size().width / (double)params.imgOrg.size().height*resultImage.size().height), resultImage.size().height));
+
+	Mat compareTwoImages(Size(resizedImage.size().width + 10 + resultImage.size().width, resultImage.size().height), resultImage.type());
+	Rect sourceROI(0, 0, resizedImage.size().width, resizedImage.size().height);
+	Rect resultROI(resizedImage.size().width + 10, 0, resultImage.size().width, resultImage.size().height);
+	
+	Mat sourceTemp = compareTwoImages(sourceROI);
+	Mat resultTemp = compareTwoImages(resultROI);
+
+	addWeighted(sourceTemp, 0, resizedImage, 1, 0, sourceTemp);
+	addWeighted(resultTemp, 0, resultImage, 1, 0, resultTemp);
+
+	namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
+	resizeWindow(win_name, compareTwoImages.size().width/(double)compareTwoImages.size().height*512, 512);
+	imshow(win_name, compareTwoImages);
+	waitKey();
+	cv::destroyWindow(win_name);
+}
+
+#pragma region 关于经纬度以及纵向压缩柱面投影校正的方法(动态成员)
+//longitude-latitude reverse or forward map correction method
+Mat corrector::latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle, CorrectType type)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -61,7 +239,7 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 		{
 			for (int i = left; i < left + 2 * radius; i++)
 			{
-				if (pow(i - center.x, 2) + pow(j - center.y, 2)>pow(radius, 2))
+				if (pow(i - center.x, 2) + pow(j - center.y, 2) > pow(radius, 2))
 					continue;
 				//Origin image cooradinate in pixel
 				u = i;
@@ -150,9 +328,7 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 				//	continue;
 				//}
 
-				_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(v,u);
-
-
+				_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(v, u);
 			}
 		}
 
@@ -166,16 +342,14 @@ Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerField
 	//waitKey();
 #ifdef _DEBUG_
 	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
-	imshow("Corrected Image", retImg );
+	imshow("Corrected Image", retImg);
 	waitKey();
 #endif
 	return retImg;
 }
 
-
-//longitude-latitude map
-Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode distMap, double camerFieldAngle,
-	camMode camProjMode)
+//persective or longitude-latitude map with camera len model optional
+Mat corrector::latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode distMap, double camerFieldAngle, camMode camProjMode)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -219,7 +393,7 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode dist
 
 	//Image cooradinate of imgOrg
 	double u, v;
-	Point pt,pt1, pt2, pt3, pt4;
+	Point pt, pt1, pt2, pt3, pt4;
 
 	//Image cooradinate of imgRet
 	int u_latitude, v_latitude;
@@ -261,7 +435,7 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode dist
 
 				//latitude = latitude_offset + atan((double)j/(double)(imgSize.height-j));
 				//longitude = longitude_offset + i*dx;
-				
+
 				latitude = latitude_offset + j*dy;
 				longitude = longitude_offset + i*dx;
 				//Convert from latitude cooradinate to the sphere cooradinate
@@ -284,7 +458,7 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode dist
 			{
 			case STEREOGRAPHIC:
 				foval = radius / (2 * tan(camerFieldAngle / 4));
-				p = 2 * foval*tan(Theta_sphere/2);
+				p = 2 * foval*tan(Theta_sphere / 2);
 				break;
 			case EQUIDISTANCE:
 				foval = radius / (camerFieldAngle / 2);
@@ -316,12 +490,12 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode dist
 			v = -y_cart + center.y;
 
 			pt = Point(u, v);
-			
+
 			if (!pt.inside(imgArea))
 			{
 				continue;
 			}
-		
+
 			_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(pt);
 
 		}
@@ -335,14 +509,12 @@ Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode dist
 	imshow("Corrected Image", retImg);
 	waitKey();
 #endif
-	imwrite("ret.jpg", retImg);
+	//imwrite("ret.jpg", retImg);
 	return retImg;
 }
 
-
 //w=PI/2
-Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle,
-	camMode camProjMode)
+Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle, camMode camProjMode)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -354,8 +526,8 @@ Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode dist
 	//int width = imgOrg.size().width*rateOfWindow;
 	//int height = width;
 
-	int width = max(imgOrg.cols,imgOrg.rows);
-	int height =width;
+	int width = max(imgOrg.cols, imgOrg.rows);
+	int height = width;
 	//int height = imgOrg.rows;
 
 
@@ -413,7 +585,7 @@ Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode dist
 		{
 			Point3f tmpPt(i - center_x, center_y - j, 600);//最后一个参数用来修改成像面的焦距
 			double normPt = norm(tmpPt);
-			
+
 			switch (distMap)
 			{
 			case PERSPECTIVE:
@@ -451,7 +623,7 @@ Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode dist
 			{
 				//double theta = PI/4;
 				//double phi = -PI/2;
-				cv::Mat curPt(cv::Point3f(x,y,z));
+				cv::Mat curPt(cv::Point3f(x, y, z));
 				std::vector<cv::Point3f> pts;
 
 				//向东旋转地球
@@ -466,8 +638,8 @@ Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode dist
 
 				//两个方向旋转
 				pts.push_back(cv::Point3f(cos(theta_left), 0, sin(theta_left)));
-				pts.push_back(cv::Point3f(sin(phi_up)*sin(theta_left), cos(phi_up),-sin(phi_up)*cos(theta_left)));
-				pts.push_back(cv::Point3f(-cos(phi_up)*sin(theta_left), sin(phi_up),cos(phi_up)*cos(theta_left)));
+				pts.push_back(cv::Point3f(sin(phi_up)*sin(theta_left), cos(phi_up), -sin(phi_up)*cos(theta_left)));
+				pts.push_back(cv::Point3f(-cos(phi_up)*sin(theta_left), sin(phi_up), cos(phi_up)*cos(theta_left)));
 
 
 				cv::Mat revert = cv::Mat(pts).reshape(1).t();
@@ -546,15 +718,15 @@ Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode dist
 	imshow("Corrected Image", retImg);
 	waitKey();
 #endif
-	imwrite("ret.jpg", retImg);
+	//imwrite("ret.jpg", retImg);
 	return retImg;
 }
-double func(double l, double phi)
+double corrector::func(double l, double phi)
 {
 	double result = (l / 2 - 1)*cos(phi) - sin(phi) + 1;
 	return result;
 }
-double getPhi(double l)
+double corrector::getPhi(double l)
 {
 	double head = 0;
 	double tail = 0;
@@ -587,7 +759,7 @@ double getPhi(double l)
 		tail = PI;
 		mid = tail;
 		result = func(l, mid);
-		while (abs(result)>LIMIT)
+		while (abs(result) > LIMIT)
 		{
 			mid = (tail + head) / 2;
 			result = func(l, mid);
@@ -605,8 +777,7 @@ double getPhi(double l)
 }
 
 /*********************w is variable********************************/
-Mat latitudeCorrection4(Mat imgOrg, Point2i center, int radius,double w_longtitude,double w_latitude, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle,
-	camMode camProjMode)
+Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, double w_longtitude, double w_latitude, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle, camMode camProjMode)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -671,7 +842,7 @@ Mat latitudeCorrection4(Mat imgOrg, Point2i center, int radius,double w_longtitu
 	Mat_<Vec3b> _imgOrg = imgOrg;
 
 	//according to the camera type to do the calibration
-	double  limi_latitude = 2*auxFunc(w_latitude, 0);
+	double  limi_latitude = 2 * auxFunc(w_latitude, 0);
 	double  limi_longtitude = 2 * auxFunc(w_longtitude, 0);
 	for (int j = 0; j < imgSize.height; j++)
 	{
@@ -792,11 +963,11 @@ Mat latitudeCorrection4(Mat imgOrg, Point2i center, int radius,double w_longtitu
 			u = x_cart + center.x;
 			v = -y_cart + center.y;
 
-			pt = Point(u, v);	
+			pt = Point(u, v);
 
 			if (!pt.inside(imgArea))
 			{
-				continue;				
+				continue;
 			}
 			else
 			{
@@ -818,13 +989,13 @@ Mat latitudeCorrection4(Mat imgOrg, Point2i center, int radius,double w_longtitu
 	imwrite("ret.jpg", retImg);
 	return retImg;
 }
-double func1(double l, double phi,double w)
+double corrector::func1(double l, double phi, double w)
 {
 	static double limit = auxFunc(w, 0);
-	double result = l-limit + auxFunc(w, phi);
+	double result = l - limit + auxFunc(w, phi);
 	return result;
 }
-double getPhi1(double l,double w)
+double corrector::getPhi1(double l, double w)
 {
 	int N_lim = 100;
 	int N = 0;
@@ -840,10 +1011,10 @@ double getPhi1(double l,double w)
 		tail = PI / 2;
 		mid = head;
 		result = func1(l, mid, w);
-		while (abs(result)>LIMIT&&N++<N_lim)
+		while (abs(result)>LIMIT&&N++ < N_lim)
 		{
 			mid = (tail + head) / 2;
-			result = func1(l, mid,w);
+			result = func1(l, mid, w);
 
 			if (result > 0)
 			{
@@ -861,11 +1032,11 @@ double getPhi1(double l,double w)
 		head = PI / 2;
 		tail = PI;
 		mid = tail;
-		result = func1(l, mid,w);
-		while (abs(result)>LIMIT&&N++<N_lim)
+		result = func1(l, mid, w);
+		while (abs(result) > LIMIT&&N++ < N_lim)
 		{
 			mid = (tail + head) / 2;
-			result = func1(l, mid,w);
+			result = func1(l, mid, w);
 			if (result > 0)
 			{
 				head = mid;
@@ -879,7 +1050,7 @@ double getPhi1(double l,double w)
 	return mid;
 }
 
-double auxFunc(double w, double phi)
+double corrector::auxFunc(double w, double phi)
 {
 	double l = sin(w)*sqrt(cos(phi)*cos(phi) + (1 - sin(phi))*(1 - sin(phi))) / sin(PI - w - atan((1 - sin(phi)) / abs(cos(phi))));
 	if (phi > PI / 2)
@@ -888,8 +1059,7 @@ double auxFunc(double w, double phi)
 }
 
 /************************w is variable, and Forward map*/
-Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtitude, double w_latitude, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle,
-	camMode camProjMode)
+Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtitude, double w_latitude, distMapMode distMap, double theta_left, double phi_up, double camerFieldAngle, camMode camProjMode)
 {
 	if (!(camerFieldAngle > 0 && camerFieldAngle <= PI))
 	{
@@ -960,14 +1130,14 @@ Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtit
 	{
 		for (int i = left; i < left + 2 * radius; i++)
 		{
-			if (pow(i - center.x, 2) + pow(j - center.y, 2)>pow(radius, 2))
+			if (pow(i - center.x, 2) + pow(j - center.y, 2) > pow(radius, 2))
 				continue;
 			//Origin image cooradinate in pixel
 			u = i;
 			v = j;
 
 			//Convert to cartiesian cooradinate in unity circle
-			x_cart = (u - center.x) ;
+			x_cart = (u - center.x);
 			y_cart = -(v - center.y);
 
 			//convert to polar axes
@@ -998,11 +1168,11 @@ Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtit
 			}
 			else
 			{
-				l =limi_latitude+sin(w_latitude)*sqrt(cos(latitude)*cos(latitude) + (1 - sin(latitude))*(1 - sin(latitude))) / sin(PI - w_latitude - atan((1 - sin(latitude)) / abs(cos(latitude))));
+				l = limi_latitude + sin(w_latitude)*sqrt(cos(latitude)*cos(latitude) + (1 - sin(latitude))*(1 - sin(latitude))) / sin(PI - w_latitude - atan((1 - sin(latitude)) / abs(cos(latitude))));
 			}
-			u_longtitude = ((longitude - longitude_offset)/dx);
+			u_longtitude = ((longitude - longitude_offset) / dx);
 			// = (latitude - latitude_offset) / dy;
-			v_latitude = l*imgSize.height/(2*limi_latitude);
+			v_latitude = l*imgSize.height / (2 * limi_latitude);
 
 			if (u_longtitude < 0 || u_longtitude >= imgSize.height || v_latitude < 0 || v_latitude >= imgSize.width)
 				continue;
@@ -1023,3 +1193,5 @@ Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtit
 	imwrite("ret.jpg", retImg);
 	return retImg;
 }
+
+#pragma endregion
