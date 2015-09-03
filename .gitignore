@@ -9,6 +9,8 @@
 # Build results
 
 [Dd]ebug/
+![Dd]ebug/*.dll
+![Dd]ebug/*.exe
 [Rr]elease/
 x64/
 build/
