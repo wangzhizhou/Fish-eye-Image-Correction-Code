@@ -1,51 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{ad93484e-e440-4e77-b0d2-cd2e789662db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterFinder">
+      <UniqueIdentifier>{ef09c095-78b6-4538-b44b-3070d43ac5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImagesStitcher">
+      <UniqueIdentifier>{a527c24c-a492-4144-8c2f-599e9b7b34ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PanoramaBrower">
+      <UniqueIdentifier>{cbf96d38-e32f-4025-940f-e9f2a9d6214a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FisheyeImageCorrector">
+      <UniqueIdentifier>{99ea9f13-c8e6-4652-8658-b5ca64192279}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="tools.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="findCircleParameter.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="corrector.cpp">
-      <Filter>源文件</Filter>
+      <Filter>FisheyeImageCorrector</Filter>
+    </ClCompile>
+    <ClCompile Include="findCircleParameter.cpp">
+      <Filter>ParameterFinder</Filter>
     </ClCompile>
     <ClCompile Include="viewer.cpp">
-      <Filter>源文件</Filter>
+      <Filter>PanoramaBrower</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="imagesStitcher.cpp">
+      <Filter>ImagesStitcher</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="globalInclude.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="tools.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="findCircleParameter.h">
-      <Filter>头文件</Filter>
+      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="corrector.h">
-      <Filter>头文件</Filter>
+      <Filter>FisheyeImageCorrector</Filter>
+    </ClInclude>
+    <ClInclude Include="findCircleParameter.h">
+      <Filter>ParameterFinder</Filter>
     </ClInclude>
     <ClInclude Include="viewer.h">
-      <Filter>头文件</Filter>
+      <Filter>PanoramaBrower</Filter>
+    </ClInclude>
+    <ClInclude Include="globalInclude.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="imagesStitcher.h">
+      <Filter>ImagesStitcher</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

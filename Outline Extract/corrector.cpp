@@ -155,6 +155,9 @@ void corrector::correctImage(correctParameters params, correctMethod method)
 		cout << "You had not choose a method to correct the image!" << endl;
 	}
 
+
+	imwrite("C:\\Users\\Joker\\Desktop\\a4.jpg",resultImage);
+
 	string win_name = "The result Image";
 
 	Mat resizedImage;
@@ -337,6 +340,8 @@ Mat corrector::latitudeCorrection(Mat imgOrg, Point2i center, int radius, double
 		cout << "The CorrectType is Wrong! It should be \"Forward\" or \"Reverse\"." << endl;
 		return Mat();
 	}
+
+	//imwrite("C:\\Users\\Joker\\Desktop\\ret4.jpg", retImg);
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
 	//waitKey();
@@ -1193,5 +1198,10 @@ Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, doubl
 	imwrite("ret.jpg", retImg);
 	return retImg;
 }
+
+#pragma endregion
+
+
+#pragma region Í¼ÏñÆ´½ÓÏà¹Ø
 
 #pragma endregion

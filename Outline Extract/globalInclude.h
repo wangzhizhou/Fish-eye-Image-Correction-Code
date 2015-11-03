@@ -11,8 +11,8 @@
 using namespace std;
 using namespace cv;
 
-#define PI (3.1415926535897932384626433832795)
-#define LIMIT	(1e-4)
+const double  PI = 3.1415926535897932384626433832795;
+const double  LIMIT = 1e-4;
 
 enum CorrectType
 {

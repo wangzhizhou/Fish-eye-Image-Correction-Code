@@ -2,6 +2,13 @@
 #include "tools.h"
 #include "findCircleParameter.h"
 #include "corrector.h"
+#include "viewer.h"
+
+
+void help()
+{
+
+}
 
 //主程度入口点
 int main(int argc, char** argv)
@@ -51,27 +58,13 @@ int main(int argc, char** argv)
 				//adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_FORWORD_W_VARIABLE);
 			}
 		}
-	}	 
-//	
-//
-//	//漫游算法雏形
-//	//std::ostringstream fileName;
-//	//double stepAng = PI / 6;
-//	//int Number = 0;
-//	//for (double i = -PI / 2; i < PI / 2; i += stepAng)
-//	//{
-//	//	for (double j = -PI / 2; j < PI / 2; j += stepAng)
-//	//	{
-//	//		Mat ret1 = latitudeCorrection3(imgOrg, center, radius, PERSPECTIVE, i, j);
-//	//		////imshow("org", ret1);
-//	//		fileName << "stitch\\" << ++Number << ".jpg";
-//	//		imwrite(fileName.str().c_str(), ret1);
-//	//		//std::cout << fileName.str() << endl;
-//	//		fileName.str("");
-//	//	}
-//	//}
-//
-//	
-//	waitKey();
+	}
+
+	//Mat img = imread("C:\\Users\\Joker\\Desktop\\CMU0-all.jpg");
+	//if (!img.empty())
+	//{
+	//	viewer v(img);
+	//	v.showWindow();
+	//}
 	return 0;
 }

@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="corrector.cpp" />
     <ClCompile Include="findCircleParameter.cpp" />
+    <ClCompile Include="imagesStitcher.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tools.cpp" />
     <ClCompile Include="viewer.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="corrector.h" />
     <ClInclude Include="findCircleParameter.h" />
     <ClInclude Include="globalInclude.h" />
+    <ClInclude Include="imagesStitcher.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="viewer.h" />
   </ItemGroup>
