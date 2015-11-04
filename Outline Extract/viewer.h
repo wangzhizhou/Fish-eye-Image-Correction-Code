@@ -18,7 +18,7 @@ public:
 	viewer(Mat inputImg);
 	Mat getWindow();
 	void showWindow();
-	Mat updataWindow();
+	void updataWindow();
 	Point3d navigationHV(Point3d orgPt, double angleH, double angleV);
 	~viewer() {};
 	void refreshWindow();
@@ -26,8 +26,11 @@ private:
 	static void onMouse(int event, int x, int y, int, void* params);
 private:
 	Mat paronoma;
+	Mat paronomaWithOutline;
 	Mat window;
 	double angleH;
 	double angleV;
 	string winname;
+	string winname_paronomaWithOutline;
+	double distance;
 };

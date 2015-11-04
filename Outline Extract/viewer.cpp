@@ -8,6 +8,8 @@ viewer::viewer(Mat inputImg)
 	angleH = 0;
 	angleV = PI / 2;
 	winname = "window";
+	winname_paronomaWithOutline = "paronomaWithOutline";
+	distance = 300;
 
 }
 
@@ -30,8 +32,9 @@ void viewer::showWindow()
 	waitKey(0);
 }
 
-Mat viewer::updataWindow()
+void viewer::updataWindow()
 {
+	paronomaWithOutline = paronoma.clone();
 	//获取显示区域的尺寸
 	Size dispSize = window.size();
 
@@ -52,15 +55,11 @@ Mat viewer::updataWindow()
 	Mat_<Vec3b> _retImg = window;
 	Mat_<Vec3b> _imgOrg = paronoma;
 
-	double distance = 300;
-
 	cout << "[Processing ";
 
 	double percent = 0.0;
 
-
 	int count = dispSize.height / 80;
-
 	for (int j = 0; j < dispSize.height; j++)
 	{
 		for (int i = 0; i < dispSize.width; i++)
@@ -98,13 +97,17 @@ Mat viewer::updataWindow()
 			Point pt(v, u);
 
 			if (pt.inside(Rect(0, 0, _imgOrg.size().height, _imgOrg.size().width + 1)))
+			{
 				_retImg.at<Vec3b>(j, i) = _imgOrg.at<Vec3b>(v, u);
+				paronomaWithOutline.at<Vec3b>(v, u) = Vec3b(255, 255, 255);
+	
+			}
 		}
 		if (j%count == 0)
 			cout << ".";
 	}
 	cout << "]" << endl;
-	return window;
+	resize(paronomaWithOutline,paronomaWithOutline,Size(VIEWER_WIDTH, VIEWER_HEIGHT));
 }
 Point3d viewer::navigationHV(Point3d orgPt, double angleH, double angleV)
 {
@@ -139,8 +142,11 @@ void viewer::refreshWindow()
 	if (window.empty())
 		return;
 	imshow(winname, window);
-}
 
+	if (paronomaWithOutline.empty())
+		return;
+	imshow(winname_paronomaWithOutline, paronomaWithOutline);
+}
 void viewer::onMouse(int event, int x, int y, int, void * params)
 {
 	viewer *pV = (viewer*)params;
@@ -155,7 +161,7 @@ void viewer::onMouse(int event, int x, int y, int, void * params)
 	const double delta = PI / 8;
 	const double limitH = 2 * PI;
 	const double limitV = PI;
-
+	const double zoomDelta = 50;
 	switch (event)
 	{
 	case EVENT_LBUTTONDOWN:
@@ -194,6 +200,25 @@ void viewer::onMouse(int event, int x, int y, int, void * params)
 		pV->updataWindow();
 		pV->refreshWindow();
 
+		break;
+	case EVENT_MBUTTONDOWN:
+		cout << "Zoom In" << endl;
+
+		pV->distance = pV->distance + zoomDelta;
+		pV->updataWindow();
+		pV->refreshWindow();
+		break;
+
+	case EVENT_RBUTTONDOWN:
+		cout << "Zoom Out" << endl;
+
+		pV->distance = pV->distance - zoomDelta;
+		if (pV->distance < 250)
+		{
+			pV->distance = 250;
+		}
+		pV->updataWindow();
+		pV->refreshWindow();
 		break;
 	default:
 		break;

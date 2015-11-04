@@ -13,6 +13,7 @@ void help()
 //主程度入口点
 int main(int argc, char** argv)
 {
+	/*
 	//读图片到内存中
 	if (tools::readImage())
 	{
@@ -59,12 +60,13 @@ int main(int argc, char** argv)
 			}
 		}
 	}
+	*/
 
-	//Mat img = imread("C:\\Users\\Joker\\Desktop\\CMU0-all.jpg");
-	//if (!img.empty())
-	//{
-	//	viewer v(img);
-	//	v.showWindow();
-	//}
+	Mat img = imread("C:\\Users\\Joker\\Desktop\\result.jpg");
+	if (!img.empty())
+	{
+		viewer v(img);
+		v.showWindow();
+	}
 	return 0;
 }
