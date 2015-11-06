@@ -324,6 +324,10 @@ void findCircleParameter::findPoints(Point2i center, int radius, std::vector<cv:
 	cout << points << endl;
 }
 
+findCircleParameter::~findCircleParameter()
+{
+}
+
 //为确定鱼眼圆形有效区域参数而设置的回调函数，供OpenCV使用
 void findCircleParameter::On_N_trackbar(int N_slider_value, void* params)
 {

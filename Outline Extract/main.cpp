@@ -3,6 +3,7 @@
 #include "findCircleParameter.h"
 #include "corrector.h"
 #include "viewer.h"
+#include "imagesStitcher.h"
 
 
 void help()
@@ -62,11 +63,18 @@ int main(int argc, char** argv)
 	}
 	*/
 
-	Mat img = imread("C:\\Users\\Joker\\Desktop\\result.jpg");
-	if (!img.empty())
+#pragma region 图像接接部分
+	vector<Mat> images1,images2;
+	for (int i = 1;i < argc;i++)
 	{
-		viewer v(img);
-		v.showWindow();
+		if (i < argc - 1)
+			images1.push_back(imread(argv[i]));
+		else
+			images2.push_back(imread(argv[i]));
 	}
+	imagesStitcher composer;
+	images2.insert(images2.begin(),composer.stitchImages(images1));	
+	composer.showPanorama();
+#pragma endregion
 	return 0;
 }
