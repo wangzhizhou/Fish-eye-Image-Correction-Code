@@ -13,4 +13,5 @@ public:
 	Mat stitchImages(vector<Mat>& images);
 	void showPanorama();
 	static void onMouse(int event, int x, int y, int, void* args);
+	Mat getPanorama();
 };

@@ -31,10 +31,10 @@ public:
 	};
 
 public:
-	corrector(){ counter++; }
-	~corrector(){ counter--; };
+	corrector(){}
+	~corrector(){};
 	static void dispHeaveAndEarthCorrectImage(Mat sourceImage);
-	void correctImage(correctParameters params, correctMethod method);
+	Mat correctImage(correctParameters params, correctMethod method, bool isDispRet);
 private:
 	static Mat heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, double startRadian = 0, CorrectType type = Reverse);
 	
@@ -54,11 +54,6 @@ private:
 	 static double auxFunc(double w, double phi);
 
 	 Mat latitudeCorrection5(Mat imgOrg, Point2i center, int radius, double w_longtitude, double w_latitude, distMapMode distMap = LATITUDE_LONGTITUDE, double theta_left = 0, double phi_up = 0, double camerFieldAngle = PI, camMode camProjMode = EQUIDISTANCE);
-#pragma endregion
-
-#pragma region ÕºœÒ∆¥Ω”œ‡πÿ
-
-
 #pragma endregion
 private:
 	static int counter;

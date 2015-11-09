@@ -7,16 +7,14 @@ class tools
 public:
 	static bool readImage();
 	static bool GetFilePathToProcess();
-	static void Tip(string message);
-	static Mat GetImage();
-	static void DisplayImage(Mat img);
-	static void CompareTwoImages(Mat img1, Mat img2);
+	static void Tip(string message="");
+	static vector<Mat>& GetImages();
 private:
-	tools();
-	~tools();
-private:
-	static string filePathToProcess;
-	static Mat image;
+	tools() {}
+	~tools() {}
+private:	
+	static vector<string> fileNames;
+	static vector<Mat> images;
 	
 };
 

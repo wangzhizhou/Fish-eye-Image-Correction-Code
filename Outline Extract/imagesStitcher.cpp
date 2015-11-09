@@ -16,7 +16,8 @@ Mat imagesStitcher::stitchImages(vector<Mat>& images)
 	if (Stitcher::OK != status)
 	{
 		cout << "Can't stitch images, error code = " << status << endl;
-		return Mat();
+		tools::Tip();
+		exit(-1);
 	}
 	return panorama;
 }
@@ -32,8 +33,8 @@ void imagesStitcher::showPanorama()
 	resize(panorama, tmp, s);
 	imshow(panorama_winname, tmp);
 	setMouseCallback(panorama_winname, onMouse, this);
-
 	waitKey();
+	destroyWindow(panorama_winname);
 }
 
 void imagesStitcher::onMouse(int event, int x, int y, int, void * args)
@@ -56,4 +57,11 @@ void imagesStitcher::onMouse(int event, int x, int y, int, void * args)
 	default:
 		break;
 	}
+}
+
+Mat imagesStitcher::getPanorama()
+{
+	if (panorama.empty())
+		return Mat();
+	return panorama.clone();
 }

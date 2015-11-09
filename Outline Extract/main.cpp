@@ -2,48 +2,35 @@
 #include "tools.h"
 #include "findCircleParameter.h"
 #include "corrector.h"
-#include "viewer.h"
 #include "imagesStitcher.h"
-
-
-void help()
-{
-
-}
+#include "viewer.h"
 
 //主程度入口点
 int main(int argc, char** argv)
-{
-	/*
+{	
+	correctParameters params;
+	bool isDispCorrectRet = false;
+	corrector adjuster;
+	vector<Mat> outputs;
+
+	imagesStitcher stitcher;
+
+	bool saveResult = false;
+
 	//读图片到内存中
 	if (tools::readImage())
 	{
-		Mat source_image = tools::GetImage();
+		vector<Mat>& inputs = tools::GetImages();
 
-		if (findCircleParameter::init(source_image))
-		{
-			findCircleParameter::findCircle();
+			Mat source_image = inputs[0];
 
-			if (IDOK == MessageBox(NULL, "Would you want to check the FOV of fish-eye lens is valid?", "Check FOV", IDOK))
+			if (findCircleParameter::init(source_image))
 			{
-				findCircleParameter::checkVarify();
-			}
-			else
-				cout << "You have not choose to check the FOV" << endl;
+				findCircleParameter::findCircle();				 
 
-			if (IDOK == MessageBox(NULL, "Is this Image a HeaveAndEarth circular fish-eye image?", "Answer a question", IDOK))
-			{
-				corrector::dispHeaveAndEarthCorrectImage(source_image);
-			}
-
-			if (IDOK == MessageBox(NULL, "Do you want to correct the fish-eye image using the LCCP method?", "Correction Select",IDOK))
-			{
 #pragma region 校正参数设定区
-				correctParameters params;
 				params.imgOrg = source_image;
-
 				findCircleParameter::getCircleParatemer(params.center, params.radius);
-
 				params.w_longtitude = PI / 2;
 				params.w_latitude = PI / 2;
 				params.distMap = LATITUDE_LONGTITUDE;
@@ -52,29 +39,66 @@ int main(int argc, char** argv)
 				params.camerFieldAngle = findCircleParameter::FOV;
 				params.camProjMode = EQUIDISTANCE;
 				params.typeOfCorrect = Reverse;
-#pragma endregion
+#pragma endregion								
 
-				corrector adjuster;
-				adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI);
-				//adjuster.correctImage(params, corrector::correctMethod::LONG_LAT_MAP_REVERSE_FORWARD);
-				//adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_FORWORD_W_VARIABLE);
+				cout <<endl			
+					<< "Correct Image(s) with the same circular region params: " << endl
+					<< "radius = " << params.radius << ", center = " << params.center << endl << endl;
+
+#pragma region 图像校正区
+				outputs.push_back(
+					adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI,
+						isDispCorrectRet)
+					);
+
+				for (int i = 1;i < inputs.size();i++)
+				{
+					source_image = inputs[i];
+					params.imgOrg = source_image;
+
+					outputs.push_back(
+						adjuster.correctImage(params, corrector::correctMethod::LONG_LAT_MAP_REVERSE_FORWARD,isDispCorrectRet)
+						);
+				}
 			}
-		}
-	}
-	*/
-
+		}	
+#pragma endregion
+	cout << endl
+		<<"Start Stitch images" << endl;
 #pragma region 图像接接部分
-	vector<Mat> images1,images2;
-	for (int i = 1;i < argc;i++)
+
+	if (outputs.size() > 1)
 	{
-		if (i < argc - 1)
-			images1.push_back(imread(argv[i]));
-		else
-			images2.push_back(imread(argv[i]));
+		vector<Mat> images1, images2;
+		string filenamePath;
+		char suffix[MAX_PATH];
+		for (int i = 0;i < outputs.size();i++)
+		{
+			if (saveResult)
+			{
+				sprintf_s(suffix, "_corrected%d.jpg", i);
+				string tmp(suffix);
+				filenamePath = tmp;
+				imwrite(filenamePath, outputs[i]);
+			}
+
+			if (i < outputs.size() - 1)
+				images1.push_back(outputs[i]);
+			else
+				images2.push_back(outputs[i]);
+		}
+		images2.insert(images2.begin(), stitcher.stitchImages(images1));
+		stitcher.stitchImages(images2);
+		stitcher.showPanorama();
 	}
-	imagesStitcher composer;
-	images2.insert(images2.begin(),composer.stitchImages(images1));	
-	composer.showPanorama();
+#pragma endregion
+	cout << "Stitch Images completes!" << endl;
+
+#pragma region 浏览全景图像
+	Mat panoramaImage = stitcher.getPanorama();
+	if (panoramaImage.empty()) return 0;
+	viewer panoViewer(panoramaImage);
+	panoViewer.showWindow();
 #pragma endregion
 	return 0;
 }

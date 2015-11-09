@@ -70,6 +70,7 @@ bool findCircleParameter::init(Mat img)
 //开始识别圆
 void findCircleParameter::findCircle()
 {
+	cout << "Find the circular region params in image:" << endl;
 	namedWindow(win_name,CV_WINDOW_NORMAL);
 	resizeWindow(win_name, width_disp_img, height_disp_img+100);
 	createTrackbar(N_trackbar_name, win_name, &N_slider_value, N_max_value, On_N_trackbar);

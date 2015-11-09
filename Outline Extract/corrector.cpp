@@ -131,7 +131,7 @@ Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, doubl
 
 #pragma endregion
 
-void corrector::correctImage(correctParameters params, correctMethod method)
+Mat corrector::correctImage(correctParameters params, correctMethod method,bool isDispRet)
 {
 	Mat resultImage;
 	switch (method)
@@ -154,30 +154,32 @@ void corrector::correctImage(correctParameters params, correctMethod method)
 	default:
 		cout << "You had not choose a method to correct the image!" << endl;
 	}
+	counter++;
+	cout << "Image " << counter << " corrected!" << endl;
+	if (isDispRet)
+	{
+		string win_name("The result Image"+counter);
 
+		Mat resizedImage;
+		resize(params.imgOrg, resizedImage, Size((params.imgOrg.size().width / (double)params.imgOrg.size().height*resultImage.size().height), resultImage.size().height));
 
-	imwrite("C:\\Users\\Joker\\Desktop\\a4.jpg",resultImage);
+		Mat compareTwoImages(Size(resizedImage.size().width + 10 + resultImage.size().width, resultImage.size().height), resultImage.type());
+		Rect sourceROI(0, 0, resizedImage.size().width, resizedImage.size().height);
+		Rect resultROI(resizedImage.size().width + 10, 0, resultImage.size().width, resultImage.size().height);
 
-	string win_name = "The result Image";
+		Mat sourceTemp = compareTwoImages(sourceROI);
+		Mat resultTemp = compareTwoImages(resultROI);
 
-	Mat resizedImage;
-	resize(params.imgOrg, resizedImage, Size((params.imgOrg.size().width / (double)params.imgOrg.size().height*resultImage.size().height), resultImage.size().height));
+		addWeighted(sourceTemp, 0, resizedImage, 1, 0, sourceTemp);
+		addWeighted(resultTemp, 0, resultImage, 1, 0, resultTemp);
 
-	Mat compareTwoImages(Size(resizedImage.size().width + 10 + resultImage.size().width, resultImage.size().height), resultImage.type());
-	Rect sourceROI(0, 0, resizedImage.size().width, resizedImage.size().height);
-	Rect resultROI(resizedImage.size().width + 10, 0, resultImage.size().width, resultImage.size().height);
-	
-	Mat sourceTemp = compareTwoImages(sourceROI);
-	Mat resultTemp = compareTwoImages(resultROI);
-
-	addWeighted(sourceTemp, 0, resizedImage, 1, 0, sourceTemp);
-	addWeighted(resultTemp, 0, resultImage, 1, 0, resultTemp);
-
-	namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
-	resizeWindow(win_name, compareTwoImages.size().width/(double)compareTwoImages.size().height*512, 512);
-	imshow(win_name, compareTwoImages);
-	waitKey();
-	cv::destroyWindow(win_name);
+		namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
+		resizeWindow(win_name, compareTwoImages.size().width / (double)compareTwoImages.size().height * 512, 512);
+		imshow(win_name, compareTwoImages);
+		waitKey();
+		cv::destroyWindow(win_name);
+	}
+	return resultImage;
 }
 
 #pragma region 关于经纬度以及纵向压缩柱面投影校正的方法(动态成员)
