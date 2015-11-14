@@ -154,7 +154,9 @@ Mat corrector::correctImage(correctParameters params, correctMethod method,bool 
 	default:
 		cout << "You had not choose a method to correct the image!" << endl;
 	}
+
 	counter++;
+
 	cout << "Image " << counter << " corrected!" << endl;
 	if (isDispRet)
 	{

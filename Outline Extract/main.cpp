@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 
 	imagesStitcher stitcher;
 
-	bool saveResult = false;
+	bool saveResult = true;
 
 	//读图片到内存中
 	if (tools::readImage())
@@ -46,8 +46,10 @@ int main(int argc, char** argv)
 					<< "radius = " << params.radius << ", center = " << params.center << endl << endl;
 
 #pragma region 图像校正区
+				corrector::correctMethod method = corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI;
+
 				outputs.push_back(
-					adjuster.correctImage(params, corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI,
+					adjuster.correctImage(params, method,
 						isDispCorrectRet)
 					);
 
@@ -57,7 +59,7 @@ int main(int argc, char** argv)
 					params.imgOrg = source_image;
 
 					outputs.push_back(
-						adjuster.correctImage(params, corrector::correctMethod::LONG_LAT_MAP_REVERSE_FORWARD,isDispCorrectRet)
+						adjuster.correctImage(params, method,isDispCorrectRet)
 						);
 				}
 			}
@@ -87,7 +89,8 @@ int main(int argc, char** argv)
 			else
 				images2.push_back(outputs[i]);
 		}
-		images2.insert(images2.begin(), stitcher.stitchImages(images1));
+		Mat tmpRet = stitcher.stitchImages(images1);
+		images2.insert(images2.begin(), tmpRet.clone());
 		stitcher.stitchImages(images2);
 		stitcher.showPanorama();
 	}
@@ -97,6 +100,7 @@ int main(int argc, char** argv)
 #pragma region 浏览全景图像
 	Mat panoramaImage = stitcher.getPanorama();
 	if (panoramaImage.empty()) return 0;
+	imwrite("panorama.jpg", panoramaImage);
 	viewer panoViewer(panoramaImage);
 	panoViewer.showWindow();
 #pragma endregion
