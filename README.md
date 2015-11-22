@@ -47,13 +47,19 @@ OK! Probably like this. Here is a sample processing.
 ## Sample Processing
 
 #### The original images
-
+![image1](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/1.JPG)
+![image2](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/2.JPG)
+![image3](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/3.JPG)
+![image4](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/4.JPG)
 #### The corrected images
-
+![corrected1](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/corrected0.jpg)
+![corrected2](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/corrected1.jpg)
+![corrected3](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/corrected2.jpg)
+![corrected4](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/corrected3.jpg)
 #### The stitched panorama
-
+![panorama](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/panorama.jpg)
 #### navigate the panorama
-
+![navigate](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/navigate.jpg)
 ## The project directory tree struct is as follow:
 >>>>>>>>```
 FISH-EYE IMAGE CALIBRATION
