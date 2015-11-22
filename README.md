@@ -61,7 +61,7 @@ OK! Probably like this. Here is a sample processing.
 #### navigate the panorama
 ![navigate](https://github.com/wangzhizhou2014GitHub/Fish-eye-Image-Correction-Code/blob/master/readme_resource/navigate.jpg)
 ## The project directory tree struct is as follow:
->>>>>>>>```
+```
 FISH-EYE IMAGE CALIBRATION
 ├─ImagesForTest
 │  ├─1
