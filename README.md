@@ -1,7 +1,6 @@
 # Fish-Eye-Images-Correction-Stitching-Panorama image navigate-Code
 
-- Initially, this project was built to provide support for my thesis which titled “Correction of single circular fisheye image”. 
-And It has been published on the Journal Of Computer Application(ISSN 1001-9081). Even if not so good, it is the first thesis I wrote by myself. I try my best to do that well.
+- Initially, this project was built to provide support for my thesis which titled “Correction of single circular fisheye image”. And It has been published on the Journal Of Computer Application(ISSN 1001-9081). Even if not so good, it is the first thesis I wrote by myself. I try my best to do that well.
 
 - When I graduated from Tianjin University, I expanded the project. The purpose is to provide the facts for my graduation thesis. Its title called "Research of Panoramic Roaming System Based on Fisheye Images".
 
@@ -13,15 +12,15 @@ And It has been published on the Journal Of Computer Application(ISSN 1001-9081)
 
 * This project is developed by visual studio 2015 and can be opened by vs2015 or later version. You computer system should be windows 8.1/10 which can install the IDE.
 
-* The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use you IDE(vs2015 or later) to open it, then click F5 to build and run it.
+* The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use your IDE(vs2015 or later) to open it, then click F5 to build and run it.
 
-* If you found the program can been build successfully, but need some dlls to run. You should open the `project property page` and clike the `Debug` label in the left column, then change the `Work Directory` value(in the right column) to `$(SolutionDir)opencv248vc12x86release\bin`, and re-run the built project.
+* If you found the program can been built successfully, but need some `dll`s to run. You should open the `project property page` and clike the `Debug` label in the left column, then change the `Work Directory` value(in the right column) to `$(SolutionDir)opencv248vc12x86release\bin`, and re-run the built project.
 
-* The OpenCV related headers and libs has been included in this project, and the dlls are also added in the directory of execute file. So, it just work!
+* The OpenCV related headers and libs has been included in this project, and the dlls are also added in the directory of execute file(in directory: `\product\`). So, it just work!
 
 * And the project is in developing, so it may be updated sometime when I feel there should be added something.
 
-## This basic function of the project:
+## The basic function of the project:
 You can use this program to carry out basic experiments for circular fisheye images:
 
 * Circular Area Parameters Extration.
@@ -32,9 +31,9 @@ You can use this program to carry out basic experiments for circular fisheye ima
 Effect is not so good, it only has basic functions.
 
 ## How to use this project
-Firstly, you should clone this repo to you computer by using `git` related commands or just download the `zip` version provide by GitHub.
+Firstly, you should clone this repo to you computer by using `git` related commands or just download the `zip` version provided by GitHub.
 
-If you don't want to clone the entire repo, you can clone the latest commit in this project with the command listed follow:
+If you don't want to clone the entire repo, you can clone the latest commit in this project with the command listed as follow:
 
 > `git clone repo-site --depth=1`
 
@@ -42,7 +41,7 @@ Then, open the `*.sln` file with your visual studio 2015 or later version.
 
 After open the Solution, make sure the project configruation is `Release|Win32|X86`, and press the Key `F5` to build and run this project. 
 
-You can find some circular fisheye images for test under the directory: `\ImagesForTest\`. Only first six directory can be processed by this project, every directory contain four circular fisheye images.
+You can find some circular fisheye images for testing under the directory: `\ImagesForTest\`. Only first six directory can be processed by this project, every directory contain four circular fisheye images.
 
 Because the process of images stitching may fail, you can use the parameters in the file `\ImagesForTest\有效参数.txt` during the processing of extracting circular area step.
 
