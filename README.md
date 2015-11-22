@@ -9,6 +9,8 @@ And It has been published on the Journal Of Computer Application(ISSN 1001-9081)
 
 ## Basic situation
 
+* You can directly run the `navigator.exe` under the directory: `\product\` if you have not installed `Visual Studio` IDE.
+
 * This project is developed by visual studio 2015 and can be opened by vs2015 or later version. You computer system should be windows 8.1/10 which can install the IDE.
 
 * The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use you IDE(vs2015 or later) to open it, then click F5 to build and run it.
