@@ -1,17 +1,19 @@
 # Fish-Eye-Images-Correction-Stitching-Panorama image navigate-Code
 
-> Initially, this project was built to provide support for my thesis which titled “Correction of single circular fisheye image”. 
+- Initially, this project was built to provide support for my thesis which titled “Correction of single circular fisheye image”. 
 And It has been published on the Journal Of Computer Application(ISSN 1001-9081). Even if not so good, it is the first thesis I wrote by myself. I try my best to do that well.
 
-> When I graduated from Tianjin University, I expanded the project. The purpose is to provide the facts for my graduation thesis. Its title called "Research of Panoramic Roaming System Based on Fisheye Images".
+- When I graduated from Tianjin University, I expanded the project. The purpose is to provide the facts for my graduation thesis. Its title called "Research of Panoramic Roaming System Based on Fisheye Images".
 
-> And you can find all these two thesis in this project, under the directory: `\Paper\`. Theory and practice are not always the same. The paper just provides a way of thinking, but not all of it. That's just my bad thought. So I wish someone can help me to improve this project, or just give me some advice. That's all.
+- And you can find all these two thesis in this project, under the directory: `\Paper\`. Theory and practice are not always the same. The paper just provides a way of thinking, but not all of it. That's just my bad thought. So I wish someone can help me to improve this project, or just give me some advice. That's all.
 
 ## Basic situation
 
-* This project is developed by visual studio 2013 and can be opened by vs2013 or later version. You computer system should be windows 8.1/10 which can install the IDE.
+* This project is developed by visual studio 2015 and can be opened by vs2015 or later version. You computer system should be windows 8.1/10 which can install the IDE.
 
-* The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use you IDE(vs2013 or later) to open it, then click F5 to build and run it.
+* The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use you IDE(vs2015 or later) to open it, then click F5 to build and run it.
+
+* If you found the program can been build successfully, but need some dlls to run. You should open the `project property page` and clike the `Debug` label in the left column, then change the `Work Directory` value(in the right column) to `$(SolutionDir)opencv248vc12x86release\bin`, and re-run the built project.
 
 * The OpenCV related headers and libs has been included in this project, and the dlls are also added in the directory of execute file. So, it just work!
 
@@ -34,7 +36,7 @@ If you don't want to clone the entire repo, you can clone the latest commit in t
 
 > `git clone repo-site --depth=1`
 
-Then, open the `*.sln` file with your visual studio 2013 or later version.
+Then, open the `*.sln` file with your visual studio 2015 or later version.
 
 After open the Solution, make sure the project configruation is `Release|Win32|X86`, and press the Key `F5` to build and run this project. 
 
