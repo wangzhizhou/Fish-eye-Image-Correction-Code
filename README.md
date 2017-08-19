@@ -10,11 +10,11 @@
 
 * You can directly run the `navigator.exe` under the directory: `\product\` if you have not installed `Visual Studio` IDE.
 
-* This project is developed by visual studio 2015 and can be opened by vs2015 or later version. You computer system should be windows 8.1/10 which can install the IDE.
+* This project is developed by visual studio 2017 and can be opened by vs2017 or later version. Your computer system should be windows 10 which can install the IDE.
 
-* The OpenCV 2.4.8 is used in this code, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use your IDE(vs2015 or later) to open it, then click F5 to build and run it.
+* The OpenCV 3.3.0(opencv-vc14-x64-release) has been included in this project, and you do not't need to configure the OpenCV development environment, just checkout the project to you local repo, and use your IDE(vs2017 or later) to open it, then click F5 to build and run it.
 
-* If you found the program can been built successfully, but need some `dll`s to run. You should open the `project property page` and clike the `Debug` label in the left column, then change the `Work Directory` value(in the right column) to `$(SolutionDir)opencv248vc12x86release\bin`, and re-run the built project.
+* If you found the program can been built successfully, but need some `dll`s to run. When this project use opencv 2.4.8, you should open the `project property page` and clike the `Debug` label in the left column, then change the `Work Directory` value(in the right column) to `$(SolutionDir)opencv3.3.0vc14x64release\bin`, and re-run the built project. But now, you do not do anything, because I have defined some user marcos in the `OpenCV_Release_x64.props` and `OpenCV_Debug_x64.props`, 
 
 * The OpenCV related headers and libs has been included in this project, and the dlls are also added in the directory of execute file(in directory: `\product\`). So, it just work!
 
@@ -31,21 +31,24 @@ You can use this program to carry out basic experiments for circular fisheye ima
 Effect is not so good, it only has basic functions.
 
 ## How to use this project
+
 Firstly, you should clone this repo to you computer by using `git` related commands or just download the `zip` version provided by GitHub.
 
 If you don't want to clone the entire repo, you can clone the latest commit in this project with the command listed as follow:
 
 > `git clone repo-site --depth=1`
 
-Then, open the `*.sln` file with your visual studio 2015 or later version.
+Then, open the `*.sln` file with your visual studio 2017 or later version.
 
-After open the Solution, make sure the project configruation is `Release|Win32|X86`, and press the Key `F5` to build and run this project. 
+After open the Solution, make sure the project configruation is `Release|Win32|X64`, and press the Key `F5` to build and run this project. 
 
 You can find some circular fisheye images for testing under the directory: `\ImagesForTest\`. Only first six directory can be processed by this project, every directory contain four circular fisheye images.
 
 Because the process of images stitching may fail, you can use the parameters in the file `\ImagesForTest\有效参数.txt` during the processing of extracting circular area step.
 
 OK! Probably like this. Here is a sample processing.
+
+- If you want to check the project that use the opencv 2.4.8 version, you can run this command with git: `git checkout v1.0`
 
 ## Sample Processing
 
@@ -66,51 +69,61 @@ OK! Probably like this. Here is a sample processing.
 ## The project directory tree struct is as follow:
 ```
 FISH-EYE IMAGE CALIBRATION
-├─ImagesForTest
-│  ├─1
-│  ├─2
-│  ├─3
-│  ├─4
-│  ├─5
-│  ├─6
-│  ├─7
-│  ├─8
-│  ├─9
-│  └─other
-├─navigator
-│  └─Release
-│      └─navigator.tlog
-├─opencv248vc12x86release
-│  ├─bin
-│  ├─include
-│  │  ├─opencv
-│  │  └─opencv2
-│  │      ├─calib3d
-│  │      ├─contrib
-│  │      ├─core
-│  │      ├─features2d
-│  │      ├─flann
-│  │      ├─gpu
-│  │      │  └─device
-│  │      │      └─detail
-│  │      ├─highgui
-│  │      ├─imgproc
-│  │      ├─legacy
-│  │      ├─ml
-│  │      ├─nonfree
-│  │      ├─objdetect
-│  │      ├─ocl
-│  │      ├─photo
-│  │      ├─stitching
-│  │      │  └─detail
-│  │      ├─superres
-│  │      ├─ts
-│  │      ├─video
-│  │      └─videostab
-│  └─lib
-├─Paper
-├─product
-└─readme_resource
+├── ImagesForTest
+│   ├── 1
+│   ├── 2
+│   ├── 3
+│   ├── 4
+│   ├── 5
+│   ├── 6
+│   ├── 7
+│   ├── 8
+│   ├── 9
+│   ├── other
+│   └── 有效参数.txt
+├── OpenCV_Debug_x64.props
+├── OpenCV_Release_x64.props
+├── Paper
+│   ├── 单幅圆形鱼眼图像的校正.pdf
+│   └── 鱼眼成像全景漫游系统的研究.docx
+├── README.md
+├── navigator
+│   ├── corrector.cpp
+│   ├── corrector.h
+│   ├── findCircleParameter.cpp
+│   ├── findCircleParameter.h
+│   ├── globalInclude.h
+│   ├── imagesStitcher.cpp
+│   ├── imagesStitcher.h
+│   ├── main.cpp
+│   ├── navigator.vcxproj
+│   ├── navigator.vcxproj.filters
+│   ├── navigator.vcxproj.user
+│   ├── tools.cpp
+│   ├── tools.h
+│   ├── viewer.cpp
+│   └── viewer.h
+├── navigator.sln
+├── opencv330vc14x64release
+│   ├── bin
+│   ├── include
+│   └── lib
+├── product
+│   ├── navigator.exe
+│   └── opencv_world330.dll
+└── readme_resource
+    ├── 1.JPG
+    ├── 2.JPG
+    ├── 3.JPG
+    ├── 4.JPG
+    ├── corrected0.jpg
+    ├── corrected1.jpg
+    ├── corrected2.jpg
+    ├── corrected3.jpg
+    ├── navigate.jpg
+    └── panorama.jpg
+
+19 directories, 34 files
 ```
 
 
