@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <OPENCV_DIR>$(SolutionDir)opencv330vc14x64release\</OPENCV_DIR>
+    <OPENCV_BIN>$(OPENCV_DIR)bin</OPENCV_BIN>
+    <OPENCV_INCLUDE>$(OPENCV_DIR)include</OPENCV_INCLUDE>
+    <OPENCV_LIB>$(OPENCV_DIR)lib</OPENCV_LIB>
+    <OPENCV_LIBS>opencv_world330d.lib</OPENCV_LIBS>
+    <OPENCV_DLLS>opencv_world330d.dll</OPENCV_DLLS>
+    <IMG_DIR>$(SolutionDir)ImagesForTest</IMG_DIR>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>OpenCV_Debug_x64</_PropertySheetDisplayName>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(OPENCV_INCLUDE)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(OPENCV_LIB)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(OPENCV_LIBS);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>echo D | rd /S /Q  "$(SolutionDir)product\" 
+echo D | xcopy /Y "$(TargetPath)" "$(SolutionDir)product\" 
+echo D | xcopy /Y "$(OPENCV_DIR)bin\$(OPENCV_DLLS)" "$(SolutionDir)product\"
+
+echo D | xcopy /Y "$(OPENCV_DIR)bin\$(OPENCV_DLLS)" "$(SolutionDir)$(Platform)\$(Configuration)"</Command>
+      <Message>复制生成的应用程序以及运行依赖的dll文件到指定文件夹</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="OPENCV_DIR">
+      <Value>$(OPENCV_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENCV_BIN">
+      <Value>$(OPENCV_BIN)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENCV_INCLUDE">
+      <Value>$(OPENCV_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENCV_LIB">
+      <Value>$(OPENCV_LIB)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENCV_LIBS">
+      <Value>$(OPENCV_LIBS)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OPENCV_DLLS">
+      <Value>$(OPENCV_DLLS)</Value>
+    </BuildMacro>
+    <BuildMacro Include="IMG_DIR">
+      <Value>$(IMG_DIR)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
