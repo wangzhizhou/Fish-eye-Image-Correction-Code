@@ -14,7 +14,7 @@ void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
 	Mat dispImage;
 
 	string win_name = "Heaven And Earth Correct";
-	namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
+	cv::namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
 
 	if (findCircleParameter::getCircleParatemer(center, radius) && image.data)
 	{
@@ -24,11 +24,11 @@ void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
 			if (dispImage.data)
 			{
 				imshow(win_name, dispImage);
-				waitKey(10);
+				cv::waitKey(10);
 			}
 		}
-		waitKey();
-		destroyWindow(win_name);
+		cv::waitKey();
+		cv::destroyWindow(win_name);
 	}
 }
 
@@ -54,8 +54,8 @@ Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, doubl
 
 	//Õ¹¿ªÍ¼µÄ±äÁ¿·ÖÅä
 	Mat retImg(heightOfPanorama, widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg.clone();
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg.clone();
 
 	switch (type)
 	{
@@ -122,9 +122,9 @@ Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, doubl
 	}
 
 #ifdef _DEBUG_
-	namedWindow("expand fish-eye image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("expand fish-eye image", CV_WINDOW_AUTOSIZE);
 	imshow("expand fish-eye image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	return	retImg;
 }
@@ -175,10 +175,10 @@ Mat corrector::correctImage(correctParameters params, correctMethod method,bool 
 		addWeighted(sourceTemp, 0, resizedImage, 1, 0, sourceTemp);
 		addWeighted(resultTemp, 0, resultImage, 1, 0, resultTemp);
 
-		namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
-		resizeWindow(win_name, compareTwoImages.size().width / (double)compareTwoImages.size().height * 512, 512);
+		cv::namedWindow(win_name, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO);
+		cv::resizeWindow(win_name, compareTwoImages.size().width / (double)compareTwoImages.size().height * 512, 512);
 		imshow(win_name, compareTwoImages);
-		waitKey();
+		cv::waitKey();
 		cv::destroyWindow(win_name);
 	}
 	return resultImage;
@@ -232,8 +232,8 @@ Mat corrector::latitudeCorrection(Mat imgOrg, Point2i center, int radius, double
 	longitude_offset = (PI - camerFieldAngle) / 2;
 	latitude_offset = (PI - camerFieldAngle) / 2;
 
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg;
 
 	//according to the correct type to do the calibration
 	switch (type)
@@ -348,11 +348,11 @@ Mat corrector::latitudeCorrection(Mat imgOrg, Point2i center, int radius, double
 	//imwrite("C:\\Users\\Joker\\Desktop\\ret4.jpg", retImg);
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
-	//waitKey();
+	//cv::waitKey();
 #ifdef _DEBUG_
-	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	return retImg;
 }
@@ -416,8 +416,8 @@ Mat corrector::latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distM
 	double foval = 0.0;//½¹¾à
 
 
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg;
 
 	//according to the camera type to do the calibration
 	for (int j = 0; j < imgSize.height; j++)
@@ -512,11 +512,11 @@ Mat corrector::latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distM
 
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
-	//waitKey();
+	//cv::waitKey();
 #ifdef _DEBUG_
-	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	//imwrite("ret.jpg", retImg);
 	return retImg;
@@ -583,8 +583,8 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 	double foval = 0.0;//½¹¾à
 
 
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg;
 
 	//according to the camera type to do the calibration
 	for (int j = 0; j < imgSize.height; j++)
@@ -655,7 +655,7 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 
 				cv::Mat changed(revert*curPt);
 
-				Mat_<double> changed_double;
+				cv::Mat_<double> changed_double;
 				changed.convertTo(changed_double, CV_64F);
 
 				x = changed_double.at<double>(0, 0);
@@ -721,11 +721,11 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
-	//waitKey();
+	//cv::waitKey();
 #ifdef _DEBUG_
-	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	//imwrite("ret.jpg", retImg);
 	return retImg;
@@ -847,8 +847,8 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 	double foval = 0.0;//½¹¾à
 
 
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg;
 
 	//according to the camera type to do the calibration
 	double  limi_latitude = 2 * auxFunc(w_latitude, 0);
@@ -920,7 +920,7 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 
 				cv::Mat changed(revert*curPt);
 
-				Mat_<double> changed_double;
+				cv::Mat_<double> changed_double;
 				changed.convertTo(changed_double, CV_64F);
 
 				x = changed_double.at<double>(0, 0);
@@ -989,11 +989,11 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
-	//waitKey();
+	//cv::waitKey();
 #ifdef _DEBUG_
-	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	imwrite("ret.jpg", retImg);
 	return retImg;
@@ -1129,8 +1129,8 @@ Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, doubl
 	double foval = 0.0;//½¹¾à
 
 
-	Mat_<Vec3b> _retImg = retImg;
-	Mat_<Vec3b> _imgOrg = imgOrg;
+	cv::Mat_<Vec3b> _retImg = retImg;
+	cv::Mat_<Vec3b> _imgOrg = imgOrg;
 
 	int left, top;
 	left = center.x - radius;
@@ -1193,11 +1193,11 @@ Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, doubl
 
 	//imshow("org", _imgOrg);
 	//imshow("ret", _retImg);
-	//waitKey();
+	//cv::waitKey();
 #ifdef _DEBUG_
-	namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Corrected Image", CV_WINDOW_AUTOSIZE);
 	imshow("Corrected Image", retImg);
-	waitKey();
+	cv::waitKey();
 #endif
 	imwrite("ret.jpg", retImg);
 	return retImg;

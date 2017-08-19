@@ -18,7 +18,7 @@ bool tools::readImage()
 		images.clear();
 		for (int i = 0;i < fileNames.size();i++)
 		{
-			Mat image = imread(fileNames[i], IMREAD_COLOR);
+			Mat image = cv::imread(fileNames[i], cv::IMREAD_COLOR);
 			if (image.empty())
 			{
 				Tip("Failed to read in a image.");

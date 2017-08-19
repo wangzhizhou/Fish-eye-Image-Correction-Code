@@ -3,14 +3,28 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <opencv2\stitching\stitcher.hpp>
+#include <opencv2/stitching/warpers.hpp>
 #include <math.h>
 #include <sstream>
 #include <string>
 #include <fstream>
 
 using namespace std;
-using namespace cv;
+
+//由于opencv3.0之后, windows系统内部也有一个名称空间叫做cv,所以不能直接使用using namespace cv;
+//using namespace cv;
+
+typedef cv::Mat			Mat;
+typedef cv::Point		Point;
+typedef cv::Point2i		Point2i;
+typedef cv::Size		Size;
+typedef cv::Vec3b		Vec3b;
+typedef cv::Scalar		Scalar;
+typedef cv::Rect		Rect;
+typedef cv::Point3f		Point3f;
+typedef cv::Point3i		Point3i;
+typedef cv::Stitcher	Stitcher;
+
 
 const double  PI = 3.1415926535897932384626433832795;
 const double  LIMIT = 1e-4;

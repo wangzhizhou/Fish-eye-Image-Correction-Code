@@ -71,24 +71,24 @@ bool findCircleParameter::init(Mat img)
 void findCircleParameter::findCircle()
 {
 	cout << "Find the circular region params in image:" << endl;
-	namedWindow(win_name,CV_WINDOW_NORMAL);
-	resizeWindow(win_name, width_disp_img, height_disp_img+100);
-	createTrackbar(N_trackbar_name, win_name, &N_slider_value, N_max_value, On_N_trackbar);
-	createTrackbar(thresholdValue_trackbar_name, win_name, &thresholdValue_slider_value, thresholdValue_max_value, On_threshold_trackbar);
+	cv::namedWindow(win_name,CV_WINDOW_NORMAL);
+	cv::resizeWindow(win_name, width_disp_img, height_disp_img+100);
+	cv::createTrackbar(N_trackbar_name, win_name, &N_slider_value, N_max_value, On_N_trackbar);
+	cv::createTrackbar(thresholdValue_trackbar_name, win_name, &thresholdValue_slider_value, thresholdValue_max_value, On_threshold_trackbar);
 	On_N_trackbar(N_slider_value, 0);
 	On_threshold_trackbar(thresholdValue_slider_value, 0);
-	waitKey();
-	destroyWindow(win_name);
+	cv::waitKey();
+	cv::destroyWindow(win_name);
 }
 
 //检验是否有效
 void findCircleParameter::checkVarify()
 {
-	namedWindow(check_win_name, CV_WINDOW_NORMAL);
-	resizeWindow(check_win_name, width_disp_img, height_disp_img);
+	cv::namedWindow(check_win_name, CV_WINDOW_NORMAL);
+	cv::resizeWindow(check_win_name, width_disp_img, height_disp_img);
 	imshow(check_win_name, image);
-	setMouseCallback(check_win_name, onMouse);
-	waitKey();
+	cv::setMouseCallback(check_win_name, onMouse);
+	cv::waitKey();
 	cv::destroyWindow(check_win_name);
 }
 
@@ -264,7 +264,7 @@ void findCircleParameter::findPoints(Point2i center, int radius, std::vector<cv:
 		cout << matPt << endl << K << endl;
 		Mat ptSphere(K*matPt);
 		cout << ptSphere << endl;
-		Mat_<double> ptSphere_double;
+		cv::Mat_<double> ptSphere_double;
 		ptSphere.convertTo(ptSphere_double, CV_64F);
 		double x = ptSphere_double.at<double>(0, 0);
 		double y = ptSphere_double.at<double>(1, 0);
@@ -401,7 +401,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 #ifdef _SHOW_POINTS_
 			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 
 			for (int i = imgSize.height - 1; i >= 0; i--)
@@ -428,7 +428,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
 			line(src, ptMax1, ptMax2, Scalar(192, 192, 0), 2);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 			if (flag == 2)
 			{
@@ -500,7 +500,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 #ifdef _SHOW_POINTS_
 			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 
 			for (int i = imgSize.width - 1; i >= 0; i--)
@@ -564,7 +564,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
 			line(src, ptMax1, ptMax2, Scalar(192, 192, 0), 2);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 			if (flag == 2)
 			{
@@ -599,7 +599,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 #ifdef _SHOW_POINTS_
 			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 
 			for (int i = gray.cols - 1; i >= 0; i--)
@@ -626,7 +626,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
 			line(src, ptMax1, ptMax2, Scalar(192, 192, 0), 2);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 			if (flag == 2)
 			{
@@ -697,7 +697,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 #ifdef _SHOW_POINTS_
 			circle(src, ptMax1, 5, Scalar(0, 255, 255), -1);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 
 			for (int i = imgSize.width - 1 / 2; i >= 0; i--)
@@ -760,7 +760,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 			circle(src, ptMax2, 5, Scalar(0, 255, 255), -1);
 			line(src, ptMax1, ptMax2, Scalar(192, 192, 0), 2);
 			imshow("src", src);
-			waitKey();
+			cv::waitKey();
 #endif
 			if (flag == 2)
 			{
@@ -827,11 +827,11 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 	circle(src, center, radius, Scalar(0, 0, 255), src.cols / 300);
 	circle(src, center, 5, Scalar(0, 255, 255), -1);
 
-	//namedWindow("Revised ScanLine Method Result", CV_WINDOW_AUTOSIZE);
+	//cv::namedWindow("Revised ScanLine Method Result", CV_WINDOW_AUTOSIZE);
 	//imshow("Revised ScanLine Method Result", src);
 	imshow(win_name, src);
 	//imwrite("Revised_Scan_ret.tiff", src);
-	//waitKey();
+	//cv::waitKey();
 	//#endif
 
 }
@@ -857,8 +857,8 @@ bool findCircleParameter::CircleFitByKasa(vector<Point> validPoints, Point& cent
 	Mat A = Mat(extendA).reshape(1);
 	Mat	B = Mat(extendB).reshape(1);
 
-	Mat_<double> dA, dB;
-	Mat_<double> P(3, 1, CV_64F);
+	cv::Mat_<double> dA, dB;
+	cv::Mat_<double> P(3, 1, CV_64F);
 	A.convertTo(dA, CV_64F);
 	B.convertTo(dB, CV_64F);
 	P = dA.inv(CV_SVD)*dB;

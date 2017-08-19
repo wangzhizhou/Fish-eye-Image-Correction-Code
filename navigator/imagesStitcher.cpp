@@ -32,9 +32,9 @@ void imagesStitcher::showPanorama()
 	Mat tmp;
 	resize(panorama, tmp, s);
 	imshow(panorama_winname, tmp);
-	setMouseCallback(panorama_winname, onMouse, this);
-	waitKey();
-	destroyWindow(panorama_winname);
+	cv::setMouseCallback(panorama_winname, onMouse, this);
+	cv::waitKey();
+	cv::destroyWindow(panorama_winname);
 }
 
 void imagesStitcher::onMouse(int event, int x, int y, int, void * args)
@@ -44,12 +44,12 @@ void imagesStitcher::onMouse(int event, int x, int y, int, void * args)
 	static bool flag = false;
 	switch (event)
 	{
-	case EVENT_LBUTTONDOWN:
+	case cv::EVENT_LBUTTONDOWN:
 		pt1.x = x;
 		pt1.y = y;
 		flag = true;
 		break;
-	case EVENT_MOUSEMOVE:
+	case cv::EVENT_MOUSEMOVE:
 		if (flag)
 		{
 

@@ -26,10 +26,10 @@ void viewer::showWindow()
 		return;
 	}
 	updataWindow();
-	namedWindow(winname, CV_WINDOW_AUTOSIZE);
-	setMouseCallback(winname, onMouse, this);
+	cv::namedWindow(winname, CV_WINDOW_AUTOSIZE);
+	cv::setMouseCallback(winname, onMouse, this);
 	refreshWindow();
-	waitKey(0);
+	cv::waitKey(0);
 }
 
 void viewer::updataWindow()
@@ -52,8 +52,8 @@ void viewer::updataWindow()
 	double Theta_sphere;
 	double Phi_sphere;
 
-	Mat_<Vec3b> _retImg = window;
-	Mat_<Vec3b> _imgOrg = paronoma;
+	cv::Mat_<Vec3b> _retImg = window;
+	cv::Mat_<Vec3b> _imgOrg = paronoma;
 
 	cout << "[Processing ";
 
@@ -128,10 +128,10 @@ Point3d viewer::navigationHV(Point3d orgPt, double angleH, double angleV)
 	Mat cvtMat = cvtMatV*cvtMatH;
 
 	Mat org(orgPt);
-	Mat_<double> dOrg;
+	cv::Mat_<double> dOrg;
 	org.convertTo(dOrg, CV_64F);
 
-	Mat_<double> ret(3, 1, CV_64F);
+	cv::Mat_<double> ret(3, 1, CV_64F);
 	ret = cvtMat*dOrg;
 
 	return Point3d(ret);
