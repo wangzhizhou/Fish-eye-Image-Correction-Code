@@ -137,6 +137,3 @@ FISH-EYE IMAGE CALIBRATION
 19 directories, 34 files
 ```
 
-<video src="./Paper/处理过程演示视频.mp4">
-
-
