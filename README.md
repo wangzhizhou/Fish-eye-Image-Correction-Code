@@ -93,6 +93,8 @@ FISH-EYE IMAGE CALIBRATION
 ├── OpenCV_Debug_x64.props
 ├── OpenCV_Release_x64.props
 ├── Paper
+│   ├── 毕业答辩.pptx
+│   ├── 处理过程演示视频.mp4
 │   ├── 单幅圆形鱼眼图像的校正.pdf
 │   └── 鱼眼成像全景漫游系统的研究.docx
 ├── README.md
@@ -135,6 +137,6 @@ FISH-EYE IMAGE CALIBRATION
 19 directories, 34 files
 ```
 
-
+<video src="./Paper/处理过程演示视频.mp4">
 
 
