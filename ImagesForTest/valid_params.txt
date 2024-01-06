@@ -1,0 +1,6 @@
+Fisheye\1: N=5,t=23, 24
+Fisheye\2: N=5,t=26, 27
+Fisheye\3: N=5,t=20, 21, 22, 23, 24, 25, 26
+Fisheye\4: N=5,t=24, 25
+Fisheye\5: N=5,t=46, 49
+Fisheye\6: N=5,t=11, 12, 13
