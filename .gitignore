@@ -160,4 +160,3 @@ $RECYCLE.BIN/
 opencv_build/
 opencv_install/
 *.dSYM
-product/
