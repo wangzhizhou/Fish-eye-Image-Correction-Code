@@ -10,7 +10,6 @@ code --install-extension ms-vscode.cpptools
 code --install-extension ms-vscode.cpptools-extension-pack
 code --install-extension ms-vscode.cpptools-themes
 code --install-extension MS-CEINTL.vscode-language-pack-zh-hans
-code --install-extension ms-vscode.cmake-tools
 
 # open visual studio code and
 code .
