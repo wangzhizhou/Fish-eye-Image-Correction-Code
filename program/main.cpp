@@ -1,4 +1,4 @@
-//°üº¬µÄÍ·ÎÄ¼ş
+//åŒ…å«çš„å¤´æ–‡ä»¶
 #include "tools.h"
 #include "findCircleParameter.h"
 #include "corrector.h"
@@ -37,7 +37,7 @@ void paserParams(int argc, char**argv)
 	}
 }
 
-//Ö÷³Ì¶ÈÈë¿Úµã
+//ä¸»ç¨‹åº¦å…¥å£ç‚¹
 int main(int argc, char** argv)
 {
 	paserParams(argc, argv);
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 	vector<Mat> outputs;
 	imagesStitcher stitcher;
 
-	//¶ÁÍ¼Æ¬µ½ÄÚ´æÖĞ
+	//è¯»å›¾ç‰‡åˆ°å†…å­˜ä¸­
 	if (tools::readImage())
 	{
 		vector<Mat>& inputs = tools::GetImages();
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 		{
 			findCircleParameter::findCircle();
 
-#pragma region Ğ£Õı²ÎÊıÉè¶¨Çø
+#pragma region æ ¡æ­£å‚æ•°è®¾å®šåŒº
 			params.imgOrg = source_image;
 			findCircleParameter::getCircleParatemer(params.center, params.radius);
 			params.w_longtitude = PI / 2;
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 				<< "Correct Image(s) with the same circular region params: " << endl
 				<< "radius = " << params.radius << ", center = " << params.center << endl << endl;
 
-#pragma region Í¼ÏñĞ£ÕıÇø
+#pragma region å›¾åƒæ ¡æ­£åŒº
 			corrector::correctMethod method = corrector::correctMethod::PERSPECTIVE_LONG_LAT_MAP_CAMERA_LEN_MODEL_REVERSE_W_HALF_PI;
 
 			outputs.push_back(
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 	}
 #pragma endregion
 
-#pragma region Í¼Ïñ½Ó½Ó²¿·Ö
+#pragma region å›¾åƒæ¥æ¥éƒ¨åˆ†
 	vector<Mat> images1, images2;
 	string filenamePath;
 	char suffix[MAX_PATH];
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 	{
 		if (saveResult)
 		{
-			sprintf_s(suffix, "corrected%d.jpg", i);
+			snprintf(suffix, MAX_PATH, "corrected%d.jpg", i);
 			string tmp(suffix);
 			filenamePath = tmp;
 			imwrite(filenamePath, outputs[i]);
@@ -126,7 +126,7 @@ int main(int argc, char** argv)
 
 		cout << "Stitch Images completes!" << endl;
 #pragma endregion
-#pragma region ä¯ÀÀÈ«¾°Í¼Ïñ
+#pragma region æµè§ˆå…¨æ™¯å›¾åƒ
 
 		Mat panoramaImage = stitcher.getPanorama();
 

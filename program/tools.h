@@ -1,6 +1,6 @@
 #pragma once
 #include "globalInclude.h"
-#include <Windows.h>
+#define MAX_PATH 260
 
 class tools
 {

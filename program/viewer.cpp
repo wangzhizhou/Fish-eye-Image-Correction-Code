@@ -35,7 +35,7 @@ void viewer::showWindow()
 void viewer::updataWindow()
 {
 	paronomaWithOutline = paronoma.clone();
-	//»ñÈ¡ÏÔÊ¾ÇøÓòµÄ³ß´ç
+	//è·å–æ˜¾ç¤ºåŒºåŸŸçš„å°ºå¯¸
 	Size dispSize = window.size();
 
 	int center_x = dispSize.width/ 2;
@@ -64,11 +64,11 @@ void viewer::updataWindow()
 	{
 		for (int i = 0; i < dispSize.width; i++)
 		{
-			Point3d tmpPt(i - center_x, center_y - j, distance);//×îºóÒ»¸ö²ÎÊıÓÃÀ´ĞŞ¸Ä³ÉÏñÃæµ½µ¥Î»ÇòÃæµÄ¾àÀë
+			Point3d tmpPt(i - center_x, center_y - j, distance);//æœ€åä¸€ä¸ªå‚æ•°ç”¨æ¥ä¿®æ”¹æˆåƒé¢åˆ°å•ä½çƒé¢çš„è·ç¦»
 
 			double normPt = norm(tmpPt);
 
-			//Çó³öµ¥Î»Ô²ÉÏµÄµã×ø±ê
+			//æ±‚å‡ºå•ä½åœ†ä¸Šçš„ç‚¹åæ ‡
 			tmpPt.x /= normPt;
 			tmpPt.y /= normPt;
 			tmpPt.z /= normPt;

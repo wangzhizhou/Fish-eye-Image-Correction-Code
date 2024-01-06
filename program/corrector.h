@@ -40,7 +40,7 @@ private:
 	
 private:
 
-#pragma region 鱼眼图像校正部分成员函数
+#pragma region 楸肩溂鍥惧儚鏍℃閮ㄥ垎鎴愬憳鍑芥暟
 	 Mat latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle = PI, CorrectType type = Reverse);
 	 Mat latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distMapMode distMap = LATITUDE_LONGTITUDE, double camerFieldAngle = PI, camMode camProjMode = EQUIDISTANCE);
 	 Mat latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distMapMode distMap = LATITUDE_LONGTITUDE, double theta_left = 0, double phi_up = 0, double camerFieldAngle = PI, camMode camProjMode = EQUIDISTANCE);

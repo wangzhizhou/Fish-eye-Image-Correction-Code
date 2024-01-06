@@ -1,59 +1,59 @@
 #include "findCircleParameter.h"
 
-#pragma region Óë±ä½Ç¶ÈÏßÉ¨Ãè·¨Ïà¹ØµÄ±äÁ¿ÉùÃ÷
-//Ô²ÌáÈ¡´°¿Ú±êÌâ
+#pragma region ä¸å˜è§’åº¦çº¿æ‰«ææ³•ç›¸å…³çš„å˜é‡å£°æ˜
+//åœ†æå–çª—å£æ ‡é¢˜
 string findCircleParameter::win_name = "Circle Extraction";
 
-//±ä½Ç¶ÈÏßÉ¨Ãè·¨£¬É¨ÃèÇã½Ç·Ö¸îÏµÊı
+//å˜è§’åº¦çº¿æ‰«ææ³•ï¼Œæ‰«æå€¾è§’åˆ†å‰²ç³»æ•°
 string findCircleParameter::N_trackbar_name = "N(0-15)";
 
-//±ä½Ç¶ÈÏßÉ¨Ãè·¨ãĞÖµÉè¶¨Öµ
+//å˜è§’åº¦çº¿æ‰«ææ³•é˜ˆå€¼è®¾å®šå€¼
 string findCircleParameter::thresholdValue_trackbar_name = "Threshold(0-255)";
 
-//±ä½Ç¶ÈÏßÉ¨Ãè·¨µÄ½Ç¶È·½ÏòÊı³õÖµ
+//å˜è§’åº¦çº¿æ‰«ææ³•çš„è§’åº¦æ–¹å‘æ•°åˆå€¼
 int findCircleParameter::N_slider_value = 5;
 
-//±ä½Ç¶ÈÏßÉ¨Ãè·¨µÄ½Ç¶È·½ÏòÊı×î´óÉè¶¨Öµ
+//å˜è§’åº¦çº¿æ‰«ææ³•çš„è§’åº¦æ–¹å‘æ•°æœ€å¤§è®¾å®šå€¼
 int findCircleParameter::N_max_value = 15;
 
-//ÏßÉ¨ÃèµÄãĞÖµ
+//çº¿æ‰«æçš„é˜ˆå€¼
 int findCircleParameter::thresholdValue_slider_value = 40;
 
-//ÏßÉ¨ÃèãĞÖµ×î´óÉè¶¨Öµ
+//çº¿æ‰«æé˜ˆå€¼æœ€å¤§è®¾å®šå€¼
 int findCircleParameter::thresholdValue_max_value = 255;
 
-//´æ·ÅÊ¶±ğ³öµÄÔ²µÄÖĞĞÄ×ø±ê(Í¼Ïñ×ø±êÏµÏÂ)
+//å­˜æ”¾è¯†åˆ«å‡ºçš„åœ†çš„ä¸­å¿ƒåæ ‡(å›¾åƒåæ ‡ç³»ä¸‹)
 Point2i findCircleParameter::center = Point2i(-1, -1);
 
-//´æ·ÅÊ¶±ğ³öµÄÔ²µÄ°ë¾¶´óĞ¡
+//å­˜æ”¾è¯†åˆ«å‡ºçš„åœ†çš„åŠå¾„å¤§å°
 int findCircleParameter::radius = -1;
 
-//´æ·ÅÔ­Í¼
+//å­˜æ”¾åŸå›¾
 Mat findCircleParameter::image = Mat();
 #pragma endregion
 
-#pragma region ÑéÖ¤²¿·Ö±äÁ¿³õÊ¼»¯
-//´æ·ÅÏßÌõÉÏµãµÄ×ø±ê
+#pragma region éªŒè¯éƒ¨åˆ†å˜é‡åˆå§‹åŒ–
+//å­˜æ”¾çº¿æ¡ä¸Šç‚¹çš„åæ ‡
 std::vector<std::vector<cv::Point>> findCircleParameter::lines;
 
-//ÑéÖ¤´°¿Ú±êÌâ
+//éªŒè¯çª—å£æ ‡é¢˜
 std::string findCircleParameter::check_win_name = "Check Verify";
 
 //
 std::vector<cv::Point> findCircleParameter::points;
 
-//ÓãÑÛ¾µÍ·µÄÊÓ³¡½Ç
+//é±¼çœ¼é•œå¤´çš„è§†åœºè§’
 const double findCircleParameter::FOV = PI;
 #pragma endregion
 
-#pragma region ÎªÁË±ãÓÚÏÔÊ¾¶ø¼ÆËãµÄÍ¼Æ¬ÏÔÊ¾³ß´ç
+#pragma region ä¸ºäº†ä¾¿äºæ˜¾ç¤ºè€Œè®¡ç®—çš„å›¾ç‰‡æ˜¾ç¤ºå°ºå¯¸
 int findCircleParameter::width_disp_img = -1;
 int findCircleParameter::height_disp_img = -1;
 
 #pragma endregion
 
 
-//³õÊ¼»¯Ê¶±ğÍ¼£¬µ¼Èë´ıÊ¶±ğÍ¼Ïñ
+//åˆå§‹åŒ–è¯†åˆ«å›¾ï¼Œå¯¼å…¥å¾…è¯†åˆ«å›¾åƒ
 bool findCircleParameter::init(Mat img)
 {
 	image = img;
@@ -67,7 +67,7 @@ bool findCircleParameter::init(Mat img)
 	return false;
 }
 
-//¿ªÊ¼Ê¶±ğÔ²
+//å¼€å§‹è¯†åˆ«åœ†
 void findCircleParameter::findCircle()
 {
 	cout << "Find the circular region params in image:" << endl;
@@ -81,7 +81,7 @@ void findCircleParameter::findCircle()
 	cv::destroyWindow(win_name);
 }
 
-//¼ìÑéÊÇ·ñÓĞĞ§
+//æ£€éªŒæ˜¯å¦æœ‰æ•ˆ
 void findCircleParameter::checkVarify()
 {
 	cv::namedWindow(check_win_name, CV_WINDOW_NORMAL);
@@ -92,7 +92,7 @@ void findCircleParameter::checkVarify()
 	cv::destroyWindow(check_win_name);
 }
 
-//»ñÈ¡¼ì²âµ½µÄÔ²µÄ²ÎÊı
+//è·å–æ£€æµ‹åˆ°çš„åœ†çš„å‚æ•°
 bool findCircleParameter::getCircleParatemer(Point2i & centerPos, int& r)
 {
 	if (center != Point2i(-1, -1) && radius != -1)
@@ -106,7 +106,7 @@ bool findCircleParameter::getCircleParatemer(Point2i & centerPos, int& r)
 }
 
 
-//¹â±ê»Øµ÷º¯Êı
+//å…‰æ ‡å›è°ƒå‡½æ•°
 void findCircleParameter::onMouse(int event, int x, int y, int, void* params)
 {
 	Mat src = image.clone();
@@ -247,9 +247,9 @@ void findCircleParameter::findPoints(Point2i center, int radius, std::vector<cv:
 	tmpK.push_back(e3);
 	cout << e1 << endl << e2 << endl << e3 << endl;
 	cout << "tmpK=" << tmpK << endl;
-	Mat K = Mat(tmpK).reshape(1).t(); //´Ó±ê×¼¿Õ¼ä×ø±êµ½±¨ÏñÍ·¿Õ¼ä×ø±êµÄ±ä»»¾ØÕó
+	Mat K = Mat(tmpK).reshape(1).t(); //ä»æ ‡å‡†ç©ºé—´åæ ‡åˆ°æŠ¥åƒå¤´ç©ºé—´åæ ‡çš„å˜æ¢çŸ©é˜µ
 	cout << "K=" << K << endl;
-	Mat T = K.inv(CV_SVD);//´Ó±¨ÏñÍ·¿Õ¼ä×ø±êµ½±ê×¼¿Õ¼ä×ø±êÆ½Ãæ±ä»»¾ØÕó
+	Mat T = K.inv(CV_SVD);//ä»æŠ¥åƒå¤´ç©ºé—´åæ ‡åˆ°æ ‡å‡†ç©ºé—´åæ ‡å¹³é¢å˜æ¢çŸ©é˜µ
 
 	points.clear();
 	const int count = 20;
@@ -329,29 +329,29 @@ findCircleParameter::~findCircleParameter()
 {
 }
 
-//ÎªÈ·¶¨ÓãÑÛÔ²ĞÎÓĞĞ§ÇøÓò²ÎÊı¶øÉèÖÃµÄ»Øµ÷º¯Êı£¬¹©OpenCVÊ¹ÓÃ
+//ä¸ºç¡®å®šé±¼çœ¼åœ†å½¢æœ‰æ•ˆåŒºåŸŸå‚æ•°è€Œè®¾ç½®çš„å›è°ƒå‡½æ•°ï¼Œä¾›OpenCVä½¿ç”¨
 void findCircleParameter::On_N_trackbar(int N_slider_value, void* params)
 {
 	cout << endl;
 	cout << "N_Slider" << N_slider_value << endl;
 	cout << "Threshold_Slider" << thresholdValue_slider_value << endl;
-	//ÓÃ±ä½Ç¶ÈÏßÉ¨Ãè·¨È¡ÇóÔ²ĞÎÓĞĞ§ÇøÓòµÄÔ²ĞÄºÍ°ë¾¶µÄ²ÎÊı
+	//ç”¨å˜è§’åº¦çº¿æ‰«ææ³•å–æ±‚åœ†å½¢æœ‰æ•ˆåŒºåŸŸçš„åœ†å¿ƒå’ŒåŠå¾„çš„å‚æ•°
 	if (image.data)
 		revisedScanLineMethod(image, center, radius, thresholdValue_slider_value, N_slider_value);
 }
 
-//ÎªÈ·¶¨ÓãÑÛÔ²ĞÎÓĞĞ§ÇøÓò²ÎÊı¶øÉèÖÃµÄ»Øµ÷º¯Êı£¬¹©OpenCVÊ¹ÓÃ
+//ä¸ºç¡®å®šé±¼çœ¼åœ†å½¢æœ‰æ•ˆåŒºåŸŸå‚æ•°è€Œè®¾ç½®çš„å›è°ƒå‡½æ•°ï¼Œä¾›OpenCVä½¿ç”¨
 void findCircleParameter::On_threshold_trackbar(int thresholdValue_slider_value, void* params)
 {
 	cout << endl;
 	cout << "N_Slider: " << N_slider_value << endl;
 	cout << "Threshold_Slider: " << thresholdValue_slider_value << endl;
-	//ÓÃ±ä½Ç¶ÈÏßÉ¨Ãè·¨È¡ÇóÔ²ĞÎÓĞĞ§ÇøÓòµÄÔ²ĞÄºÍ°ë¾¶µÄ²ÎÊı
+	//ç”¨å˜è§’åº¦çº¿æ‰«ææ³•å–æ±‚åœ†å½¢æœ‰æ•ˆåŒºåŸŸçš„åœ†å¿ƒå’ŒåŠå¾„çš„å‚æ•°
 	if (image.data)
 		revisedScanLineMethod(image, center, radius, thresholdValue_slider_value, N_slider_value);
 }
 
-//±ä½Ç¶ÈÏßÉ¨Ãè·¨¡ª¡ª¸Ä½øºóµÄÏßÉ¨Ãè·¨
+//å˜è§’åº¦çº¿æ‰«ææ³•â€”â€”æ”¹è¿›åçš„çº¿æ‰«ææ³•
 void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int& radius, int threshold, int N)
 {
 	Mat src, gray;
@@ -836,7 +836,7 @@ void findCircleParameter::revisedScanLineMethod(Mat imgOrg, Point2i& center, int
 
 }
 
-//Ô²ÄâºÏº¯Êı£¬ĞÔÄÜºÜºÃ£¬µ«Òª·ÀÖ¹ÄâºÏÊ±³öÏÖÆæÒìÖµµÄÇé¿ö
+//åœ†æ‹Ÿåˆå‡½æ•°ï¼Œæ€§èƒ½å¾ˆå¥½ï¼Œä½†è¦é˜²æ­¢æ‹Ÿåˆæ—¶å‡ºç°å¥‡å¼‚å€¼çš„æƒ…å†µ
 bool findCircleParameter::CircleFitByKasa(vector<Point> validPoints, Point& center, int&	 radius)
 {
 	if (validPoints.size() <= 2)

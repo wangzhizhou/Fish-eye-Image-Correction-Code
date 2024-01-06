@@ -1,10 +1,10 @@
 #include "corrector.h"
 
 
-#pragma region ¾²Ì¬³ÉÔ±±äÁ¿ºÍº¯Êı
+#pragma region é™æ€æˆå‘˜å˜é‡å’Œå‡½æ•°
 int corrector::counter = 0;
 
-//ÒÔ¶¯Ì¬µÄ·½Ê½ÏÔÊ¾±»Ğ£ÕıµÄÍ¼Ïñ
+//ä»¥åŠ¨æ€çš„æ–¹å¼æ˜¾ç¤ºè¢«æ ¡æ­£çš„å›¾åƒ
 void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
 {
 	Mat image = sourceImage.clone();
@@ -32,14 +32,14 @@ void corrector::dispHeaveAndEarthCorrectImage(Mat sourceImage)
 	}
 }
 
-//¶ÔÓÚÏòÌìºÍÏòµØÅÄÉãµÄÓãÑÛÍ¼Æ¬Ğ£Õı
+//å¯¹äºå‘å¤©å’Œå‘åœ°æ‹æ‘„çš„é±¼çœ¼å›¾ç‰‡æ ¡æ­£
 Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, double startRadian, CorrectType type)
 {
-	//Éè¶¨Õ¹¿ªÍ¼µÄ¸ß¶È£¬ÒòÎªÓãÑÛÍ¼Ïñ²»ÄÜ»Ò¸´¸ß¶ÈĞÅÏ¢£¬ËùÒÔÕâÀï¿ÉÒÔ¸ú¸ùÊµ¼ÊÀ´
-	//½øĞĞµ÷½Ú
+	//è®¾å®šå±•å¼€å›¾çš„é«˜åº¦ï¼Œå› ä¸ºé±¼çœ¼å›¾åƒä¸èƒ½ç°å¤é«˜åº¦ä¿¡æ¯ï¼Œæ‰€ä»¥è¿™é‡Œå¯ä»¥è·Ÿæ ¹å®é™…æ¥
+	//è¿›è¡Œè°ƒèŠ‚
 	int heightOfPanorama = radius * 2;
 
-	//Éè¶¨Õ¹¿ªÍ¼µÄ¿í¶È£¬ÕâÀïÉè¶¨ÎªÓãÑÛÍ¼ÏñÔ²ĞÎÓĞĞ§ÇøÓòµÄÖÜ³¤
+	//è®¾å®šå±•å¼€å›¾çš„å®½åº¦ï¼Œè¿™é‡Œè®¾å®šä¸ºé±¼çœ¼å›¾åƒåœ†å½¢æœ‰æ•ˆåŒºåŸŸçš„å‘¨é•¿
 	int widthOfPanorama = 2 * PI*radius;
 
 	double dx = 2 * PI / widthOfPanorama;
@@ -52,14 +52,14 @@ Mat corrector::heavenAndEarthCorrect(Mat imgOrg, Point center, int radius, doubl
 
 	int u, v;
 
-	//Õ¹¿ªÍ¼µÄ±äÁ¿·ÖÅä
+	//å±•å¼€å›¾çš„å˜é‡åˆ†é…
 	Mat retImg(heightOfPanorama, widthOfPanorama, CV_8UC3, Scalar(0, 0, 0));
 	cv::Mat_<Vec3b> _retImg = retImg;
 	cv::Mat_<Vec3b> _imgOrg = imgOrg.clone();
 
 	switch (type)
 	{
-	case Reverse:	//Ê¹ÓÃ·´ÏòÓ³ÉäÀ´Ìî³äÕ¹¿ªÍ¼
+	case Reverse:	//ä½¿ç”¨åå‘æ˜ å°„æ¥å¡«å……å±•å¼€å›¾
 		for (int j = 0; j < heightOfPanorama; j++)
 		{
 			for (int i = 0; i < widthOfPanorama; i++)
@@ -160,7 +160,7 @@ Mat corrector::correctImage(correctParameters params, correctMethod method,bool 
 	cout << "Image " << counter << " corrected!" << endl;
 	if (isDispRet)
 	{
-		string win_name("The result Image"+counter);
+		string win_name("The result Image"+to_string(counter));
 
 		Mat resizedImage;
 		resize(params.imgOrg, resizedImage, Size((params.imgOrg.size().width / (double)params.imgOrg.size().height*resultImage.size().height), resultImage.size().height));
@@ -184,7 +184,7 @@ Mat corrector::correctImage(correctParameters params, correctMethod method,bool 
 	return resultImage;
 }
 
-#pragma region ¹ØÓÚ¾­Î³¶ÈÒÔ¼°×İÏòÑ¹ËõÖùÃæÍ¶Ó°Ğ£ÕıµÄ·½·¨(¶¯Ì¬³ÉÔ±)
+#pragma region å…³äºç»çº¬åº¦ä»¥åŠçºµå‘å‹ç¼©æŸ±é¢æŠ•å½±æ ¡æ­£çš„æ–¹æ³•(åŠ¨æ€æˆå‘˜)
 //longitude-latitude reverse or forward map correction method
 Mat corrector::latitudeCorrection(Mat imgOrg, Point2i center, int radius, double camerFieldAngle, CorrectType type)
 {
@@ -413,7 +413,7 @@ Mat corrector::latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distM
 	longitude_offset = (PI - camerFieldAngle) / 2;
 	latitude_offset = (PI - camerFieldAngle) / 2;
 
-	double foval = 0.0;//½¹¾à
+	double foval = 0.0;//ç„¦è·
 
 
 	cv::Mat_<Vec3b> _retImg = retImg;
@@ -425,7 +425,7 @@ Mat corrector::latitudeCorrection2(Mat imgOrg, Point2i center, int radius, distM
 
 		for (int i = 0; i < imgSize.width; i++)
 		{
-			Point3f tmpPt(i - center_x, center_y - j, 100);//×îºóÒ»¸ö²ÎÊıÓÃÀ´ĞŞ¸Ä³ÉÏñÃæµÄ½¹¾à
+			Point3f tmpPt(i - center_x, center_y - j, 100);//æœ€åä¸€ä¸ªå‚æ•°ç”¨æ¥ä¿®æ”¹æˆåƒé¢çš„ç„¦è·
 			double normPt = norm(tmpPt);
 
 			switch (distMap)
@@ -580,7 +580,7 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 	longitude_offset = (PI - camerFieldAngle) / 2;
 	latitude_offset = (PI - camerFieldAngle) / 2;
 
-	double foval = 0.0;//½¹¾à
+	double foval = 0.0;//ç„¦è·
 
 
 	cv::Mat_<Vec3b> _retImg = retImg;
@@ -592,7 +592,7 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 
 		for (int i = 0; i < imgSize.width; i++)
 		{
-			Point3f tmpPt(i - center_x, center_y - j, 600);//×îºóÒ»¸ö²ÎÊıÓÃÀ´ĞŞ¸Ä³ÉÏñÃæµÄ½¹¾à
+			Point3f tmpPt(i - center_x, center_y - j, 600);//æœ€åä¸€ä¸ªå‚æ•°ç”¨æ¥ä¿®æ”¹æˆåƒé¢çš„ç„¦è·
 			double normPt = norm(tmpPt);
 
 			switch (distMap)
@@ -635,17 +635,17 @@ Mat corrector::latitudeCorrection3(Mat imgOrg, Point2i center, int radius, distM
 				cv::Mat curPt(cv::Point3f(x, y, z));
 				std::vector<cv::Point3f> pts;
 
-				//Ïò¶«Ğı×ªµØÇò
+				//å‘ä¸œæ—‹è½¬åœ°çƒ
 				//pts.push_back(cv::Point3f(cos(theta), 0, -sin(theta)));
 				//pts.push_back(cv::Point3f(0, 1, 0));
 				//pts.push_back(cv::Point3f(sin(theta), 0, cos(theta)));
 
-				//ÏòÄÏĞı×ªµØÇò
+				//å‘å—æ—‹è½¬åœ°çƒ
 				//pts.push_back(cv::Point3f(1, 0, 0));
 				//pts.push_back(cv::Point3f(0, cos(phi), sin(phi)));
 				//pts.push_back(cv::Point3f(0, -sin(phi), cos(phi)));
 
-				//Á½¸ö·½ÏòĞı×ª
+				//ä¸¤ä¸ªæ–¹å‘æ—‹è½¬
 				pts.push_back(cv::Point3f(cos(theta_left), 0, sin(theta_left)));
 				pts.push_back(cv::Point3f(sin(phi_up)*sin(theta_left), cos(phi_up), -sin(phi_up)*cos(theta_left)));
 				pts.push_back(cv::Point3f(-cos(phi_up)*sin(theta_left), sin(phi_up), cos(phi_up)*cos(theta_left)));
@@ -844,7 +844,7 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 	longitude_offset = (PI - camerFieldAngle) / 2;
 	latitude_offset = (PI - camerFieldAngle) / 2;
 
-	double foval = 0.0;//½¹¾à
+	double foval = 0.0;//ç„¦è·
 
 
 	cv::Mat_<Vec3b> _retImg = retImg;
@@ -858,7 +858,7 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 
 		for (int i = 0; i < imgSize.width; i++)
 		{
-			Point3f tmpPt(i - center_x, center_y - j, 600);//×îºóÒ»¸ö²ÎÊıÓÃÀ´ĞŞ¸Ä³ÉÏñÃæµÄ½¹¾à
+			Point3f tmpPt(i - center_x, center_y - j, 600);//æœ€åä¸€ä¸ªå‚æ•°ç”¨æ¥ä¿®æ”¹æˆåƒé¢çš„ç„¦è·
 			double normPt = norm(tmpPt);
 
 			switch (distMap)
@@ -900,17 +900,17 @@ Mat corrector::latitudeCorrection4(Mat imgOrg, Point2i center, int radius, doubl
 				cv::Mat curPt(cv::Point3f(x, y, z));
 				std::vector<cv::Point3f> pts;
 
-				//Ïò¶«Ğı×ªµØÇò
+				//å‘ä¸œæ—‹è½¬åœ°çƒ
 				//pts.push_back(cv::Point3f(cos(theta), 0, -sin(theta)));
 				//pts.push_back(cv::Point3f(0, 1, 0));
 				//pts.push_back(cv::Point3f(sin(theta), 0, cos(theta)));
 
-				//ÏòÄÏĞı×ªµØÇò
+				//å‘å—æ—‹è½¬åœ°çƒ
 				//pts.push_back(cv::Point3f(1, 0, 0));
 				//pts.push_back(cv::Point3f(0, cos(phi), sin(phi)));
 				//pts.push_back(cv::Point3f(0, -sin(phi), cos(phi)));
 
-				//Á½¸ö·½ÏòĞı×ª
+				//ä¸¤ä¸ªæ–¹å‘æ—‹è½¬
 				pts.push_back(cv::Point3f(cos(theta_left), 0, sin(theta_left)));
 				pts.push_back(cv::Point3f(sin(phi_up)*sin(theta_left), cos(phi_up), -sin(phi_up)*cos(theta_left)));
 				pts.push_back(cv::Point3f(-cos(phi_up)*sin(theta_left), sin(phi_up), cos(phi_up)*cos(theta_left)));
@@ -1126,7 +1126,7 @@ Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, doubl
 	longitude_offset = (PI - camerFieldAngle) / 2;
 	latitude_offset = (PI - camerFieldAngle) / 2;
 
-	double foval = 0.0;//½¹¾à
+	double foval = 0.0;//ç„¦è·
 
 
 	cv::Mat_<Vec3b> _retImg = retImg;
@@ -1206,6 +1206,6 @@ Mat corrector::latitudeCorrection5(Mat imgOrg, Point2i center, int radius, doubl
 #pragma endregion
 
 
-#pragma region Í¼ÏñÆ´½ÓÏà¹Ø
+#pragma region å›¾åƒæ‹¼æ¥ç›¸å…³
 
 #pragma endregion

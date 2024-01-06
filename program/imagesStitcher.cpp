@@ -11,8 +11,8 @@ imagesStitcher::~imagesStitcher()
 
 Mat imagesStitcher::stitchImages(vector<Mat>& images)
 {
-	Stitcher s=Stitcher::createDefault(false);
-	Stitcher::Status status = s.stitch(images, panorama);
+	Ptr<Stitcher> s=Stitcher::create(Stitcher::PANORAMA);
+	Stitcher::Status status = s->stitch(images, panorama);
 	if (Stitcher::OK != status)
 	{
 		cout << "Can't stitch images, error code = " << status << endl;

@@ -3,6 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui/highgui_c.h>
 #include <opencv2/stitching/warpers.hpp>
 #include <math.h>
 #include <sstream>
@@ -10,9 +11,7 @@
 #include <fstream>
 
 using namespace std;
-
-//由于opencv3.0之后, windows系统内部也有一个名称空间叫做cv,所以不能直接使用using namespace cv;
-//using namespace cv;
+using namespace cv;
 
 typedef cv::Mat			Mat;
 typedef cv::Point		Point;

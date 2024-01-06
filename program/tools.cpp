@@ -7,7 +7,9 @@ vector<Mat>& tools::GetImages()
 {
 	if (images.size())
 		return images;
-	return vector<Mat>();
+
+	images = vector<Mat>();
+	return images;
 }
 
 bool tools::readImage()
@@ -41,63 +43,63 @@ bool tools::readImage()
 }
 bool tools::GetFilePathToProcess()
 {
-	OPENFILENAME ofn;
+// 	OPENFILENAME ofn;
 
-	CHAR szOpenFileNames[80 * MAX_PATH];
-	TCHAR szPath[MAX_PATH];
-	TCHAR szFileName[MAX_PATH];
-	TCHAR* p;
-	int nLen = 0;
+// 	CHAR szOpenFileNames[80 * MAX_PATH];
+// 	TCHAR szPath[MAX_PATH];
+// 	TCHAR szFileName[MAX_PATH];
+// 	TCHAR* p;
+// 	int nLen = 0;
 
-	char curPath[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, curPath);
+// 	char curPath[MAX_PATH];
+// 	GetCurrentDirectory(MAX_PATH, curPath);
 
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = szOpenFileNames;
-	ofn.lpstrFile[0] = TEXT('\0');
-	ofn.nMaxFile = sizeof(szOpenFileNames);
-	ofn.lpstrFilter = TEXT("jpg\0*.jpg\0bmp\0*.bmp\0png\0*.png\0"); //¶¨ÒåÈı¸öÑ¡Ïî jpg/bmp/pngÍ¼Æ¬¸ñÊ½
-	ofn.nFilterIndex = 1;      //¶¨ÒåÊ×Ñ¡ÏîÊÇÄÄÒ»¸ö
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST|OFN_ALLOWMULTISELECT;
-	ofn.lpstrInitialDir = curPath;
+// 	ZeroMemory(&ofn, sizeof(ofn));
+// 	ofn.lStructSize = sizeof(ofn);
+// 	ofn.lpstrFile = szOpenFileNames;
+// 	ofn.lpstrFile[0] = TEXT('\0');
+// 	ofn.nMaxFile = sizeof(szOpenFileNames);
+// 	ofn.lpstrFilter = TEXT("jpg\0*.jpg\0bmp\0*.bmp\0png\0*.png\0"); //å®šä¹‰ä¸‰ä¸ªé€‰é¡¹ jpg/bmp/pngå›¾ç‰‡æ ¼å¼
+// 	ofn.nFilterIndex = 1;      //å®šä¹‰é¦–é€‰é¡¹æ˜¯å“ªä¸€ä¸ª
+// 	ofn.lpstrFileTitle = NULL;
+// 	ofn.nMaxFileTitle = 0;
+// 	ofn.lpstrInitialDir = NULL;
+// 	ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST|OFN_ALLOWMULTISELECT;
+// 	ofn.lpstrInitialDir = curPath;
 
-	if (GetOpenFileName(&ofn))
-	{	
-		lstrcpyn(szPath, szOpenFileNames, ofn.nFileOffset);
-		szPath[ofn.nFileOffset] = '\0';
-		nLen = lstrlen(szPath);
+// 	if (GetOpenFileName(&ofn))
+// 	{	
+// 		lstrcpyn(szPath, szOpenFileNames, ofn.nFileOffset);
+// 		szPath[ofn.nFileOffset] = '\0';
+// 		nLen = lstrlen(szPath);
 
-		if (szPath[nLen - 1] != '\\')   //Èç¹ûÑ¡ÁË¶à¸öÎÄ¼ş,Ôò±ØĞë¼ÓÉÏ'\\'
-		{
-			lstrcat(szPath, TEXT("\\"));
-		}
+// 		if (szPath[nLen - 1] != '\\')   //å¦‚æœé€‰äº†å¤šä¸ªæ–‡ä»¶,åˆ™å¿…é¡»åŠ ä¸Š'\\'
+// 		{
+// 			lstrcat(szPath, TEXT("\\"));
+// 		}
 
-		p = szOpenFileNames + ofn.nFileOffset; //°ÑÖ¸ÕëÒÆµ½µÚÒ»¸öÎÄ¼ş
+// 		p = szOpenFileNames + ofn.nFileOffset; //æŠŠæŒ‡é’ˆç§»åˆ°ç¬¬ä¸€ä¸ªæ–‡ä»¶
 
-		ZeroMemory(szFileName, sizeof(szFileName));
-		while (*p)
-		{
-			lstrcpy(szFileName, szPath);  //¸øÎÄ¼şÃû¼ÓÉÏÂ·¾¶  
-			lstrcat(szFileName, p);    //¼ÓÉÏÎÄ¼şÃû   
-			fileNames.push_back(string(szFileName));
-			p += lstrlen(p) + 1;     //ÒÆÖÁÏÂÒ»¸öÎÄ¼ş
-		}
+// 		ZeroMemory(szFileName, sizeof(szFileName));
+// 		while (*p)
+// 		{
+// 			lstrcpy(szFileName, szPath);  //ç»™æ–‡ä»¶ååŠ ä¸Šè·¯å¾„  
+// 			lstrcat(szFileName, p);    //åŠ ä¸Šæ–‡ä»¶å   
+// 			fileNames.push_back(string(szFileName));
+// 			p += lstrlen(p) + 1;     //ç§»è‡³ä¸‹ä¸€ä¸ªæ–‡ä»¶
+// 		}
 
-#ifdef _DEBUG
-		cout << "The path of image to be opened is:" << endl;
-		for (int i = 0;i < fileNames.size();i++)
-			cout << fileNames[i] << endl;
-#endif // _DEBUG	
-		return true;
-	}
+// #ifdef _DEBUG
+// 		cout << "The path of image to be opened is:" << endl;
+// 		for (int i = 0;i < fileNames.size();i++)
+// 			cout << fileNames[i] << endl;
+// #endif // _DEBUG	
+// 		return true;
+// 	}
 	return false;
 }
 
-//ÓÃ·¨ÌáÊ¾
+//ç”¨æ³•æç¤º
 void tools::Tip(string message)
 {
 	if (message.empty())

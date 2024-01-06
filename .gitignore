@@ -159,3 +159,5 @@ $RECYCLE.BIN/
 .vs/
 opencv_build/
 opencv_install/
+*.dSYM
+product/
