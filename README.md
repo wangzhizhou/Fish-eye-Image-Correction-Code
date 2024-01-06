@@ -32,10 +32,12 @@ User experience is not so good, it only has basic functions.
 
 ## How to use this project
 
+> pre-requirements: you should install `g++` compiler and `cmake` cli build tool
+
 You can clone this repo into your local disk to play around as follow:
 
 ```bash
-git clone --recurse-submodules https://github.com/wangzhizhou/Fish-eye-Image-Correction-Code.git 
+git clone --recurse-submodules https://github.com/wangzhizhou/Fish-eye-Image-Correction-Code.git && cd Fish-eye-Image-Correction-Code && ./build.sh && ./run.sh
 ```
 
 You can find some circular fisheye images for testing under the directory: `ImagesForTest`. Only first six directory can be processed by this project, every directory contain four circular fisheye images.
