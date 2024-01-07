@@ -12,9 +12,9 @@ static void help()
 {
 	printf("This is a navigator based on fisheye images.\n"
 		"Usage: navigator\n"
-		"     [-d]          # display the corrected fisheye images.\n"
-		"     [-s]          # save the result of image process into files.\n"
-		"     [-h]          # show the help information.\n"
+		"     -d     # display the corrected fisheye images.\n"
+		"     -s     # save the result of image process into files.\n"
+		"     -h     # show the help information.\n"
 		"\n");
 
 }
