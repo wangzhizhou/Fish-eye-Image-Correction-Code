@@ -113,15 +113,10 @@ OK! Probably like this. Here is a sample processing.
 │   └── valid_params.txt
 ├── README.md
 ├── build.sh
-├── corrected0.jpg
-├── corrected1.jpg
-├── corrected2.jpg
-├── corrected3.jpg
 ├── opencv
 │   ├── contrib
 │   ├── extra
 │   └── main
-├── panorama.jpg
 ├── paper
 │   ├── 毕业答辩.pptx
 │   ├── 处理过程演示视频.mp4
@@ -155,5 +150,5 @@ OK! Probably like this. Here is a sample processing.
 ├── run.sh
 └── setup-vsc.sh
 
-20 directories, 36 files
+20 directories, 31 files
 ```
