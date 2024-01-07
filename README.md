@@ -28,7 +28,10 @@ User experience is not so good, it only has basic functions.
 
 1. pre-requirements: 
     - required: 
-        - [**install g++ compiler**](https://gcc.gnu.org/install/binaries.html)
+        - [**install g++ compiler**](https://gcc.gnu.org/install/index.html)
+            - MacOS: you can install Xcode to get the g++ available automaticlly
+            - Windows: you can follow [this guide](https://code.visualstudio.com/docs/cpp/config-mingw) to install c++ compiler
+            - Linux: install g++ is not so diffcult, do some research yourself.
         - [**install cmake build tool**](https://cmake.org/download/)
     - optional:
         - [**visual studio code**](https://code.visualstudio.com/)
