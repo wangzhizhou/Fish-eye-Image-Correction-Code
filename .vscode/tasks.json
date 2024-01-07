@@ -20,7 +20,7 @@
 				"-lopencv_world",
 				"-rpath", "${workspaceFolder}/opencv_install/lib",
 				"-o",
-				"${workspaceFolder}/product/macos/navigator"
+				"${workspaceFolder}/product/navigator"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}/program"

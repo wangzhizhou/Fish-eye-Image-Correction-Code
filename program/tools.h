@@ -5,7 +5,7 @@
 class tools
 {
 public:
-	static bool readImage();
+	static bool readImage(vector<string> imagePaths);
 	static bool GetFilePathToProcess();
 	static void Tip(string message="");
 	static vector<Mat>& GetImages();
