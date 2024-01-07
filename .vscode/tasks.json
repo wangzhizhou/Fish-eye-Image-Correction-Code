@@ -1,0 +1,38 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "build",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-std=c++11",
+				"-fdiagnostics-color=always",
+				"-g",
+				"main.cpp ",
+				"corrector.cpp",
+				"findCircleParameter.cpp",
+				"imagesStitcher.cpp",
+				"tools.cpp",
+				"viewer.cpp",
+				"-I${workspaceFolder}/opencv_install/include/opencv4",
+				"-L${workspaceFolder}/opencv_install/lib",
+				"-lopencv_world",
+				"-rpath", "${workspaceFolder}/opencv_install/lib",
+				"-o",
+				"${workspaceFolder}/product/navigator"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/program"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译器: /usr/bin/g++"
+		}
+	]
+}
