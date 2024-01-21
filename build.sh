@@ -101,7 +101,7 @@ cmake --build $MAIN_BUILD_DIR \
 
 
 # build navigator executable
-clang++ -working-directory=program \
+clang++ -working-directory=$(pwd)/program \
     -std=c++11 -g \
     main.cpp \
     corrector.cpp \
