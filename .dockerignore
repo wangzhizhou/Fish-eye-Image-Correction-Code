@@ -1,5 +1,5 @@
-opencv_build/
-opencv_install/
-product/
+opencv_build/*
+opencv_install/*
+product/*
 resources/
 setup-vsc.sh
