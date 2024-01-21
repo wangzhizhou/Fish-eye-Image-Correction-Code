@@ -110,7 +110,7 @@ clang++ -working-directory=$(pwd)/program \
     tools.cpp \
     viewer.cpp \
     -I$(pwd)/opencv_install/include/opencv4 \
-    -Lopencv_install/lib \
+    -L$(pwd)/opencv_install/lib \
     -lopencv_world \
-    -rpath opencv_install/lib \
-    -o product/navigator
+    -rpath $(pwd)/opencv_install/lib \
+    -o $(pwd)/product/navigator
