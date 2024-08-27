@@ -3,7 +3,7 @@
 # OpenCV Install Tutorial: https://docs.opencv.org/4.x/d0/d3d/tutorial_general_install.html
 
 # use the correct opencv version, so checkout the correct tag
-OPENCV_VERSION="4.9.0"
+OPENCV_VERSION="4.10.0"
 OPENCV_DIR=opencv
 OPENCV_MAIN=$OPENCV_DIR/main
 OPENCV_CONTRIB=$OPENCV_DIR/contrib
