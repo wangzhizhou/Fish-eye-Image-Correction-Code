@@ -165,4 +165,3 @@ product/**
 !/resources/**
 !/ImagesForTest/**
 opencv/build_xcframework/
-/xcuserdata/
