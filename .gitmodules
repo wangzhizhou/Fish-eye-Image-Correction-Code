@@ -7,3 +7,6 @@
 [submodule "opencv/extra"]
 	path = opencv/extra
 	url = https://github.com/opencv/opencv_extra.git
+[submodule "OrzCalibration"]
+	path = OrzCalibration
+	url = https://github.com/OrzGeeker/OrzCalibration.git
