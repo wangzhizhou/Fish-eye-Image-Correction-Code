@@ -1,0 +1,74 @@
+{
+  "E1_gold": {
+    "vals_t23_N5": {
+      "center": [
+        946,
+        634
+      ],
+      "radius": 623
+    },
+    "vals_port_params": {
+      "params": [
+        946,
+        634,
+        623
+      ],
+      "MAE_source_like": 0.8043082682291667,
+      "MAE_exact_mapping": 1.3300948531539352,
+      "MAE_rows950_970_source_like": 1.115607638888889,
+      "MAE_rows950_970_exact": 8.284210069444445
+    },
+    "best_grid_search": {
+      "params": [
+        946,
+        634,
+        623
+      ],
+      "MAE_source_like": 0.8043082682291667,
+      "MAE_exact_mapping": 1.3300948531539352,
+      "MAE_rows950_970_source_like": 1.115607638888889,
+      "MAE_rows950_970_exact": 8.284210069444445
+    },
+    "cx-1": {
+      "params": [
+        945,
+        634,
+        623
+      ],
+      "MAE_source_like": 2.608660662615741,
+      "MAE_exact_mapping": 2.837581470630787,
+      "MAE_rows950_970_source_like": 7.283394097222223,
+      "MAE_rows950_970_exact": 11.008541666666666
+    },
+    "R-1": {
+      "params": [
+        946,
+        634,
+        622
+      ],
+      "MAE_source_like": 2.700221535011574,
+      "MAE_exact_mapping": 2.9220237449363426,
+      "MAE_rows950_970_source_like": 4.311536458333333,
+      "MAE_rows950_970_exact": 9.586041666666667
+    },
+    "vals_t40": {
+      "params": [
+        944,
+        633,
+        615
+      ],
+      "MAE_source_like": 9.867146629050925,
+      "MAE_exact_mapping": 9.907378291377315,
+      "MAE_rows950_970_source_like": 14.952682291666667,
+      "MAE_rows950_970_exact": 16.77302951388889
+    },
+    "jpeg_q95_self_MAE_reference": 0.797614113136574
+  },
+  "E2_real": {
+    "C5_hole_fraction": 0.09174728393554688,
+    "C5_oob_reads": 0
+  },
+  "E3_synthetic": {
+    "synthetic": true
+  }
+}

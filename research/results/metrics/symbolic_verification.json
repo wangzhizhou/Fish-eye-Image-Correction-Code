@@ -1,0 +1,237 @@
+{
+  "sympy": "1.14.0",
+  "mpmath": "1.3.0",
+  "checks": [
+    {
+      "name": "Kasa: (x-a)^2+(y-b)^2-r^2 == x^2+y^2-(p1 x+p2 y+p3)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "Kasa: r^2 == (p1^2+p2^2)/4 + p3",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "STEREOGRAPHIC: p(FOV/2) with source focal length == R",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "STEREOGRAPHIC: inverse(forward(theta)) == theta  (0<theta<=FOV/2<=pi/2)",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "1.3363823550460978230702682335757409394075984400525e-51",
+      "assumptions": "theta in (0, FOV/2]"
+    },
+    {
+      "name": "EQUIDISTANCE: p(FOV/2) with source focal length == R",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "EQUIDISTANCE: inverse(forward(theta)) == theta  (0<theta<=FOV/2<=pi/2)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": "theta in (0, FOV/2]"
+    },
+    {
+      "name": "EQUISOLID: p(FOV/2) with source focal length == R",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "EQUISOLID: inverse(forward(theta)) == theta  (0<theta<=FOV/2<=pi/2)",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "2.672764710092195646140536467151481878815196880105e-51",
+      "assumptions": "theta in (0, FOV/2]"
+    },
+    {
+      "name": "ORTHOGONAL: p(FOV/2) with source focal length == R",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "ORTHOGONAL: inverse(forward(theta)) == theta  (0<theta<=FOV/2<=pi/2)",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "2.672764710092195646140536467151481878815196880105e-51",
+      "assumptions": "theta in (0, FOV/2]"
+    },
+    {
+      "name": "STEREOGRAPHIC: FOV=pi focal length value",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "EQUIDISTANCE: FOV=pi focal length value",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "EQUISOLID: FOV=pi focal length value",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "ORTHOGONAL: FOV=pi focal length value",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "getPhi: phi = pi/2 is a root of func for every l (spurious root)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "getPhi: phi* = 2 atan(l/(4-l)) is a root of func",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": "l in [0,4)"
+    },
+    {
+      "name": "getPhi forward map: l(phi) = 2 - 2 tan(pi/4 - phi/2) solves func",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "5.3455294201843912922810729343029637576303937602101e-51",
+      "assumptions": "phi in [0,pi), phi != pi/2 numerically"
+    },
+    {
+      "name": "getPhi: func(2, phi) == 1 - sin(phi)  (double root at pi/2 when l=2)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "auxFunc north: equals 2 sin w sin a / sin(w+a), phi = pi/2-2a",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "1.7533336498204803438681919224513721125027691533489e-48",
+      "assumptions": "w in (0,3pi/4), a in (0,pi/4]"
+    },
+    {
+      "name": "auxFunc south: |aux| equals 2 sin w sin a / sin(w+a) at phi = pi/2+2a (source applies the minus sign)",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "1.7533336498204803438681919224513721125027691533489e-48",
+      "assumptions": "w in (0,3pi/4), a in (0,pi/4]"
+    },
+    {
+      "name": "sub-identity: sqrt(cos^2 phi + (1-sin phi)^2) == 2 sin a",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "2.672764710092195646140536467151481878815196880105e-51",
+      "assumptions": "a in (0, pi/4]"
+    },
+    {
+      "name": "sub-identity: (1 - sin phi)/|cos phi| == tan a",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "w = pi/2: aux == 2 tan(a) (Braun)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "tan form: 2 sin w sin a/sin(w+a) == 2 tan a / (1 + cot w tan a)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "h(w) = aux(w,0) == 2 sin w/(sin w + cos w)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "h(w) == sqrt(2) sin w / sin(3pi/4 - w)   (paper Eq.17)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "d aux/da == 2 sin^2 w / sin^2(w+a)  (>0 => strictly monotone)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "w=pi/2: aux(pi/2,phi) == 2 - l_getPhi(phi) i.e. getPhi is LCCP(pi/2)",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "inverse: aux(w, a_inv(s)) == s",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": "0<s<=h(w)"
+    },
+    {
+      "name": "func == (cos phi / 2) * func1(w=pi/2)  (northern branch, phi=pi/2-2a)",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "5.3455294201843912922810729343029637576303937602101e-51",
+      "assumptions": "a in (0, pi/4], l in [0, 4)"
+    },
+    {
+      "name": "latlon->xyz is on the unit sphere",
+      "ok": true,
+      "method": "sympy.simplify",
+      "residual": "0",
+      "assumptions": ""
+    },
+    {
+      "name": "acos(y) recovers phi",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "5.3455294201843912922810729343029637576303937602101e-50",
+      "assumptions": "phi in (0,pi)"
+    },
+    {
+      "name": "atan2(z,-x) recovers lam",
+      "ok": true,
+      "method": "mpmath 50-digit random sampling (simplify inconclusive)",
+      "residual": "1.3363823550460978230702682335757409394075984400525e-51",
+      "assumptions": "phi in (0,pi), lam in (0,pi)"
+    }
+  ]
+}

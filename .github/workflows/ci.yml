@@ -1,0 +1,86 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cpp:
+    name: C++ ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux / apt OpenCV 4
+            os: ubuntu-24.04
+          - name: macos / brew opencv@4
+            os: macos-14
+          - name: macos / brew OpenCV 5 (improved only)
+            os: macos-14
+            opencv5: true
+          - name: windows / choco OpenCV 4.10 / MSVC
+            os: windows-2022
+    steps:
+      - uses: actions/checkout@v4          # submodules (OpenCV sources) are not needed
+
+      - name: OpenCV (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libopencv-dev
+          echo "CMAKE_ARGS=" >> "$GITHUB_ENV"
+
+      - name: OpenCV (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          if [ "${{ matrix.opencv5 }}" = "true" ]; then F=opencv; else F=opencv@4; fi
+          brew install "$F"
+          P="$(brew --prefix "$F")"
+          echo "CMAKE_ARGS=-DOpenCV_DIR=$(dirname "$(find "$P/lib/cmake" -name OpenCVConfig.cmake | head -1)")" >> "$GITHUB_ENV"
+
+      - name: OpenCV (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install opencv --version=4.10.0 -y --no-progress
+          $cfg = Get-ChildItem -Path C:\tools\opencv\build -Recurse -Filter OpenCVConfig.cmake | Select-Object -First 1
+          $dll = Get-ChildItem -Path C:\tools\opencv\build -Recurse -Filter "opencv_world*.dll" | Select-Object -First 1
+          "CMAKE_ARGS=-DOpenCV_DIR=C:/tools/opencv/build" | Out-File -FilePath $env:GITHUB_ENV -Append
+          $dll.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Append
+          Write-Host "config: $($cfg.FullName)  dll: $($dll.FullName)"
+
+      - name: Configure
+        shell: bash
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release $CMAKE_ARGS
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Upload test outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-out-${{ matrix.os }}${{ matrix.opencv5 && '-opencv5' || '' }}
+          path: build/test_out
+          if-no-files-found: ignore
+
+  python:
+    name: Python tests ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r research/requirements.txt
+      # C++-dependent tests skip themselves (they need research/*/build from the local build scripts)
+      - run: python -m pytest -q research/tests

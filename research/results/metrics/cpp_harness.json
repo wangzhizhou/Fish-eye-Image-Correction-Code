@@ -1,0 +1,344 @@
+{
+ "setup": {
+  "opencv": "4.14.0",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+  "flags": "-std=c++11 -g (as build.sh)",
+  "program_dir_modified": false,
+  "circle": [
+   945,
+   634,
+   623
+  ]
+ },
+ "getPhi": {
+  "H": 1920,
+  "max_abs_diff_cpp_vs_python_port": 0.0,
+  "bitwise_identical_rows": 1920,
+  "cpp_getPhi_at_l2": 1.5830681730979816,
+  "cpp_error_at_l2_rad": 0.012271846303085088,
+  "cpp_max_abs_error_vs_closed_rad": 0.012271846303085088,
+  "at_row": 960,
+  "at_l": 2.0,
+  "rows_error_gt_1em3": 79,
+  "rows_error_gt_1em3_range": [
+   890,
+   1030
+  ],
+  "cpp_max_row_shift": 5.890560151318482
+ },
+ "C3": {
+  "cpp_runtime_s": 2.2,
+  "written_fraction": 1.0,
+  "python_rint_agrees_with_cpp": 0.25037217881944446,
+  "python_rint_mask_agrees": 1.0,
+  "python_trunc_agrees_with_cpp": 0.9999945746527777,
+  "python_trunc_mask_agrees": 1.0,
+  "gold_MAE_cpp_direct_945_634_623": 2.6086814597800925,
+  "gold_MAE_cpp_direct_945_634_623_rows950_970": 7.263558201058201,
+  "gold_MAE_cpp_direct_945_634_623_cols950_970": 2.2889963624338625,
+  "gold_MAE_cpp_direct_946_634_623": 0.8043036566840278,
+  "gold_MAE_cpp_direct_946_634_623_rows950_970": 1.0996114417989418,
+  "gold_MAE_cpp_direct_946_634_623_cols950_970": 0.5930390211640212,
+  "byte_identity_946_634_623": {
+   "corrected0.jpg": {
+    "input": "ImagesForTest/1/1.JPG",
+    "bytes_cpp": 766343,
+    "bytes_repo": 766343,
+    "byte_identical": true,
+    "decoded_MAE": 0.0
+   },
+   "corrected1.jpg": {
+    "input": "ImagesForTest/1/2.JPG",
+    "bytes_cpp": 793532,
+    "bytes_repo": 793532,
+    "byte_identical": true,
+    "decoded_MAE": 0.0
+   },
+   "corrected2.jpg": {
+    "input": "ImagesForTest/1/3.JPG",
+    "bytes_cpp": 824037,
+    "bytes_repo": 824037,
+    "byte_identical": true,
+    "decoded_MAE": 0.0
+   },
+   "corrected3.jpg": {
+    "input": "ImagesForTest/1/4.JPG",
+    "bytes_cpp": 756046,
+    "bytes_repo": 756046,
+    "byte_identical": true,
+    "decoded_MAE": 0.0
+   }
+  },
+  "jpeg_q95_self_MAE_reference": 0.8043036566840278,
+  "gold_946_trunc_source_getPhi_MAE_all": 0.8043082682291667,
+  "gold_946_trunc_source_getPhi_MAE_rows950_970": 1.0996114417989418,
+  "gold_946_trunc_source_getPhi_MAE_cols950_970": 0.5930390211640212,
+  "gold_946_trunc_closed_form_phi_MAE_all": 1.321744972511574,
+  "gold_946_trunc_closed_form_phi_MAE_rows950_970": 8.286425264550264,
+  "gold_946_trunc_closed_form_phi_MAE_cols950_970": 3.3025297619047618,
+  "gold_grid_search_trunc_top3": [
+   [
+    0.8043082682291667,
+    946,
+    634,
+    623
+   ],
+   [
+    2.608660662615741,
+    945,
+    634,
+    623
+   ],
+   [
+    2.617819552951389,
+    947,
+    634,
+    623
+   ]
+  ],
+  "gold_grid_search_trunc_at_945_634_623": 2.608660662615741,
+  "gold_grid_search_trunc_at_946_634_623": 0.8043082682291667
+ },
+ "getPhi1": {
+  "pi/6": {
+   "max_abs_diff_cpp_vs_python_port": 0.0,
+   "bitwise_identical_rows": 512,
+   "cpp_max_abs_error_vs_closed_rad": 0.0003493729098957843
+  },
+  "pi/4": {
+   "max_abs_diff_cpp_vs_python_port": 0.0,
+   "bitwise_identical_rows": 512,
+   "cpp_max_abs_error_vs_closed_rad": 0.00019914891070230145
+  },
+  "pi/3": {
+   "max_abs_diff_cpp_vs_python_port": 0.0,
+   "bitwise_identical_rows": 512,
+   "cpp_max_abs_error_vs_closed_rad": 0.00013106540000684674
+  },
+  "pi/2": {
+   "max_abs_diff_cpp_vs_python_port": 0.0,
+   "bitwise_identical_rows": 512,
+   "cpp_max_abs_error_vs_closed_rad": 9.862095562596096e-05
+  },
+  "2pi/3": {
+   "max_abs_diff_cpp_vs_python_port": 0.0,
+   "bitwise_identical_rows": 512,
+   "cpp_max_abs_error_vs_closed_rad": 9.587379924291817e-05
+  }
+ },
+ "static_cache": {
+  "first_w": "pi/2",
+  "then_w": "pi/4",
+  "rows": 512,
+  "max_abs_diff_cpp_vs_python_port": 0.0,
+  "cpp_rows_error_gt_1deg": 509,
+  "cpp_max_error_deg": 90.0
+ },
+ "auxFunc": {
+  "pi/6": {
+   "max_abs_diff_cpp_vs_python_port": 1.1102230246251565e-16,
+   "max_abs_diff_cpp_vs_closed": 3.3306690738754696e-16,
+   "cpp_aux_at_equator": 6.123233995736766e-17,
+   "cpp_h": 0.7320508075688772
+  },
+  "pi/4": {
+   "max_abs_diff_cpp_vs_python_port": 2.220446049250313e-16,
+   "max_abs_diff_cpp_vs_closed": 3.3306690738754696e-16,
+   "cpp_aux_at_equator": 6.123233995736765e-17,
+   "cpp_h": 1.0
+  },
+  "pi/3": {
+   "max_abs_diff_cpp_vs_python_port": 2.220446049250313e-16,
+   "max_abs_diff_cpp_vs_closed": 4.440892098500626e-16,
+   "cpp_aux_at_equator": 6.123233995736766e-17,
+   "cpp_h": 1.2679491924311228
+  },
+  "pi/2": {
+   "max_abs_diff_cpp_vs_python_port": 4.440892098500626e-16,
+   "max_abs_diff_cpp_vs_closed": 1.3322676295501878e-15,
+   "cpp_aux_at_equator": 6.123233995736766e-17,
+   "cpp_h": 2.0000000000000004
+  },
+  "2pi/3": {
+   "max_abs_diff_cpp_vs_python_port": 8.881784197001252e-16,
+   "max_abs_diff_cpp_vs_closed": 7.993605777301127e-15,
+   "cpp_aux_at_equator": 6.123233995736766e-17,
+   "cpp_h": 4.732050807568875
+  }
+ },
+ "cvFastArctan": {
+  "n": 160801,
+  "max_abs_diff_cpp_vs_python_emulation_deg": 3.1015624983865564e-05,
+  "cpp_max_error_vs_atan2_deg": 0.00955200000001355
+ },
+ "CircleFitByKasa": {
+  "sets": 42,
+  "cpp_equals_python_port": 41,
+  "details": {
+   "diamond_100_100": {
+    "cpp_ok": true,
+    "cpp": [
+     100,
+     100,
+     99
+    ],
+    "python_ok": true,
+    "python": [
+     100,
+     99,
+     100
+    ],
+    "python_continuous": [
+     100.00000000000072,
+     99.99999999999933,
+     100.00000000000009
+    ]
+   },
+   "two_points": {
+    "cpp_ok": false,
+    "cpp": null,
+    "python_ok": false,
+    "python": null,
+    "python_continuous": null
+   }
+  }
+ },
+ "C4_C5": {
+  "BUG16_ret_jpg": {
+   "created_by_c4": true,
+   "MAE_retjpg_after_c4_vs_c4_output": 2.1449076334635415,
+   "MAE_retjpg_after_c5_vs_c5_output": 4.265748341878255,
+   "MAE_retjpg_after_c5_vs_c4_output": 17.522733052571613
+  },
+  "C4_python_rint_agrees_with_cpp": 0.25215911865234375,
+  "C4_python_trunc_agrees_with_cpp": 1.0,
+  "C5_python_trunc_forward_agrees_with_cpp": 1.0,
+  "C5_hole_fraction_cpp": 0.09174728393554688,
+  "C5_hole_fraction_python": 0.09174728393554688,
+  "C5_image_identical_pixels_cpp_vs_python": 1.0,
+  "roundtrip_cpp_integer_EQUIDISTANCE": {
+   "n": 238093,
+   "mean": 3.3266977244137035,
+   "rms": 3.488640108083973,
+   "max": 6.4031242374328485,
+   "mean_signed_bias_uv": [
+    -1.6051584884897918,
+    -2.6347939670632905
+   ]
+  },
+  "roundtrip_python_C4rint_same_samples": {
+   "n": 238093,
+   "mean": 2.72485794846589,
+   "rms": 2.9051093151214205,
+   "max": 5.830951894845301,
+   "mean_signed_bias_uv": [
+    -1.1041105786394392,
+    -2.129163814139853
+   ]
+  },
+  "roundtrip_python_C4trunc_same_samples": {
+   "n": 238093,
+   "mean": 3.3266977244137035,
+   "rms": 3.488640108083973,
+   "max": 6.4031242374328485,
+   "mean_signed_bias_uv": [
+    -1.6051584884897918,
+    -2.6347939670632905
+   ]
+  },
+  "roundtrip_cpp_C5equidistant_C4STEREOGRAPHIC": {
+   "n": 238093,
+   "mean": 37.92679141674887,
+   "rms": 41.35887740779916,
+   "max": 60.802960454241045
+  },
+  "roundtrip_cpp_C5equidistant_C4EQUISOLID": {
+   "n": 238093,
+   "mean": 17.235974161199515,
+   "rms": 18.959208091182806,
+   "max": 30.610455730027933
+  },
+  "roundtrip_cpp_C5equidistant_C4ORTHOGONAL": {
+   "n": 238093,
+   "mean": 82.98551749607601,
+   "rms": 92.08996108193749,
+   "max": 135.60235986147143
+  }
+ },
+ "BUG06_C5_out_of_bounds_asan": {
+  "buildsh_flags": {
+   "exit": -6,
+   "stderr": "libc++abi: terminating due to uncaught exception of type cv::Exception: OpenCV(4.14.0) /opt/homebrew/opt/opencv@4/include/opencv4/opencv2/core/mat.inl.hpp:916: error: (-215:Assertion failed) (unsigned)i0 < (unsigned)size.p[0] in function 'at'"
+  },
+  "ndebug_asan": {
+   "exit": -6,
+   "asan_error": "==98305==ERROR: AddressSanitizer: heap-buffer-overflow",
+   "first_program_frame": "#1 0x000102ba418c in corrector::latitudeCorrection5(cv::Mat, cv::Point_<int>, int, double, double, distMapMode, double, double, double, camMode) corrector.cpp:1190"
+  }
+ },
+ "BUG12_navigator_asan": {
+  "asan_exit": -6,
+  "asan_error": "==98315==ERROR: AddressSanitizer: heap-buffer-overflow",
+  "first_program_frame": "#4 0x0001021e9134 in paserParams(int, char**) main.cpp:53",
+  "stdout_tail": [
+   "you selected images as follow:",
+   "/Users/joker/Documents/Fish-eye-Image-Correction-Code/ImagesForTest/1/1.JPG"
+  ]
+ },
+ "BUG23_stitch_failure_exit": {
+  "input": "1 image (Stitcher returns ERR_NEED_MORE_IMGS)",
+  "exit_code": 0,
+  "stdout": [
+   "Can't stitch images, error code = 1",
+   "Press \"Enter\" to exit ..."
+  ]
+ },
+ "BUG15_latitudeCorrection_fwd_vs_rev": {
+  "pi": {
+   "pixels_both": 1154195,
+   "fwd_vs_rev_fisheye_distance": {
+    "n": 1154195,
+    "mean": 1.4199449480256874,
+    "rms": 1.4438126231652586,
+    "max": 2.8284271247461903
+   },
+   "fwd_vs_rev_median": 1.4142135623730951,
+   "max_fisheye_radius_used_forward": 623.0,
+   "max_fisheye_radius_used_reverse": 624.333244349522
+  },
+  "0.8pi": {
+   "pixels_both": 1219275,
+   "fwd_vs_rev_fisheye_distance": {
+    "n": 1219275,
+    "mean": 20.360162135912525,
+    "rms": 21.60385332388777,
+    "max": 32.01562118716424
+   },
+   "fwd_vs_rev_median": 21.540659228538015,
+   "max_fisheye_radius_used_forward": 623.0,
+   "max_fisheye_radius_used_reverse": 621.13444599378
+  }
+ },
+ "BUG24_viewer": {
+  "window": [
+   1024,
+   512
+  ],
+  "written_fraction": 1.0,
+  "python_intended_indexing_agrees": 1.0,
+  "note": "written_fraction==1 => the swapped inside() test never rejects a pixel"
+ },
+ "stitch_real": {
+  "exit_code": 0,
+  "stdout": [
+   "Can't stitch images, error code = 1",
+   "Press \"Enter\" to exit ..."
+  ],
+  "seconds": 1,
+  "repo_panorama_jpg_size": [
+   3702,
+   1870
+  ],
+  "repo_panorama_aspect": 1.98
+ }
+}

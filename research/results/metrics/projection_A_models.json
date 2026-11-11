@@ -1,0 +1,46 @@
+{
+  "FOV=pi": {
+    "STEREOGRAPHIC": {
+      "f_over_R": 0.5000000000000001,
+      "p_at_FOVhalf_over_R": 1.0,
+      "edge_to_centre_radial_scale": 1.9999999999999996,
+      "inverse_max_err_rad": 2.220446049250313e-16
+    },
+    "EQUIDISTANCE": {
+      "f_over_R": 0.6366197723675814,
+      "p_at_FOVhalf_over_R": 1.0,
+      "edge_to_centre_radial_scale": 1.0,
+      "inverse_max_err_rad": 1.1102230246251565e-16
+    },
+    "EQUISOLID": {
+      "f_over_R": 0.7071067811865476,
+      "p_at_FOVhalf_over_R": 1.0,
+      "edge_to_centre_radial_scale": 0.7071067811865477,
+      "inverse_max_err_rad": 2.220446049250313e-16
+    },
+    "ORTHOGONAL": {
+      "f_over_R": 1.0,
+      "p_at_FOVhalf_over_R": 1.0,
+      "edge_to_centre_radial_scale": 6.123233995736766e-17,
+      "inverse_max_err_rad": 8.659739592076221e-15
+    }
+  },
+  "R_for_f=1": {
+    "STEREOGRAPHIC": {
+      "FOV=120": 1.1547005383792512,
+      "FOV=180": 1.9999999999999998
+    },
+    "EQUIDISTANCE": {
+      "FOV=120": 1.0471975511965976,
+      "FOV=180": 1.5707963267948966
+    },
+    "EQUISOLID": {
+      "FOV=120": 0.9999999999999999,
+      "FOV=180": 1.414213562373095
+    },
+    "ORTHOGONAL": {
+      "FOV=120": 0.8660254037844386,
+      "FOV=180": 1.0
+    }
+  }
+}

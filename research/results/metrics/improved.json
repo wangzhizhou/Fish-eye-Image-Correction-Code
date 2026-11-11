@@ -1,0 +1,1755 @@
+{
+ "A_build": {
+  "improved_opencv4": "4.14.0",
+  "improved_opencv4_warnings": 0,
+  "improved_opencv5": "5.1.0",
+  "improved_opencv5_built": true,
+  "improved_opencv5_warnings": 0,
+  "original_vs_opencv5_files_compiling": 0,
+  "original_vs_opencv5_first_error": "/Users/joker/Documents/Fish-eye-Image-Correction-Code/program/globalInclude.h:6:10: fatal error: 'opencv2/highgui/highgui_c.h' file not found"
+ },
+ "B_synthetic_accuracy": {
+  "render_s": 2,
+  "C3_centre_cross_band_MAE": {
+   "original": 17.59567036507109,
+   "improved_double_circle": 2.631085520927021
+  },
+  "cases": {
+   "C3 original (int circle, getPhi bisection, fastAtan, Point trunc, nearest)": {
+    "MAE": 6.7764631303124006,
+    "PSNR": 19.284640853589536,
+    "n": 3194801
+   },
+   "C3 projection, improved, int circle (946,634,623)": {
+    "MAE": 3.475585010206328,
+    "PSNR": 24.597529931622514,
+    "n": 3194968
+   },
+   "C3 projection, improved, exact double circle": {
+    "MAE": 1.6778720301563095,
+    "PSNR": 31.025695225442426,
+    "n": 3194968
+   },
+   "C4 original 512x512": {
+    "MAE": 6.733722706522357,
+    "PSNR": 20.663922621104245,
+    "n": 233747
+   },
+   "C4 projection, improved 512x512": {
+    "MAE": 1.6146273496478696,
+    "PSNR": 31.84408295416273,
+    "n": 233920
+   },
+   "C4 projection, improved auto size 1246x1586": {
+    "MAE": 1.6047063476244976,
+    "PSNR": 31.520174871934074,
+    "n": 1766064
+   }
+  },
+  "C4_auto_size": [
+   1246,
+   1586
+  ]
+ },
+ "C_fov": {
+  "original_C4_fov0.8pi_written_pixels_sampling_outside_circle": 0.1420789637350147,
+  "original_C3_ignores_fov": "harness c3 has no fov input: latitudeCorrection3's ranges ignore camerFieldAngle (BUG-14)",
+  "improved_fov0.8pi_size": [
+   1246,
+   1441
+  ],
+  "improved_valid_pixels_sampling_outside_circle": 0.0,
+  "improved_masked_fraction": 0.1594509787322207
+ },
+ "D_roundtrip": {
+  "EQUIDISTANCE": {
+   "n": 135476.0,
+   "cont_mean": 1.350011158e-13,
+   "cont_max": 2.218729055e-11,
+   "int_mean": 0.09309963827,
+   "int_max": 1.414213562,
+   "bias_u": 0.0005388408279,
+   "bias_v": 0.0005093153031,
+   "width": 1246.0,
+   "height": 1586.0
+  },
+  "EQUISOLID": {
+   "n": 135476.0,
+   "cont_mean": 1.330046827e-13,
+   "cont_max": 1.020968569e-11,
+   "int_mean": 0.04617158859,
+   "int_max": 1.414213562,
+   "bias_u": 0.0001623903865,
+   "bias_v": 0.0003469249166,
+   "width": 1384.0,
+   "height": 1762.0
+  },
+  "STEREOGRAPHIC": {
+   "n": 135476.0,
+   "cont_mean": 1.398501462e-13,
+   "cont_max": 1.382686223e-11,
+   "int_mean": 0.2982471829,
+   "int_max": 1.414213562,
+   "bias_u": 0.0001623903865,
+   "bias_v": -0.0008710029821,
+   "width": 979.0,
+   "height": 1246.0
+  },
+  "ORTHOGONAL": {
+   "n": 135476.0,
+   "cont_mean": 1.535796676e-13,
+   "cont_max": 7.236772245e-12,
+   "int_mean": 0.0,
+   "int_max": 0.0,
+   "bias_u": 0.0,
+   "bias_v": 0.0,
+   "width": 1957.0,
+   "height": 2492.0
+  },
+  "original_cpp": {
+   "roundtrip_cpp_integer_EQUIDISTANCE": {
+    "n": 238093,
+    "mean": 3.3266977244137035,
+    "rms": 3.488640108083973,
+    "max": 6.4031242374328485,
+    "mean_signed_bias_uv": [
+     -1.6051584884897918,
+     -2.6347939670632905
+    ]
+   },
+   "roundtrip_cpp_C5equidistant_C4STEREOGRAPHIC": {
+    "n": 238093,
+    "mean": 37.92679141674887,
+    "rms": 41.35887740779916,
+    "max": 60.802960454241045
+   },
+   "roundtrip_cpp_C5equidistant_C4EQUISOLID": {
+    "n": 238093,
+    "mean": 17.235974161199515,
+    "rms": 18.959208091182806,
+    "max": 30.610455730027933
+   },
+   "roundtrip_cpp_C5equidistant_C4ORTHOGONAL": {
+    "n": 238093,
+    "mean": 82.98551749607601,
+    "rms": 92.08996108193749,
+    "max": 135.60235986147143
+   }
+  }
+ },
+ "E_timing": {
+  "original_C3_1920x1920_harness_ms": 1945.818,
+  "original_C3_1920x1920_harness_O2_ms": 2172.08,
+  "improved_C3proj_1920x1920_improved_cli_g_1thread_ms": 134.352,
+  "improved_C3proj_1920x1920_improved_cli_1thread_ms": 54.552,
+  "improved_C3proj_1920x1920_improved_cli_allthreads_ms": 19.535
+ },
+ "F_projection": {
+  "C2 equirect (lin, lin)": {
+   "mean_shape_distortion": 0.306857898905047,
+   "frac_shape_distortion_gt_25pct": 0.40064305971305414,
+   "area_scale_log_std": 0.4213833634524778,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 1.9999999999999996,
+   "aspect_W_over_H": 1.0,
+   "pixels_per_f2": 9.869604401089358
+  },
+  "C3 main (lccp pi/2, lccp pi/2)": {
+   "mean_shape_distortion": 0.4045568349809321,
+   "frac_shape_distortion_gt_25pct": 0.6330474213974947,
+   "area_scale_log_std": 0.5914605336584443,
+   "horizon_k_over_h_at_lam60": 1.333333333333333,
+   "horizon_k_over_h_at_lam85": 1.8396628204761492,
+   "k_over_h_at_psi60_centre": 1.5,
+   "aspect_W_over_H": 1.0,
+   "pixels_per_f2": 15.999999999999996
+  },
+  "C4 (lin, lccp pi/6)": {
+   "mean_shape_distortion": 0.9789343966677082,
+   "frac_shape_distortion_gt_25pct": 0.8674940719982132,
+   "area_scale_log_std": 0.2643972972024313,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 5.999999999999999,
+   "aspect_W_over_H": 2.1457476865731118,
+   "pixels_per_f2": 4.59961087822572
+  },
+  "C4 (lin, lccp pi/4)": {
+   "mean_shape_distortion": 0.6931509206184123,
+   "frac_shape_distortion_gt_25pct": 0.7817291904427337,
+   "area_scale_log_std": 0.3021061190953919,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 3.7320508075688767,
+   "aspect_W_over_H": 1.570796326794897,
+   "pixels_per_f2": 6.2831853071795845
+  },
+  "C4 (lin, lccp pi/3)": {
+   "mean_shape_distortion": 0.49969362083917546,
+   "frac_shape_distortion_gt_25pct": 0.6604832580890914,
+   "area_scale_log_std": 0.37657587689776145,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 2.6666666666666665,
+   "aspect_W_over_H": 1.2388480044560028,
+   "pixels_per_f2": 7.966759736133452
+  },
+  "C4 (lin, lccp 3pi/8)": {
+   "mean_shape_distortion": 0.41757789050851657,
+   "frac_shape_distortion_gt_25pct": 0.5799063632923522,
+   "area_scale_log_std": 0.4172266923732669,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 2.3032253728412058,
+   "aspect_W_over_H": 1.1107207345395915,
+   "pixels_per_f2": 8.885765876316732
+  },
+  "C4 (lin, lccp pi/2)": {
+   "mean_shape_distortion": 0.18450659359838867,
+   "frac_shape_distortion_gt_25pct": 0.25327003616514865,
+   "area_scale_log_std": 0.5555843713570022,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 1.5,
+   "aspect_W_over_H": 0.7853981633974484,
+   "pixels_per_f2": 12.56637061435917
+  },
+  "C4 (lin, lccp 2pi/3)": {
+   "mean_shape_distortion": 0.23859663800403416,
+   "frac_shape_distortion_gt_25pct": 0.5603342995630398,
+   "area_scale_log_std": 0.8782438606413077,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 0.6666666666666673,
+   "aspect_W_over_H": 0.3319483223388942,
+   "pixels_per_f2": 29.732352106944035
+  },
+  "optimum_lin_lon_lccp_lat": {
+   "w": 1.81,
+   "w_deg": 103.705360918679,
+   "mean_shape_distortion": 0.08835923286326156,
+   "frac_shape_distortion_gt_25pct": 0.07927774480867392,
+   "area_scale_log_std": 0.6672682638336531,
+   "horizon_k_over_h_at_lam60": 1.0,
+   "horizon_k_over_h_at_lam85": 1.0,
+   "k_over_h_at_psi60_centre": 1.1073368149867486,
+   "aspect_W_over_H": 0.5938608740023806,
+   "pixels_per_f2": 16.619388198741298
+  },
+  "optimum_note": "grid over w_lon in {lin} U [1.50,2.19] and w_lat in [1.50,2.19] (step 0.01); objective = solid-angle mean |ln(k/h)|",
+  "optimum_lon_axis": "lin"
+ },
+ "G_circle": {
+  "synthetic": {
+   "clean": {
+    "source_VALS_t40_N5": {
+     "centre_err_max": 0.6708203932499623,
+     "radius_err_max": 1.0,
+     "failures": 0
+    },
+    "improved_VALS_t40": {
+     "centre_err_max": 0.027253335718410463,
+     "radius_err_max": 0.11760234013809168,
+     "failures": 0
+    },
+    "radial_auto": {
+     "centre_err_max": 0.011207130960146385,
+     "radius_err_max": 0.004186401874562762,
+     "failures": 0
+    },
+    "radial_init_t5..80_max": {
+     "centre_err_max": 0.011207556558114739,
+     "radius_err_max": 0.00418646066140127,
+     "failures": 0
+    }
+   },
+   "noisy(sigma=8)": {
+    "source_VALS_t40_N5": {
+     "centre_err_max": 86.45490153831648,
+     "radius_err_max": 78.0,
+     "failures": 0
+    },
+    "improved_VALS_t40": {
+     "centre_err_max": 0.03082386367236944,
+     "radius_err_max": 0.07196439557509393,
+     "failures": 0
+    },
+    "radial_auto": {
+     "centre_err_max": 0.015411621440914089,
+     "radius_err_max": 0.007350303909106515,
+     "failures": 0
+    },
+    "radial_init_t5..80_max": {
+     "centre_err_max": 0.015411654974606458,
+     "radius_err_max": 0.007350323704088169,
+     "failures": 0
+    }
+   },
+   "low_contrast": {
+    "source_VALS_t40_N5": {
+     "centre_err_max": 13.514806694880996,
+     "radius_err_max": 37.0,
+     "failures": 0
+    },
+    "improved_VALS_t40": {
+     "centre_err_max": 10.891999866775123,
+     "radius_err_max": 85.38505322115802,
+     "failures": 0
+    },
+    "radial_auto": {
+     "centre_err_max": 0.09226578063089733,
+     "radius_err_max": 0.25398394035812544,
+     "failures": 0
+    },
+    "radial_init_t5..80_max": {
+     "centre_err_max": 0.0922670111940111,
+     "radius_err_max": 0.2539843298739015,
+     "failures": 0
+    }
+   },
+   "missing_edge": {
+    "source_VALS_t40_N5": {
+     "centre_err_max": 0.4999999999999886,
+     "radius_err_max": 1.0,
+     "failures": 0
+    },
+    "improved_VALS_t40": {
+     "centre_err_max": 0.036530184143054326,
+     "radius_err_max": 0.13019341114568306,
+     "failures": 0
+    },
+    "radial_auto": {
+     "centre_err_max": 0.019307667385117046,
+     "radius_err_max": 0.00795316273337221,
+     "failures": 0
+    },
+    "radial_init_t5..80_max": {
+     "centre_err_max": 0.01930768130838724,
+     "radius_err_max": 0.00795354302084661,
+     "failures": 0
+    }
+   },
+   "outlier_specks": {
+    "source_VALS_t40_N5": {
+     "centre_err_max": 139.75067083917702,
+     "radius_err_max": 55.0,
+     "failures": 0
+    },
+    "improved_VALS_t40": {
+     "centre_err_max": 0.027253335718410463,
+     "radius_err_max": 0.11760234013809168,
+     "failures": 0
+    },
+    "radial_auto": {
+     "centre_err_max": 0.011255770044598042,
+     "radius_err_max": 0.0038691696618684546,
+     "failures": 0
+    },
+    "radial_init_t5..80_max": {
+     "centre_err_max": 0.011255761193195657,
+     "radius_err_max": 0.0038692200843684077,
+     "failures": 0
+    }
+   }
+  },
+  "real": {
+   "set1": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     947.27,
+     634.42,
+     627.2
+    ],
+    "reliable": true,
+    "rays_used": 584,
+    "fit_rms_px": 1.3375520306505775,
+    "radial_range_over_thresholds": [
+     0.017,
+     0.002,
+     0.007
+    ],
+    "source_VALS_range": [
+     18.0,
+     50.0,
+     68.0
+    ],
+    "improved_VALS_range": [
+     7.87,
+     10.43,
+     12.99
+    ]
+   },
+   "set2": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     949.04,
+     634.6,
+     625.73
+    ],
+    "reliable": true,
+    "rays_used": 582,
+    "fit_rms_px": 1.0125075977373013,
+    "radial_range_over_thresholds": [
+     0.002,
+     0.006,
+     0.002
+    ],
+    "source_VALS_range": [
+     7.0,
+     9.0,
+     15.0
+    ],
+    "improved_VALS_range": [
+     1.81,
+     1.87,
+     9.7
+    ]
+   },
+   "set3": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     947.59,
+     635.47,
+     625.03
+    ],
+    "reliable": true,
+    "rays_used": 596,
+    "fit_rms_px": 1.415272516932892,
+    "radial_range_over_thresholds": [
+     0.012,
+     0.013,
+     0.008
+    ],
+    "source_VALS_range": [
+     13.0,
+     7.0,
+     29.0
+    ],
+    "improved_VALS_range": [
+     6.43,
+     5.12,
+     28.09
+    ]
+   },
+   "set4": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     947.36,
+     635.43,
+     624.91
+    ],
+    "reliable": true,
+    "rays_used": 598,
+    "fit_rms_px": 1.5577721740138106,
+    "radial_range_over_thresholds": [
+     0.011,
+     0.014,
+     0.006
+    ],
+    "source_VALS_range": [
+     6.0,
+     19.0,
+     33.0
+    ],
+    "improved_VALS_range": [
+     3.92,
+     33.69,
+     32.02
+    ]
+   },
+   "set5": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     948.45,
+     635.52,
+     625.77
+    ],
+    "reliable": true,
+    "rays_used": 563,
+    "fit_rms_px": 1.0855479044226426,
+    "radial_range_over_thresholds": [
+     0.035,
+     0.031,
+     0.015
+    ],
+    "source_VALS_range": [
+     3.0,
+     6.0,
+     6.0
+    ],
+    "improved_VALS_range": [
+     1.67,
+     9.04,
+     13.21
+    ]
+   },
+   "set6": {
+    "size": [
+     1920,
+     1280
+    ],
+    "circle_auto": [
+     947.72,
+     636.39,
+     625.69
+    ],
+    "reliable": true,
+    "rays_used": 607,
+    "fit_rms_px": 0.9341105949984679,
+    "radial_range_over_thresholds": [
+     0.009,
+     0.006,
+     0.009
+    ],
+    "source_VALS_range": [
+     21.0,
+     17.0,
+     19.0
+    ],
+    "improved_VALS_range": [
+     8.18,
+     15.15,
+     23.86
+    ]
+   },
+   "set7": {
+    "size": [
+     3840,
+     2560
+    ],
+    "circle_auto": [
+     1895.93,
+     1271.55,
+     1258.42
+    ],
+    "reliable": true,
+    "rays_used": 568,
+    "fit_rms_px": 4.109657018528329,
+    "radial_range_over_thresholds": [
+     0.058,
+     0.047,
+     0.036
+    ],
+    "source_VALS_range": null,
+    "improved_VALS_range": null
+   },
+   "set8": {
+    "size": [
+     2048,
+     3072
+    ],
+    "circle_auto": [
+     965.76,
+     1097.57,
+     1123.63
+    ],
+    "reliable": false,
+    "rays_used": 77,
+    "fit_rms_px": 70.11049802766125,
+    "radial_range_over_thresholds": [
+     49.815,
+     20.435,
+     35.041
+    ],
+    "source_VALS_range": null,
+    "improved_VALS_range": null
+   },
+   "set9": {
+    "size": [
+     5616,
+     3744
+    ],
+    "circle_auto": [
+     2781.56,
+     1867.28,
+     1811.12
+    ],
+    "reliable": true,
+    "rays_used": 507,
+    "fit_rms_px": 2.7772864483903823,
+    "radial_range_over_thresholds": [
+     0.017,
+     0.018,
+     0.114
+    ],
+    "source_VALS_range": null,
+    "improved_VALS_range": null
+   }
+  },
+  "real_sets1to6_same_camera_spread": {
+   "cx_std": 0.6347470713071194,
+   "cy_std": 0.6499365312985221,
+   "r_std": 0.7448455332448918,
+   "mean": [
+    947.9063994431394,
+    635.3055632817837,
+    625.7223780468382
+   ]
+  }
+ },
+ "H_stitch": {
+  "set1": {
+   "mutual_matches": 1824,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 170.09078853123177,
+    "within_1px": 92,
+    "within_2px": 332,
+    "within_4px": 848,
+    "rms_within_2px": 1.3395130503107138
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 183.63119618944816,
+    "within_1px": 954,
+    "within_2px": 1514,
+    "within_4px": 1702,
+    "rms_within_2px": 0.9969558811941728
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 149.57233374709872,
+    "within_1px": 53,
+    "within_2px": 188,
+    "within_4px": 383,
+    "rms_within_2px": 1.393436667106268
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 1,
+    "within_2px": 8,
+    "within_4px": 43,
+    "rms_within_2px": 1.4320185592849668
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 13,
+    "within_2px": 48,
+    "within_4px": 201
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     20.67533013327969,
+     40.93379587045759,
+     16.80570722187947,
+     17.98770415831785,
+     16.671401541219048,
+     19.43414032691117
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 18.725720460097044,
+    "overlap_mad_mean": 22.084679875344136,
+    "coverage": 0.993432,
+    "gains": [
+     1.060104500002167,
+     0.9633493473885172,
+     0.9215586163260188,
+     1.0118664836829374
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     27.13597610407297,
+     25.780624742385058,
+     32.470021855573734,
+     30.18835033930046
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 28.893743260333054,
+    "overlap_mad_mean": 28.893743260333054,
+    "coverage": 0.9348682222222222,
+    "gains": [
+     1.0390889881282521,
+     0.9755739717353997,
+     0.9349797767914804,
+     1.0227766236941909
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     35.7423127567712,
+     51.76165117248245,
+     28.802718566233462,
+     27.861460501670074,
+     28.042245914294647,
+     43.59641198075161
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 34.000725951356586,
+    "overlap_mad_mean": 35.967800148700576,
+    "coverage": 0.973742,
+    "gains": [
+     1.0581470140323261,
+     0.9574550535010214,
+     0.9184655774743968,
+     1.022432689865097
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     946,
+     634,
+     623
+    ],
+    "threshold": 23,
+    "exit_code": 0,
+    "stdout": [
+     "Press \"Enter\" to exit ..."
+    ],
+    "success": false
+   }
+  },
+  "set2": {
+   "mutual_matches": 1846,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 169.94877184048363,
+    "within_1px": 128,
+    "within_2px": 325,
+    "within_4px": 761,
+    "rms_within_2px": 1.2887236667070565
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 182.9899414988298,
+    "within_1px": 700,
+    "within_2px": 1351,
+    "within_4px": 1700,
+    "rms_within_2px": 1.1243296847499675
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 137.49454865754478,
+    "within_1px": 89,
+    "within_2px": 159,
+    "within_4px": 355,
+    "rms_within_2px": 1.0642519234193262
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 3,
+    "within_2px": 13,
+    "within_4px": 63,
+    "rms_within_2px": 1.447767598771384
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 10,
+    "within_2px": 39,
+    "within_4px": 218
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     20.41094340039952,
+     18.957909078037666,
+     19.072021832186838,
+     17.901497252032158,
+     15.698567998457397,
+     20.102839770819354
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 19.371825563859467,
+    "overlap_mad_mean": 18.69062988865549,
+    "coverage": 1.0,
+    "gains": [
+     0.9763312682817963,
+     1.0372450737496468,
+     1.0205755294110885,
+     0.9447948607298967
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     22.921109588522935,
+     23.390744317479204,
+     25.750840998633116,
+     24.53368700435478
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 24.14909547724751,
+    "overlap_mad_mean": 24.14909547724751,
+    "coverage": 0.9339197777777778,
+    "gains": [
+     0.9765912559823471,
+     1.0525139967470574,
+     1.006891048566371,
+     0.9416926891661042
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     23.332105244821516,
+     24.589055092125705,
+     25.056497753833714,
+     23.783133966188277,
+     27.15709867070106,
+     31.55359630606027
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 25.931333317725944,
+    "overlap_mad_mean": 25.911914505621755,
+    "coverage": 0.99242,
+    "gains": [
+     0.97740578674393,
+     1.0422593355884218,
+     1.0131822768641725,
+     0.9539841326924005
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     952,
+     634,
+     622
+    ],
+    "threshold": 26,
+    "exit_code": 0,
+    "stdout": [
+     "Press \"Enter\" to exit ..."
+    ],
+    "success": false
+   }
+  },
+  "set3": {
+   "mutual_matches": 1276,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 169.1446365053186,
+    "within_1px": 199,
+    "within_2px": 372,
+    "within_4px": 587,
+    "rms_within_2px": 1.1379557030530172
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 182.75821371789922,
+    "within_1px": 621,
+    "within_2px": 915,
+    "within_4px": 1108,
+    "rms_within_2px": 0.9486444742578054
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 152.7763693768904,
+    "within_1px": 88,
+    "within_2px": 181,
+    "within_4px": 311,
+    "rms_within_2px": 1.153880559041934
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 1,
+    "within_2px": 9,
+    "within_4px": 41,
+    "rms_within_2px": 1.55256476115173
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 5,
+    "within_2px": 21,
+    "within_4px": 95
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     20.65522979064766,
+     15.543091252464952,
+     18.69408218551009,
+     21.799927879218515,
+     25.363952231955665,
+     18.466780998582372
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 19.90400521348966,
+    "overlap_mad_mean": 20.087177389729877,
+    "coverage": 1.0,
+    "gains": [
+     1.0291676442947224,
+     0.951965830648974,
+     1.0357900733307412,
+     0.971850654258868
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     25.661848178275765,
+     21.70118309422708,
+     21.504526501726424,
+     28.182270388307444
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 24.262457040634178,
+    "overlap_mad_mean": 24.262457040634178,
+    "coverage": 0.9290328888888889,
+    "gains": [
+     1.0395026169339405,
+     0.9525670357967937,
+     1.0430908319714516,
+     0.9486925463878837
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     25.14596659012292,
+     19.24658558023625,
+     24.556244690790514,
+     23.104680718370396,
+     25.493361058090628,
+     33.29778210911693
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 26.52616852710019,
+    "overlap_mad_mean": 25.140770124454605,
+    "coverage": 0.9855404444444444,
+    "gains": [
+     1.0393627129722243,
+     0.9594478282003208,
+     1.0272276022444788,
+     0.9614759114678839
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     948,
+     634,
+     621
+    ],
+    "threshold": 20,
+    "exit_code": 0,
+    "stdout": [
+     "panorama 5394 x 1938"
+    ],
+    "success": true
+   }
+  },
+  "set4": {
+   "mutual_matches": 1631,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 169.05658383245557,
+    "within_1px": 150,
+    "within_2px": 599,
+    "within_4px": 974,
+    "rms_within_2px": 1.3988592766176922
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 182.59326759757892,
+    "within_1px": 783,
+    "within_2px": 1294,
+    "within_4px": 1502,
+    "rms_within_2px": 1.0208379236422906
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 151.91877136530002,
+    "within_1px": 104,
+    "within_2px": 289,
+    "within_4px": 591,
+    "rms_within_2px": 1.2955771494381663
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 7,
+    "within_2px": 18,
+    "within_4px": 74,
+    "rms_within_2px": 1.3455640079513955
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 5,
+    "within_2px": 17,
+    "within_4px": 97
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     15.434076668924607,
+     17.714109306734873,
+     15.180252242576241,
+     19.690662302536523,
+     13.054019878602547,
+     15.21499584521962
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 16.379996764814248,
+    "overlap_mad_mean": 16.048019374099066,
+    "coverage": 1.0,
+    "gains": [
+     0.9839409344707378,
+     0.9653736873864587,
+     1.0389640853288087,
+     1.0013508392259325
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     17.611476801694312,
+     17.385253771497556,
+     27.937542167071676,
+     21.360896567948544
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 21.07379232705302,
+    "overlap_mad_mean": 21.07379232705302,
+    "coverage": 0.9293064444444444,
+    "gains": [
+     0.9825225020986009,
+     0.9551721054891945,
+     1.055951061742792,
+     0.9928455248664526
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     34.94181811428873,
+     39.612127994689985,
+     18.58547108951539,
+     29.587730290332633,
+     49.766079747393675,
+     37.733265213449634
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 30.212071176896593,
+    "overlap_mad_mean": 35.03774874161168,
+    "coverage": 0.9758804444444444,
+    "gains": [
+     1.0125614111014338,
+     0.8967651556467313,
+     1.0122406290695916,
+     1.044323647044096
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     950,
+     632,
+     618
+    ],
+    "threshold": 24,
+    "exit_code": 0,
+    "stdout": [
+     "Press \"Enter\" to exit ..."
+    ],
+    "success": false
+   }
+  },
+  "set5": {
+   "mutual_matches": 1123,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 170.53823042814375,
+    "within_1px": 54,
+    "within_2px": 139,
+    "within_4px": 390,
+    "rms_within_2px": 1.2660361267927522
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 182.97666621529106,
+    "within_1px": 417,
+    "within_2px": 642,
+    "within_4px": 846,
+    "rms_within_2px": 0.9837208772204835
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 154.6058027548603,
+    "within_1px": 6,
+    "within_2px": 43,
+    "within_4px": 166,
+    "rms_within_2px": 1.4163113197878585
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 7,
+    "within_2px": 13,
+    "within_4px": 33,
+    "rms_within_2px": 1.2560829526089319
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 7,
+    "within_2px": 27,
+    "within_4px": 110
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     18.954757012963753,
+     29.25601488289964,
+     18.47978583504938,
+     18.355121872475085,
+     26.40473161359425,
+     21.06973774105043
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 19.214850615384663,
+    "overlap_mad_mean": 22.08669149300542,
+    "coverage": 0.9899157777777777,
+    "gains": [
+     1.04972137440136,
+     0.9945882088257219,
+     0.9315033113899434,
+     1.0052819136366162
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     24.35841301160218,
+     23.86001995558669,
+     23.848552885269967,
+     25.31658025312824
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 24.34589152639677,
+    "overlap_mad_mean": 24.34589152639677,
+    "coverage": 0.93766,
+    "gains": [
+     1.0397353591284098,
+     1.002199316130262,
+     0.9402895780924365,
+     1.003684113556765
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     24.646403277860518,
+     35.133364294519986,
+     30.016882191100823,
+     29.8183428001792,
+     27.111854235077722,
+     39.4624813462929
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 30.98602740385836,
+    "overlap_mad_mean": 31.031554690838522,
+    "coverage": 0.9672491111111111,
+    "gains": [
+     1.0472035231590444,
+     1.0055132146888477,
+     0.9353303989536005,
+     0.9997248005882481
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     946,
+     637,
+     622
+    ],
+    "threshold": 46,
+    "exit_code": 0,
+    "stdout": [
+     "panorama 5875 x 1890"
+    ],
+    "success": true
+   }
+  },
+  "set6": {
+   "mutual_matches": 1492,
+   "EQUIDISTANCE_fitted": {
+    "fov_deg": 168.91664358260408,
+    "within_1px": 187,
+    "within_2px": 480,
+    "within_4px": 771,
+    "rms_within_2px": 1.2799610687971756
+   },
+   "EQUISOLID_fitted": {
+    "fov_deg": 182.63006144534583,
+    "within_1px": 748,
+    "within_2px": 1069,
+    "within_4px": 1324,
+    "rms_within_2px": 0.9285265764770418
+   },
+   "STEREOGRAPHIC_fitted": {
+    "fov_deg": 160.91797813415698,
+    "within_1px": 169,
+    "within_2px": 329,
+    "within_4px": 476,
+    "rms_within_2px": 1.1181787593218504
+   },
+   "ORTHOGONAL_fitted": {
+    "fov_deg": 180.0,
+    "within_1px": 4,
+    "within_2px": 19,
+    "within_4px": 104,
+    "rms_within_2px": 1.425169751100135
+   },
+   "EQUIDISTANCE_180_fixed (paper/code assumption)": {
+    "within_1px": 30,
+    "within_2px": 163,
+    "within_4px": 472
+   },
+   "panorama_EQUISOLID": {
+    "overlap_mad_by_pair": [
+     15.343567134348216,
+     15.55898354549768,
+     15.96964194157414,
+     13.11119430220314,
+     14.822860184237232,
+     12.998054629475893
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 14.355614501900348,
+    "overlap_mad_mean": 14.634050289556049,
+    "coverage": 0.9893977777777778,
+    "gains": [
+     0.982951657994051,
+     1.0028682798768496,
+     1.0152777732497023,
+     0.996723086331056
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE": {
+    "overlap_mad_by_pair": [
+     20.50623224074354,
+     20.531757565531763,
+     19.35507771819547,
+     16.424299865412504
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 19.204341847470822,
+    "overlap_mad_mean": 19.204341847470822,
+    "coverage": 0.9275453333333333,
+    "gains": [
+     0.9750581948416198,
+     1.0007735339258534,
+     1.0181536372415776,
+     1.002656532766564
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "panorama_EQUIDISTANCE_180_fixed": {
+    "overlap_mad_by_pair": [
+     19.128031144730784,
+     16.66670704364649,
+     26.769428867268143,
+     17.47300282886898,
+     17.032548607328,
+     15.616805564738458
+    ],
+    "overlap_pairs": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "overlap_mad_adjacent_mean": 19.746817101401593,
+    "overlap_mad_mean": 18.781087342763474,
+    "coverage": 0.9731504444444444,
+    "gains": [
+     0.9768988113976482,
+     1.0012744335518717,
+     1.017696781512238,
+     1.002767843853538
+    ],
+    "size": [
+     3000,
+     1500
+    ]
+   },
+   "original_pipeline_cpp": {
+    "circle": [
+     949,
+     637,
+     627
+    ],
+    "threshold": 11,
+    "exit_code": 0,
+    "stdout": [
+     "panorama 4249 x 1926"
+    ],
+    "success": true
+   }
+  }
+ },
+ "I_viewer": {
+  "original_updataWindow_ms": 858.786,
+  "improved_render_ms": 3.074,
+  "speedup": 279.3708523096942,
+  "window_MAE_between_them": 1.6184190114339192,
+  "note": "same geometry (poles on +-z, lon = atan2(y,x), V*H rotation, d=300); improved = precomputed rays + bilinear"
+ },
+ "J_defects": {
+  "clipped_circle_asan": {
+   "exit": 0,
+   "asan_error": false
+  },
+  "files_written_in_cwd": [
+   "o.png"
+  ],
+  "w_change_in_one_process": {
+   "exit": 0,
+   "out": "max_inverse_error_rad 4.441e-16"
+  },
+  "failure_exit_code": 1
+ },
+ "K_gallery": {
+  "circle": [
+   947.272733683677,
+   634.4214648945821,
+   627.201257034896
+  ],
+  "lens": "EQUISOLID",
+  "fov_deg": 183.63119618944816,
+  "w_opt": 1.81
+ }
+}
