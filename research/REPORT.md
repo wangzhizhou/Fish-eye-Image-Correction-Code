@@ -922,8 +922,8 @@ GitHub Actions 工作流为 `.github/workflows/ci.yml`。
 （跳过的 11 项是需要本地 `research/*/build` 二进制的 C++ 对照测试；CTest 已覆盖其中的要点。本机的 OpenCV 5 为 5.1.0，CI 镜像中的 Homebrew 为 5.0.0，两者都能构建改进实现。）
 
 结论：
-* **原始 `program/` 不改代码，就能在 macOS、Linux（GCC）、Windows（MSVC）上编译，非交互部分运行正确**。前提是 OpenCV 4.x，在 OpenCV 5 上无法编译（BUG-26，§16.2）。第一阶段担心的 MSVC 兼容性问题（如 `strcmp` 是否有头文件）在 MSVC 下没有出现。
-* 原有的 `build.sh` / `run.sh` / `.vscode` 配置仍然只适用于 macOS/Linux 的 shell 环境。`.vscode/tasks.json` 中的 `"main.cpp "`（文件名多一个空格）和 `launch.json` 的路径错误没有修改（§15 之后的检查已记录）；跨平台构建请用 CMake。
+* **原始 `program/` 不改代码，就能在 macOS、Linux（GCC）、Windows（MSVC）上编译，非交互部分运行正确**。前提是 OpenCV 4.x，在 OpenCV 5 上无法编译（BUG-26，§16.2）。MSVC 下没有出现编译错误（例如 `main.cpp` 使用 `strcmp` 但没有直接包含 `<cstring>`，MSVC 下也能通过传递包含编译）。
+* 原有的 `build.sh` / `run.sh` / `.vscode` 配置仍然只适用于 macOS/Linux 的 shell 环境。本次检查还发现 `.vscode` 配置有误（未修改）：`tasks.json` 把源文件写成 `"main.cpp "`（多一个空格，实测编译报找不到文件）；`launch.json` 指向 `product/macos/navigator`，而构建输出是 `product/navigator`；`c_cpp_properties.json` 只有 Mac 配置。跨平台构建请用 CMake。
 * x86-64 与 arm64 的结果有微小差异：x86-64 上的 Linux 与 Windows 彼此逐字节相同，与 arm64 上生成的仓库图像相差 25 个像素。原因推测是浮点运算差异（例如 arm64 上 clang 默认的 FMA 合并改变了个别像素的截断结果），**未进一步验证**。作者 2024 年的输出与 arm64 结果逐字节相同。
 * **没有覆盖**：GUI 部分（trackbar 选圆、浏览器窗口、`Tip()` 的按键等待），以及 Linux 上完整的交互流程。`stitchImages` 失败时会调用 `getchar()` 等待输入，所以没有放进 CTest。
 * 第一次 CI 运行中，macOS 作业因 `macos-14` 镜像已不再提供（"configuration 'macos-14-arm64-us-default' is not supported"）而被取消，改为 `macos-latest` 后通过。
