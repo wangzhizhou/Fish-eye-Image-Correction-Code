@@ -16,9 +16,9 @@ jobs:
           - name: linux / apt OpenCV 4
             os: ubuntu-24.04
           - name: macos / brew opencv@4
-            os: macos-14
+            os: macos-latest
           - name: macos / brew OpenCV 5 (improved only)
-            os: macos-14
+            os: macos-latest
             opencv5: true
           - name: windows / choco OpenCV 4.10 / MSVC
             os: windows-2022
@@ -75,7 +75,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-14, windows-2022]
+        os: [ubuntu-24.04, macos-latest, windows-2022]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
