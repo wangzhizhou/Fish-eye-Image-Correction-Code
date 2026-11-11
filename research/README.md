@@ -1,6 +1,6 @@
 # research/ — Fish-eye Image Correction 源码研究与 Python 复现
 
-本目录独立于原工程（`program/` 未做任何修改）。完整报告见 [`REPORT.md`](REPORT.md)，简明结论见 [`results/REPORT.md`](results/REPORT.md)。
+本目录独立于原工程（`program/` 未做任何修改）。完整报告见 [`REPORT.md`](REPORT.md)，简明结论见 [`results/REPORT.md`](results/REPORT.md)。论文修订建议见 [`PAPER_REVISION.md`](PAPER_REVISION.md)。
 
 ## 环境
 

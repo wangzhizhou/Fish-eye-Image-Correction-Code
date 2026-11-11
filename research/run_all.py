@@ -14,6 +14,11 @@ for s in steps:
         print("   (SymPy missing: `pip install sympy` to run the symbolic checks)")
     elif r.returncode:
         rc = 1
+# paper-specific checks (Table 1, VALS as described in the paper, horizontal stretch) -> PAPER_REVISION.md
+t = time.time()
+r = subprocess.run([sys.executable, os.path.join(HERE, "improved", "paper_checks.py")], stdout=subprocess.DEVNULL)
+print(f"== improved/paper_checks.py: exit {r.returncode} ({time.time() - t:.0f}s)")
+rc = rc or r.returncode
 # C++ harness comparison (original program/ compiled against OpenCV 4.x); needs cpp_harness/build.sh first
 if os.path.exists(os.path.join(HERE, "cpp_harness", "build", "harness")):
     t = time.time()

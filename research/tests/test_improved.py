@@ -98,3 +98,27 @@ def test_cpp_no_side_effects_and_exit_codes(tmp_path):
     r = subprocess.run([CLI, "correct", "in=/nonexistent.jpg", f"out={tmp_path / 'x.png'}", "cx=1", "cy=1", "r=1"],
                        cwd=tmp_path, capture_output=True, text=True)
     assert r.returncode != 0 and os.listdir(tmp_path) == []          # no ret.jpg, failure is reported
+
+
+def test_paper_table1_recomputation():
+    """journal p.1445 Table 1: radii are half the pair distance, mean 419.30, kept-pair Kasa fit."""
+    from paper_checks import table1
+    t = table1()
+    assert all(abs(r["radius_recomputed"] - r["radius_paper"]) <= 0.011 for r in t["rows"])
+    assert abs(t["mean_recomputed"] - 419.30) < 0.01
+    k = t["kasa_kept_pairs_2to5"]
+    assert abs(k["cx"] - 433.09) < 0.01 and abs(k["cy"] - 468.62) < 0.01 and abs(k["r"] - 412.79) < 0.01
+
+
+def test_paper_vals_clean_but_fragile():
+    """VALS as the paper describes it: accurate on a clean image, fails under outlier specks."""
+    from vals import synthetic_fisheye
+    from vals_paper import vals_paper
+    gt = dict(cx=410.3, cy=297.6, r=260.0)
+    v = vals_paper(synthetic_fisheye(seed=0, **gt), 40, 5)
+    assert v.ok and math.hypot(v.center[0] - 410.3, v.center[1] - 297.6) < 0.5
+    errs = []
+    for s in (0, 1, 2):
+        v = vals_paper(synthetic_fisheye(seed=s, specks=4, **gt), 40, 5)
+        errs.append(math.hypot(v.center[0] - 410.3, v.center[1] - 297.6))
+    assert max(errs) > 50

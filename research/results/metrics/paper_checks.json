@@ -1,0 +1,260 @@
+{
+ "table1": {
+  "rows": [
+   {
+    "angle": 0,
+    "radius_recomputed": 437.573,
+    "radius_paper": 437.57,
+    "midpoint": [
+     438.0,
+     443.5
+    ],
+    "midpoint_dev_from_median_px": 23.59
+   },
+   {
+    "angle": 30,
+    "radius_recomputed": 413.05,
+    "radius_paper": 413.04,
+    "midpoint": [
+     427.0,
+     471.5
+    ],
+    "midpoint_dev_from_median_px": 6.79
+   },
+   {
+    "angle": 60,
+    "radius_recomputed": 412.113,
+    "radius_paper": 412.11,
+    "midpoint": [
+     426.0,
+     481.0
+    ],
+    "midpoint_dev_from_median_px": 16.34
+   },
+   {
+    "angle": 90,
+    "radius_recomputed": 412.501,
+    "radius_paper": 412.5,
+    "midpoint": [
+     433.5,
+     468.0
+    ],
+    "midpoint_dev_from_median_px": 6.6
+   },
+   {
+    "angle": 120,
+    "radius_recomputed": 413.101,
+    "radius_paper": 413.1,
+    "midpoint": [
+     428.5,
+     461.5
+    ],
+    "midpoint_dev_from_median_px": 3.34
+   },
+   {
+    "angle": 150,
+    "radius_recomputed": 427.508,
+    "radius_paper": 427.5,
+    "midpoint": [
+     377.5,
+     424.0
+    ],
+    "midpoint_dev_from_median_px": 64.7
+   }
+  ],
+  "mean_recomputed": 419.308,
+  "mean_paper": 419.3,
+  "median_midpoint": [
+   427.75,
+   464.75
+  ],
+  "kasa_kept_pairs_2to5": {
+   "cx": 433.09,
+   "cy": 468.62,
+   "r": 412.79,
+   "rms_residual": 0.54
+  },
+  "kasa_all_pairs": {
+   "cx": 436.06,
+   "cy": 452.81,
+   "r": 420.62,
+   "rms_residual": 13.39
+  }
+ },
+ "vals": {
+  "synthetic": {
+   "clean": {
+    "paper_VALS_N3": {
+     "centre_err_max": 0.1354374725238253,
+     "radius_err_max": 0.42801787019800486,
+     "failures": 2
+    },
+    "paper_VALS_N5": {
+     "centre_err_max": 0.15346512160310666,
+     "radius_err_max": 0.337590550528887,
+     "failures": 0
+    },
+    "source_VALS_N3": {
+     "centre_err_max": 0.6708203932499623,
+     "radius_err_max": 1.0,
+     "failures": 2
+    },
+    "source_VALS_N5": {
+     "centre_err_max": 0.6708203932499623,
+     "radius_err_max": 1.0,
+     "failures": 0
+    }
+   },
+   "noisy(sigma=8)": {
+    "paper_VALS_N3": {
+     "centre_err_max": 94.8070551053881,
+     "radius_err_max": 58.38275416628318,
+     "failures": 0
+    },
+    "paper_VALS_N5": {
+     "centre_err_max": 87.85212847085721,
+     "radius_err_max": 77.13840771834151,
+     "failures": 0
+    },
+    "source_VALS_N3": {
+     "centre_err_max": 95.60256272715708,
+     "radius_err_max": 59.0,
+     "failures": 0
+    },
+    "source_VALS_N5": {
+     "centre_err_max": 86.45490153831648,
+     "radius_err_max": 78.0,
+     "failures": 0
+    }
+   },
+   "low_contrast": {
+    "paper_VALS_N3": {
+     "centre_err_max": 8.68144462849397,
+     "radius_err_max": 39.11594108542994,
+     "failures": 0
+    },
+    "paper_VALS_N5": {
+     "centre_err_max": 10.644049280810208,
+     "radius_err_max": 43.13999121350628,
+     "failures": 0
+    },
+    "source_VALS_N3": {
+     "centre_err_max": 12.53195914452326,
+     "radius_err_max": 38.0,
+     "failures": 0
+    },
+    "source_VALS_N5": {
+     "centre_err_max": 13.514806694880996,
+     "radius_err_max": 37.0,
+     "failures": 0
+    }
+   },
+   "missing_edge": {
+    "paper_VALS_N3": {
+     "centre_err_max": 0.456846105533403,
+     "radius_err_max": 0.1746808482997153,
+     "failures": 0
+    },
+    "paper_VALS_N5": {
+     "centre_err_max": 0.5132612957042693,
+     "radius_err_max": 0.24946325747077935,
+     "failures": 0
+    },
+    "source_VALS_N3": {
+     "centre_err_max": 0.4999999999999886,
+     "radius_err_max": 1.0,
+     "failures": 0
+    },
+    "source_VALS_N5": {
+     "centre_err_max": 0.4999999999999886,
+     "radius_err_max": 1.0,
+     "failures": 0
+    }
+   },
+   "outlier_specks": {
+    "paper_VALS_N3": {
+     "centre_err_max": 136.25246837095457,
+     "radius_err_max": 54.906779847687915,
+     "failures": 0
+    },
+    "paper_VALS_N5": {
+     "centre_err_max": 138.89353382385602,
+     "radius_err_max": 55.81475332446797,
+     "failures": 0
+    },
+    "source_VALS_N3": {
+     "centre_err_max": 136.51611626471066,
+     "radius_err_max": 52.0,
+     "failures": 0
+    },
+    "source_VALS_N5": {
+     "centre_err_max": 139.75067083917702,
+     "radius_err_max": 55.0,
+     "failures": 0
+    }
+   }
+  },
+  "real_threshold_range": {
+   "set1": [
+    19.17,
+    50.59,
+    68.28
+   ],
+   "set2": [
+    8.14,
+    8.59,
+    15.18
+   ],
+   "set3": [
+    12.98,
+    6.32,
+    28.8
+   ],
+   "set4": [
+    6.71,
+    19.6,
+    32.47
+   ],
+   "set5": [
+    4.07,
+    5.85,
+    4.79
+   ],
+   "set6": [
+    21.4,
+    17.5,
+    18.89
+   ]
+  }
+ },
+ "horizontal_stretch_k_over_h": {
+  "C2 equirect": {
+   "psi=-30,lam'=0": 1.155,
+   "psi=-45,lam'=0": 1.414,
+   "psi=-60,lam'=0": 2.0,
+   "psi=-45,lam'=45": 1.414,
+   "psi=0,lam'=60": 1.0
+  },
+  "C3 main": {
+   "psi=-30,lam'=0": 1.077,
+   "psi=-45,lam'=0": 1.207,
+   "psi=-60,lam'=0": 1.5,
+   "psi=-45,lam'=45": 1.414,
+   "psi=0,lam'=60": 1.333
+  },
+  "C4 w=pi/2 (paper Eq.17)": {
+   "psi=-30,lam'=0": 1.077,
+   "psi=-45,lam'=0": 1.207,
+   "psi=-60,lam'=0": 1.5,
+   "psi=-45,lam'=45": 1.207,
+   "psi=0,lam'=60": 1.0
+  },
+  "lin + LCCP w=1.81": {
+   "psi=-30,lam'=0": 0.941,
+   "psi=-45,lam'=0": 0.976,
+   "psi=-60,lam'=0": 1.107,
+   "psi=-45,lam'=45": 0.976,
+   "psi=0,lam'=60": 1.0
+  }
+ }
+}
