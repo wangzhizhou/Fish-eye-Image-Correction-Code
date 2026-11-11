@@ -70,6 +70,10 @@ Python 源码复刻版 Correction3（按截断改正后）与原 C++ 输出 `res
 * 所有标注 SYNTHETIC 的图和指标均为合成数据。
 * 论文只有定性图像对比，无数值结果；论文表 1 所用图像不在仓库中，无法复现。
 
+## 跨平台（第四阶段，REPORT §17）
+
+根目录 `CMakeLists.txt` + GitHub Actions 实测：原始 `program/` 不改代码，在 **macOS（clang，OpenCV 4.14）、Ubuntu 24.04（GCC，OpenCV 4.6）、Windows Server 2022（MSVC，OpenCV 4.10）** 上都能编译，14 项非交互测试全部通过；改进实现在 OpenCV 5.0 下也通过。原始 C3 输出在 macOS arm64 上与仓库图像逐字节相同，在 x86-64（Linux 与 Windows 结果彼此一致）上 MAE 0.000116。Python 测试在三个系统上都是 107 通过、11 跳过。GUI 交互部分不在测试范围内。
+
 ## 局限
 
 第三阶段的局限：镜头结论依赖纯旋转假设，没有标定板独立验证；投影度量是局部形变，不是主观观感；原始拼接失败只在 OpenCV 4.14 下观察到。

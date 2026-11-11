@@ -894,3 +894,37 @@ func1(l,φ,w) = l − h(w) + auxFunc(w,φ) = 0 ⇒ auxFunc(w,φ) = h − l，l�
 
 用 `circle_radial` 检测圆（double）→ 用多张重叠照片通过 `sphere_stitch.calibrate` 标定镜头（本相机：等立体角，FOV≈183°）→ 单张校正用 `fisheye::correct`，经度线性，纬度 LCCP；ω 按用途取 π/2（论文值，形状与分辨率较平衡）或 1.81（形状最优）→ 全景用球面拼接直接输出等距柱状图，交给预计算视线的浏览器。
 
+---
+
+## 17. 跨平台验证（第四阶段）
+
+**做法**。新增仓库根目录 `CMakeLists.txt`：用已安装的 OpenCV（不再从子模块编译），构建三个程序：
+* `navigator`：原始 `program/`，**一行未改**；只在 OpenCV < 5 时构建，强制在 5.x 上构建会给出明确的 CMake 错误；
+* `harness`：研究用的非交互驱动；
+* `improved_cli`：改进实现，OpenCV 4/5 都可以。
+
+CTest 测试都不需要 GUI，也不读 stdin，共 14 项（OpenCV 5 下只有改进部分的 8 项）：
+* 原始部分：`navigator -h`；getPhi(2) 的前 12 位有效数字为 1.5830681730（`ci/check_getphi.cmake`，BUG-01）；原始 C3 输出与仓库 `resources/corrected0.jpg` 的 MAE ≤ 1.5；
+* 原始与改进 viewer 的窗口 MAE ≤ 5；
+* 改进部分：4 种镜头的往返（`check=1`）、同一进程换 ω、真实图像校正、输入不存在时返回非 0。
+
+GitHub Actions 工作流为 `.github/workflows/ci.yml`。
+
+**结果**（分支 `ci/cmake-cross-platform`，run 43027353520，全部 7 个作业成功）：
+
+| 平台 | 编译器 / OpenCV | C++（CTest） | 原始 C3 输出 vs `resources/corrected0.jpg` | Python（pytest） |
+|---|---|---|---|---|
+| Ubuntu 24.04 x86-64 | GCC，apt OpenCV 4.6.0 | 14/14 | MAE 0.000116（25 / 3 686 400 个像素差 >2 灰度级），非逐字节相同 | 107 通过，11 跳过 |
+| Windows Server 2022 x64 | **MSVC**，choco OpenCV 4.10.0（vc16） | 14/14 | 与 Linux **逐字节相同**；对仓库图 MAE 0.000116 | 107 通过，11 跳过 |
+| macOS 26 arm64 | Apple clang，brew opencv@4 4.14.0 | 14/14 | **逐字节相同** | 107 通过，11 跳过 |
+| macOS 26 arm64 | Apple clang，brew OpenCV 5.0.0 | 8/8（只构建改进部分） | — | — |
+
+（跳过的 11 项是需要本地 `research/*/build` 二进制的 C++ 对照测试；CTest 已覆盖其中的要点。本机的 OpenCV 5 为 5.1.0，CI 镜像中的 Homebrew 为 5.0.0，两者都能构建改进实现。）
+
+结论：
+* **原始 `program/` 不改代码，就能在 macOS、Linux（GCC）、Windows（MSVC）上编译，非交互部分运行正确**。前提是 OpenCV 4.x，在 OpenCV 5 上无法编译（BUG-26，§16.2）。第一阶段担心的 MSVC 兼容性问题（如 `strcmp` 是否有头文件）在 MSVC 下没有出现。
+* 原有的 `build.sh` / `run.sh` / `.vscode` 配置仍然只适用于 macOS/Linux 的 shell 环境。`.vscode/tasks.json` 中的 `"main.cpp "`（文件名多一个空格）和 `launch.json` 的路径错误没有修改（§15 之后的检查已记录）；跨平台构建请用 CMake。
+* x86-64 与 arm64 的结果有微小差异：x86-64 上的 Linux 与 Windows 彼此逐字节相同，与 arm64 上生成的仓库图像相差 25 个像素。原因推测是浮点运算差异（例如 arm64 上 clang 默认的 FMA 合并改变了个别像素的截断结果），**未进一步验证**。作者 2024 年的输出与 arm64 结果逐字节相同。
+* **没有覆盖**：GUI 部分（trackbar 选圆、浏览器窗口、`Tip()` 的按键等待），以及 Linux 上完整的交互流程。`stitchImages` 失败时会调用 `getchar()` 等待输入，所以没有放进 CTest。
+* 第一次 CI 运行中，macOS 作业因 `macos-14` 镜像已不再提供（"configuration 'macos-14-arm64-us-default' is not supported"）而被取消，改为 `macos-latest` 后通过。
+
