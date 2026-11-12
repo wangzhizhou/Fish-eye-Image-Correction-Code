@@ -59,6 +59,22 @@ User experience is not so good, it only has basic functions.
 
     `run.sh` script use the `ImagesForTest/1/*jpg` images as demonstration.
 
+### Cross-platform build with CMake (macOS / Linux / Windows)
+
+Uses an installed OpenCV instead of building it from the submodules. The original `program/`
+needs **OpenCV 4.x** (it includes `highgui_c.h`, removed in OpenCV 5); the improved code under
+`research/improved` builds with 4.x or 5.x.
+
+```bash
+# macOS: brew install opencv@4    Linux: sudo apt-get install libopencv-dev    Windows: choco install opencv --version=4.10.0
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release        # add -DOpenCV_DIR=<dir with OpenCVConfig.cmake> if not found
+cmake --build build --config Release
+ctest --test-dir build -C Release --output-on-failure  # non-interactive tests, no GUI needed
+```
+
+Targets: `navigator` (the original program, unchanged), `harness` (non-interactive driver around the
+original sources), `improved_cli` (improved implementation). CI: `.github/workflows/ci.yml`.
+
 ### Basic situation
 
 * this program is build on MacOS, if you use it on Windows/Linux, maybe you should make some changes of configs or scipts.
